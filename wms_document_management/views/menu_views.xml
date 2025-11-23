@@ -1,47 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-    <!-- Document Management Menu -->
-    <menuitem id="menu_wms_document_management_root"
-              name="Document Management"
-              parent="stock.menu_stock_warehouse_mgmt"
-              sequence="130"/>
-
-    <menuitem id="menu_wms_documents"
-              name="Documents"
-              parent="menu_wms_document_management_root"
-              action="action_wms_document_list"
-              sequence="10"/>
-
-    <menuitem id="menu_wms_document_categories"
-              name="Categories"
-              parent="menu_wms_document_management_root"
-              action="action_wms_document_category_list"
-              sequence="20"/>
-
-    <menuitem id="menu_wms_document_tags"
-              name="Tags"
-              parent="menu_wms_document_management_root"
-              action="action_wms_document_tag_list"
-              sequence="30"/>
-
-    <menuitem id="menu_wms_document_templates"
-              name="Templates"
-              parent="menu_wms_document_management_root"
-              action="action_wms_document_template_list"
-              sequence="40"/>
-
-    <menuitem id="menu_wms_document_workflows"
-              name="Workflows"
-              parent="menu_wms_document_management_root"
-              action="action_wms_document_workflow_list"
-              sequence="50"/>
-
-    <menuitem id="menu_wms_document_archives"
-              name="Archives"
-              parent="menu_wms_document_management_root"
-              action="action_wms_document_archive_list"
-              sequence="60"/>
-
     <!-- Actions -->
     <record id="action_wms_document_list" model="ir.actions.act_window">
         <field name="name">Documents</field>
@@ -120,4 +78,46 @@
             </p>
         </field>
     </record>
+
+    <!-- Document Management Menu -->
+    <menuitem id="menu_wms_document_management_root"
+              name="Document Management"
+              parent="stock.menu_stock_warehouse_mgmt"
+              sequence="130"/>
+
+    <menuitem id="menu_wms_documents"
+              name="Documents"
+              parent="menu_wms_document_management_root"
+              action="action_wms_document_list"
+              sequence="10"/>
+
+    <menuitem id="menu_wms_document_categories"
+              name="Categories"
+              parent="menu_wms_document_management_root"
+              action="action_wms_document_category_list"
+              sequence="20"/>
+
+    <menuitem id="menu_wms_document_tags"
+              name="Tags"
+              parent="menu_wms_document_management_root"
+              action="action_wms_document_tag_list"
+              sequence="30"/>
+
+    <menuitem id="menu_wms_document_templates"
+              name="Templates"
+              parent="menu_wms_document_management_root"
+              action="action_wms_document_template_list"
+              sequence="40"/>
+
+    <menuitem id="menu_wms_document_workflows"
+              name="Workflows"
+              parent="menu_wms_document_management_root"
+              action="action_wms_document_workflow_list"
+              sequence="50"/>
+
+    <menuitem id="menu_wms_document_archives"
+              name="Archives"
+              parent="menu_wms_document_management_root"
+              action="action_wms_document_archive_list"
+              sequence="60"/>
 </odoo>

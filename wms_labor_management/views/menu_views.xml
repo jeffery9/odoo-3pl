@@ -1,47 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-    <!-- Labor Management Menu -->
-    <menuitem id="menu_wms_labor_management_root"
-              name="Labor Management"
-              parent="hr.menu_hr_root"
-              sequence="120"/>
-
-    <menuitem id="menu_wms_labor_tasks"
-              name="Labor Tasks"
-              parent="menu_wms_labor_management_root"
-              action="action_wms_labor_task_list"
-              sequence="10"/>
-
-    <menuitem id="menu_wms_labor_activities"
-              name="Labor Activities"
-              parent="menu_wms_labor_management_root"
-              action="action_wms_labor_activity_list"
-              sequence="20"/>
-
-    <menuitem id="menu_wms_labor_schedules"
-              name="Labor Schedules"
-              parent="menu_wms_labor_management_root"
-              action="action_wms_labor_schedule_list"
-              sequence="30"/>
-
-    <menuitem id="menu_wms_employee_skills"
-              name="Employee Skills"
-              parent="menu_wms_labor_management_root"
-              action="action_wms_employee_skill_list"
-              sequence="40"/>
-
-    <menuitem id="menu_wms_labor_performance"
-              name="Labor Performance"
-              parent="menu_wms_labor_management_root"
-              action="action_wms_labor_performance_list"
-              sequence="50"/>
-
-    <menuitem id="menu_wms_labor_costs"
-              name="Labor Costs"
-              parent="menu_wms_labor_management_root"
-              action="action_wms_labor_cost_list"
-              sequence="60"/>
-
     <!-- Actions -->
     <record id="action_wms_labor_task_list" model="ir.actions.act_window">
         <field name="name">Labor Tasks</field>
@@ -120,4 +78,46 @@
             </p>
         </field>
     </record>
+
+    <!-- Labor Management Menu -->
+    <menuitem id="menu_wms_labor_management_root"
+              name="Labor Management"
+              parent="hr.menu_hr_root"
+              sequence="120"/>
+
+    <menuitem id="menu_wms_labor_tasks"
+              name="Labor Tasks"
+              parent="menu_wms_labor_management_root"
+              action="action_wms_labor_task_list"
+              sequence="10"/>
+
+    <menuitem id="menu_wms_labor_activities"
+              name="Labor Activities"
+              parent="menu_wms_labor_management_root"
+              action="action_wms_labor_activity_list"
+              sequence="20"/>
+
+    <menuitem id="menu_wms_labor_schedules"
+              name="Labor Schedules"
+              parent="menu_wms_labor_management_root"
+              action="action_wms_labor_schedule_list"
+              sequence="30"/>
+
+    <menuitem id="menu_wms_employee_skills"
+              name="Employee Skills"
+              parent="menu_wms_labor_management_root"
+              action="action_wms_employee_skill_list"
+              sequence="40"/>
+
+    <menuitem id="menu_wms_labor_performance"
+              name="Labor Performance"
+              parent="menu_wms_labor_management_root"
+              action="action_wms_labor_performance_list"
+              sequence="50"/>
+
+    <menuitem id="menu_wms_labor_costs"
+              name="Labor Costs"
+              parent="menu_wms_labor_management_root"
+              action="action_wms_labor_cost_list"
+              sequence="60"/>
 </odoo>

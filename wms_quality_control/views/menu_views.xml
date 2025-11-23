@@ -1,29 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-    <!-- Quality Control Management Menu -->
-    <menuitem id="menu_wms_quality_control_root"
-              name="Quality Control"
-              parent="stock.menu_stock_warehouse_mgmt"
-              sequence="100"/>
-
-    <menuitem id="menu_wms_quality_control_sessions"
-              name="Quality Control Sessions"
-              parent="menu_wms_quality_control_root"
-              action="action_wms_quality_control_list"
-              sequence="10"/>
-
-    <menuitem id="menu_wms_quality_issues"
-              name="Quality Issues"
-              parent="menu_wms_quality_control_root"
-              action="action_wms_quality_issue_list"
-              sequence="20"/>
-
-    <menuitem id="menu_wms_quality_actions"
-              name="Corrective Actions"
-              parent="menu_wms_quality_control_root"
-              action="action_wms_quality_corrective_action_list"
-              sequence="30"/>
-
     <!-- Actions -->
     <record id="action_wms_quality_control_list" model="ir.actions.act_window">
         <field name="name">Quality Control Sessions</field>
@@ -63,4 +39,28 @@
             </p>
         </field>
     </record>
+
+    <!-- Quality Control Management Menu -->
+    <menuitem id="menu_wms_quality_control_root"
+              name="Quality Control"
+              parent="stock.menu_stock_warehouse_mgmt"
+              sequence="100"/>
+
+    <menuitem id="menu_wms_quality_control_sessions"
+              name="Quality Control Sessions"
+              parent="menu_wms_quality_control_root"
+              action="action_wms_quality_control_list"
+              sequence="10"/>
+
+    <menuitem id="menu_wms_quality_issues"
+              name="Quality Issues"
+              parent="menu_wms_quality_control_root"
+              action="action_wms_quality_issue_list"
+              sequence="20"/>
+
+    <menuitem id="menu_wms_quality_actions"
+              name="Corrective Actions"
+              parent="menu_wms_quality_control_root"
+              action="action_wms_quality_corrective_action_list"
+              sequence="30"/>
 </odoo>

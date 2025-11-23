@@ -1,47 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-    <!-- Safety Management Menu -->
-    <menuitem id="menu_wms_safety_management_root"
-              name="Safety Management"
-              parent="hr.menu_hr_root"
-              sequence="130"/>
-
-    <menuitem id="menu_wms_safety_incidents"
-              name="Safety Incidents"
-              parent="menu_wms_safety_management_root"
-              action="action_wms_safety_incident_list"
-              sequence="10"/>
-
-    <menuitem id="menu_wms_safety_training"
-              name="Safety Training"
-              parent="menu_wms_safety_management_root"
-              action="action_wms_safety_training_list"
-              sequence="20"/>
-
-    <menuitem id="menu_wms_safety_ppe"
-              name="PPE Management"
-              parent="menu_wms_safety_management_root"
-              action="action_wms_safety_ppe_list"
-              sequence="30"/>
-
-    <menuitem id="menu_wms_safety_inspections"
-              name="Safety Inspections"
-              parent="menu_wms_safety_management_root"
-              action="action_wms_safety_inspection_list"
-              sequence="40"/>
-
-    <menuitem id="menu_wms_safety_compliance"
-              name="Safety Compliance"
-              parent="menu_wms_safety_management_root"
-              action="action_wms_safety_compliance_list"
-              sequence="50"/>
-
-    <menuitem id="menu_wms_safety_risks"
-              name="Risk Assessments"
-              parent="menu_wms_safety_management_root"
-              action="action_wms_safety_risk_list"
-              sequence="60"/>
-
     <!-- Actions -->
     <record id="action_wms_safety_incident_list" model="ir.actions.act_window">
         <field name="name">Safety Incidents</field>
@@ -120,4 +78,46 @@
             </p>
         </field>
     </record>
+
+    <!-- Safety Management Menu -->
+    <menuitem id="menu_wms_safety_management_root"
+              name="Safety Management"
+              parent="hr.menu_hr_root"
+              sequence="130"/>
+
+    <menuitem id="menu_wms_safety_incidents"
+              name="Safety Incidents"
+              parent="menu_wms_safety_management_root"
+              action="action_wms_safety_incident_list"
+              sequence="10"/>
+
+    <menuitem id="menu_wms_safety_training"
+              name="Safety Training"
+              parent="menu_wms_safety_management_root"
+              action="action_wms_safety_training_list"
+              sequence="20"/>
+
+    <menuitem id="menu_wms_safety_ppe"
+              name="PPE Management"
+              parent="menu_wms_safety_management_root"
+              action="action_wms_safety_ppe_list"
+              sequence="30"/>
+
+    <menuitem id="menu_wms_safety_inspections"
+              name="Safety Inspections"
+              parent="menu_wms_safety_management_root"
+              action="action_wms_safety_inspection_list"
+              sequence="40"/>
+
+    <menuitem id="menu_wms_safety_compliance"
+              name="Safety Compliance"
+              parent="menu_wms_safety_management_root"
+              action="action_wms_safety_compliance_list"
+              sequence="50"/>
+
+    <menuitem id="menu_wms_safety_risks"
+              name="Risk Assessments"
+              parent="menu_wms_safety_management_root"
+              action="action_wms_safety_risk_list"
+              sequence="60"/>
 </odoo>

@@ -1,22 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-    <!-- Billing Management Menu -->
-    <menuitem id="wms_billing_menu" name="Billing Management" parent="wms_main_menu" sequence="40"/>
-
-    <!-- Billing Rules Submenu -->
-    <menuitem id="wms_billing_rule_submenu" name="Billing Rules" parent="wms_billing_menu" sequence="10"
-              action="action_wms_billing_rule"/>
-
-    <!-- Billing Records Submenu -->
-    <menuitem id="wms_billing_record_submenu" name="Billing Records" parent="wms_billing_menu" sequence="20"
-              action="action_wms_billing_record"/>
-
-    <!-- Billing Reports Submenu -->
-    <menuitem id="wms_billing_reports_submenu" name="Billing Reports" parent="wms_billing_menu" sequence="30">
-        <menuitem id="wms_billing_analysis" name="Billing Analysis" action="action_wms_billing_record_pivot" sequence="1"/>
-        <menuitem id="wms_billing_graph" name="Billing Graph" action="action_wms_billing_record_graph" sequence="2"/>
-    </menuitem>
-
     <!-- Actions -->
     <record id="action_wms_billing_rule" model="ir.actions.act_window">
         <field name="name">Billing Rules</field>
@@ -47,4 +30,21 @@
         <field name="res_model">wms.billing.record</field>
         <field name="view_mode">graph</field>
     </record>
+
+    <!-- Billing Management Menu -->
+    <menuitem id="wms_billing_menu" name="Billing Management" parent="wms_main_menu" sequence="40"/>
+
+    <!-- Billing Rules Submenu -->
+    <menuitem id="wms_billing_rule_submenu" name="Billing Rules" parent="wms_billing_menu" sequence="10"
+              action="action_wms_billing_rule"/>
+
+    <!-- Billing Records Submenu -->
+    <menuitem id="wms_billing_record_submenu" name="Billing Records" parent="wms_billing_menu" sequence="20"
+              action="action_wms_billing_record"/>
+
+    <!-- Billing Reports Submenu -->
+    <menuitem id="wms_billing_reports_submenu" name="Billing Reports" parent="wms_billing_menu" sequence="30">
+        <menuitem id="wms_billing_analysis" name="Billing Analysis" action="action_wms_billing_record_pivot" sequence="1"/>
+        <menuitem id="wms_billing_graph" name="Billing Graph" action="action_wms_billing_record_graph" sequence="2"/>
+    </menuitem>
 </odoo>

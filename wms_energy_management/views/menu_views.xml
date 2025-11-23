@@ -1,41 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-    <!-- Energy Management Menu -->
-    <menuitem id="menu_wms_energy_management_root"
-              name="Energy Management"
-              parent="stock.menu_stock_warehouse_mgmt"
-              sequence="120"/>
-
-    <menuitem id="menu_wms_energy_equipment"
-              name="Energy Equipment"
-              parent="menu_wms_energy_management_root"
-              action="action_wms_energy_equipment_list"
-              sequence="10"/>
-
-    <menuitem id="menu_wms_energy_readings"
-              name="Energy Readings"
-              parent="menu_wms_energy_management_root"
-              action="action_wms_energy_reading_list"
-              sequence="20"/>
-
-    <menuitem id="menu_wms_energy_reports"
-              name="Energy Reports"
-              parent="menu_wms_energy_management_root"
-              action="action_wms_energy_report_list"
-              sequence="30"/>
-
-    <menuitem id="menu_wms_energy_targets"
-              name="Energy Targets"
-              parent="menu_wms_energy_management_root"
-              action="action_wms_energy_target_list"
-              sequence="40"/>
-
-    <menuitem id="menu_wms_energy_alerts"
-              name="Energy Alerts"
-              parent="menu_wms_energy_management_root"
-              action="action_wms_energy_alert_list"
-              sequence="50"/>
-
     <!-- Actions -->
     <record id="action_wms_energy_equipment_list" model="ir.actions.act_window">
         <field name="name">Energy Equipment</field>
@@ -101,4 +65,40 @@
             </p>
         </field>
     </record>
+
+    <!-- Energy Management Menu -->
+    <menuitem id="menu_wms_energy_management_root"
+              name="Energy Management"
+              parent="stock.menu_stock_warehouse_mgmt"
+              sequence="120"/>
+
+    <menuitem id="menu_wms_energy_equipment"
+              name="Energy Equipment"
+              parent="menu_wms_energy_management_root"
+              action="action_wms_energy_equipment_list"
+              sequence="10"/>
+
+    <menuitem id="menu_wms_energy_readings"
+              name="Energy Readings"
+              parent="menu_wms_energy_management_root"
+              action="action_wms_energy_reading_list"
+              sequence="20"/>
+
+    <menuitem id="menu_wms_energy_reports"
+              name="Energy Reports"
+              parent="menu_wms_energy_management_root"
+              action="action_wms_energy_report_list"
+              sequence="30"/>
+
+    <menuitem id="menu_wms_energy_targets"
+              name="Energy Targets"
+              parent="menu_wms_energy_management_root"
+              action="action_wms_energy_target_list"
+              sequence="40"/>
+
+    <menuitem id="menu_wms_energy_alerts"
+              name="Energy Alerts"
+              parent="menu_wms_energy_management_root"
+              action="action_wms_energy_alert_list"
+              sequence="50"/>
 </odoo>
