@@ -1,0 +1,594 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- Actions -->
+    <record id="action_wms_rfid_tag" model="ir.actions.act_window">
+        <field name="name">RFID Tags</field>
+        <field name="res_model">wms.rfid.tag</field>
+        <field name="view_mode">tree,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create RFID tags
+            </p>
+            <p>
+                Define RFID tags used in the warehouse for tracking.
+            </p>
+        </field>
+    </record>
+
+    <record id="action_wms_rfid_reader" model="ir.actions.act_window">
+        <field name="name">RFID Readers</field>
+        <field name="res_model">wms.rfid.reader</field>
+        <field name="view_mode">tree,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create RFID readers
+            </p>
+            <p>
+                Define RFID readers installed in the warehouse.
+            </p>
+        </field>
+    </record>
+
+    <record id="action_wms_rfid_transaction" model="ir.actions.act_window">
+        <field name="name">RFID Transactions</field>
+        <field name="res_model">wms.rfid.transaction</field>
+        <field name="view_mode">tree,form,pivot,graph</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create RFID transactions
+            </p>
+            <p>
+                Monitor RFID scan transactions and activities.
+            </p>
+        </field>
+    </record>
+
+    <record id="action_wms_rfid_inventory" model="ir.actions.act_window">
+        <field name="name">RFID Inventory</field>
+        <field name="res_model">wms.rfid.inventory</field>
+        <field name="view_mode">tree,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create RFID inventory
+            </p>
+            <p>
+                Perform inventory counts using RFID technology.
+            </p>
+        </field>
+    </record>
+
+    <!-- Tree View for RFID Tags -->
+    <record id="view_wms_rfid_tag_tree" model="ir.ui.view">
+        <field name="name">wms.rfid.tag.tree</field>
+        <field name="model">wms.rfid.tag</field>
+        <field name="arch" type="xml">
+            <tree string="RFID Tags" decoration-info="status=='available'" decoration-primary="status=='in_use'" decoration-success="status=='retired'" decoration-warning="status=='lost'" decoration-danger="status=='damaged'">
+                <field name="name"/>
+                <field name="tag_type"/>
+                <field name="rfid_uid"/>
+                <field name="status"/>
+                <field name="product_id"/>
+                <field name="location_id"/>
+                <field name="last_scanned"/>
+                <field name="active"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Form View for RFID Tags -->
+    <record id="view_wms_rfid_tag_form" model="ir.ui.view">
+        <field name="name">wms.rfid.tag.form</field>
+        <field name="model">wms.rfid.tag</field>
+        <field name="arch" type="xml">
+            <form string="RFID Tag">
+                <header>
+                    <button name="toggle_active"
+                            type="object"
+                            class="oe_stat_button"
+                            icon="fa-check-circle-o">
+                        <field name="active"
+                               widget="boolean_button"
+                               options='{"terminology": "active"}'/>
+                    </button>
+                    <button name="action_activate_tag"
+                            string="Activate"
+                            type="object"
+                            class="oe_highlight"
+                            states="!active"
+                            help="Activate the RFID tag"/>
+                    <button name="action_deactivate_tag"
+                            string="Deactivate"
+                            type="object"
+                            states="active"
+                            help="Deactivate the RFID tag"/>
+                    <button name="action_report_lost"
+                            string="Report Lost"
+                            type="object"
+                            help="Report the RFID tag as lost"/>
+                    <button name="action_report_damaged"
+                            string="Report Damaged"
+                            type="object"
+                            help="Report the RFID tag as damaged"/>
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="toggle_active"
+                                type="object"
+                                class="oe_stat_button"
+                                icon="fa-check-circle-o">
+                            <field name="active"
+                                   widget="boolean_button"
+                                   options='{"terminology": "active"}'/>
+                        </button>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="name"/>
+                            <field name="tag_type"/>
+                            <field name="rfid_uid"/>
+                        </group>
+                        <group>
+                            <field name="status"/>
+                            <field name="active"/>
+                        </group>
+                    </group>
+
+                    <notebook>
+                        <page string="Associations">
+                            <group>
+                                <field name="product_id" attrs="{'invisible': [('tag_type', '!=', 'product')]}"/>
+                                <field name="location_id" attrs="{'invisible': [('tag_type', '!=', 'location')]}"/>
+                                <field name="lot_id" attrs="{'invisible': [('tag_type', '!=', 'product')]}"/>
+                                <field name="employee_id" attrs="{'invisible': [('tag_type', '!=', 'employee')]}"/>
+                                <field name="equipment_id" attrs="{'invisible': [('tag_type', '!=', 'equipment')]}"/>
+                            </group>
+                        </page>
+
+                        <page string="Properties">
+                            <group>
+                                <field name="capacity"/>
+                                <field name="current_load"/>
+                                <field name="utilization_rate"/>
+                            </group>
+                        </page>
+
+                        <page string="RFID Configuration">
+                            <group>
+                                <field name="rfid_data"/>
+                                <field name="security_level"/>
+                            </group>
+                        </page>
+
+                        <page string="Lifecycle">
+                            <group>
+                                <field name="date_activated"/>
+                                <field name="date_deactivated"/>
+                                <field name="last_scanned"/>
+                            </group>
+                        </page>
+
+                        <page string="Traceability">
+                            <group>
+                                <field name="owner_id"/>
+                                <field name="warehouse_id"/>
+                            </group>
+                        </page>
+
+                        <page string="Description">
+                            <field name="description"/>
+                        </page>
+
+                        <page string="Notes">
+                            <field name="notes"/>
+                        </page>
+                    </notebook>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids"/>
+                    <field name="activity_ids"/>
+                    <field name="message_ids"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <!-- Tree View for RFID Readers -->
+    <record id="view_wms_rfid_reader_tree" model="ir.ui.view">
+        <field name="name">wms.rfid.reader.tree</field>
+        <field name="model">wms.rfid.reader</field>
+        <field name="arch" type="xml">
+            <tree string="RFID Readers" decoration-info="status=='offline'" decoration-primary="status=='online'" decoration-success="status=='maintenance'" decoration-danger="status=='error'">
+                <field name="name"/>
+                <field name="code"/>
+                <field name="reader_type"/>
+                <field name="status"/>
+                <field name="location_id"/>
+                <field name="warehouse_id"/>
+                <field name="is_connected"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Form View for RFID Readers -->
+    <record id="view_wms_rfid_reader_form" model="ir.ui.view">
+        <field name="name">wms.rfid.reader.form</field>
+        <field name="model">wms.rfid.reader</field>
+        <field name="arch" type="xml">
+            <form string="RFID Reader">
+                <header>
+                    <button name="toggle_active"
+                            type="object"
+                            class="oe_stat_button"
+                            icon="fa-check-circle-o">
+                        <field name="active"
+                               widget="boolean_button"
+                               options='{"terminology": "active"}'/>
+                    </button>
+                    <button name="action_connect_reader"
+                            string="Connect"
+                            type="object"
+                            class="oe_highlight"
+                            states="status in ('offline','error')"
+                            help="Connect to the RFID reader"/>
+                    <button name="action_disconnect_reader"
+                            string="Disconnect"
+                            type="object"
+                            states="status == 'online'"
+                            help="Disconnect from the RFID reader"/>
+                    <button name="action_scan_tags"
+                            string="Scan Tags"
+                            type="object"
+                            states="status == 'online'"
+                            help="Initiate a scan for RFID tags"/>
+                    <field name="status" widget="statusbar" statusbar_visible="offline,online,maintenance,error"/>
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="toggle_active"
+                                type="object"
+                                class="oe_stat_button"
+                                icon="fa-check-circle-o">
+                            <field name="active"
+                                   widget="boolean_button"
+                                   options='{"terminology": "active"}'/>
+                        </button>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="name"/>
+                            <field name="code"/>
+                            <field name="reader_type"/>
+                        </group>
+                        <group>
+                            <field name="active"/>
+                            <field name="is_connected"/>
+                            <field name="installation_date"/>
+                        </group>
+                    </group>
+
+                    <notebook>
+                        <page string="Location Configuration">
+                            <group>
+                                <field name="location_id"/>
+                                <field name="warehouse_id"/>
+                            </group>
+                        </page>
+
+                        <page string="Network Configuration">
+                            <group>
+                                <field name="ip_address"/>
+                                <field name="port"/>
+                                <field name="protocol"/>
+                            </group>
+                        </page>
+
+                        <page string="Technical Specifications">
+                            <group>
+                                <field name="antenna_count"/>
+                                <field name="read_range"/>
+                                <field name="power_level"/>
+                                <field name="frequency"/>
+                                <field name="supported_standards"/>
+                            </group>
+                        </page>
+
+                        <page string="Integration Settings">
+                            <group>
+                                <field name="integration_enabled"/>
+                                <field name="auto_scan_enabled"/>
+                                <field name="scan_interval"/>
+                            </group>
+                        </page>
+
+                        <page string="Maintenance">
+                            <group>
+                                <field name="last_connection"/>
+                                <field name="last_maintenance"/>
+                                <field name="next_maintenance"/>
+                            </group>
+                        </page>
+
+                        <page string="Description">
+                            <field name="description"/>
+                        </page>
+
+                        <page string="Notes">
+                            <field name="notes"/>
+                        </page>
+                    </notebook>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids"/>
+                    <field name="activity_ids"/>
+                    <field name="message_ids"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <!-- Tree View for RFID Transactions -->
+    <record id="view_wms_rfid_transaction_tree" model="ir.ui.view">
+        <field name="name">wms.rfid.transaction.tree</field>
+        <field name="model">wms.rfid.transaction</field>
+        <field name="arch" type="xml">
+            <tree string="RFID Transactions" decoration-info="status=='pending'" decoration-primary="status=='completed'" decoration-success="status=='verified'" decoration-danger="status=='error'">
+                <field name="name"/>
+                <field name="transaction_type"/>
+                <field name="tag_id"/>
+                <field name="reader_id"/>
+                <field name="timestamp"/>
+                <field name="product_id"/>
+                <field name="quantity"/>
+                <field name="status"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Form View for RFID Transactions -->
+    <record id="view_wms_rfid_transaction_form" model="ir.ui.view">
+        <field name="name">wms.rfid.transaction.form</field>
+        <field name="model">wms.rfid.transaction</field>
+        <field name="arch" type="xml">
+            <form string="RFID Transaction">
+                <header>
+                    <button name="action_verify_transaction"
+                            string="Verify"
+                            type="object"
+                            class="oe_highlight"
+                            states="status == 'completed'"
+                            help="Verify the RFID transaction"/>
+                    <button name="action_mark_error"
+                            string="Mark Error"
+                            type="object"
+                            class="oe_highlight"
+                            states="status in ('pending','completed')"
+                            help="Mark the transaction as having an error"/>
+                    <field name="status" widget="statusbar" statusbar_visible="pending,completed,verified,error"/>
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <field name="is_verified" widget="boolean_button" string="Verified"/>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="name"/>
+                            <field name="transaction_type"/>
+                            <field name="rfid_uid"/>
+                        </group>
+                        <group>
+                            <field name="timestamp"/>
+                            <field name="status"/>
+                        </group>
+                    </group>
+
+                    <notebook>
+                        <page string="RFID Information">
+                            <group>
+                                <field name="tag_id"/>
+                                <field name="reader_id"/>
+                            </group>
+                        </page>
+
+                        <page string="Transaction Details">
+                            <group>
+                                <field name="source_location_id"/>
+                                <field name="destination_location_id"/>
+                            </group>
+                            <group>
+                                <field name="product_id"/>
+                                <field name="product_uom"/>
+                                <field name="quantity"/>
+                                <field name="lot_id"/>
+                            </group>
+                        </page>
+
+                        <page string="Related Documents">
+                            <field name="source_document"/>
+                        </page>
+
+                        <page string="Operator and Equipment">
+                            <group>
+                                <field name="operator_id"/>
+                                <field name="equipment_id"/>
+                            </group>
+                        </page>
+
+                        <page string="Data">
+                            <group>
+                                <field name="raw_data"/>
+                                <field name="processed_data"/>
+                            </group>
+                        </page>
+
+                        <page string="Verification">
+                            <group>
+                                <field name="verification_code"/>
+                                <field name="is_verified"/>
+                                <field name="error_message"/>
+                            </group>
+                        </page>
+
+                        <page string="Notes">
+                            <field name="notes"/>
+                        </page>
+                    </notebook>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids"/>
+                    <field name="activity_ids"/>
+                    <field name="message_ids"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <!-- Tree View for RFID Inventory -->
+    <record id="view_wms_rfid_inventory_tree" model="ir.ui.view">
+        <field name="name">wms.rfid.inventory.tree</field>
+        <field name="model">wms.rfid.inventory</field>
+        <field name="arch" type="xml">
+            <tree string="RFID Inventory" decoration-info="state=='draft'" decoration-primary="state=='in_progress'" decoration-success="state=='completed'" decoration-muted="state=='cancelled'">
+                <field name="name"/>
+                <field name="state"/>
+                <field name="location_id"/>
+                <field name="warehouse_id"/>
+                <field name="date_start"/>
+                <field name="date_end"/>
+                <field name="items_counted"/>
+                <field name="accuracy_rate"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Form View for RFID Inventory -->
+    <record id="view_wms_rfid_inventory_form" model="ir.ui.view">
+        <field name="name">wms.rfid.inventory.form</field>
+        <field name="model">wms.rfid.inventory</field>
+        <field name="arch" type="xml">
+            <form string="RFID Inventory">
+                <header>
+                    <button name="action_start_inventory"
+                            string="Start Inventory"
+                            type="object"
+                            class="oe_highlight"
+                            states="state == 'draft'"
+                            help="Start the RFID inventory"/>
+                    <button name="action_complete_inventory"
+                            string="Complete Inventory"
+                            type="object"
+                            class="oe_highlight"
+                            states="state == 'in_progress'"
+                            help="Complete the RFID inventory"/>
+                    <button name="action_cancel_inventory"
+                            string="Cancel Inventory"
+                            type="object"
+                            class="btn-secondary"
+                            states="state in ('draft','in_progress')"
+                            help="Cancel the RFID inventory"/>
+                    <button name="action_generate_report"
+                            string="Generate Report"
+                            type="object"
+                            states="state == 'completed'"
+                            help="Generate inventory report"/>
+                    <field name="state" widget="statusbar" statusbar_visible="draft,in_progress,completed,cancelled"/>
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <field name="items_counted" widget="statinfo" string="Items Counted"/>
+                        <field name="discrepancies_found" widget="statinfo" string="Discrepancies"/>
+                        <field name="accuracy_rate" widget="statinfo" string="Accuracy Rate"/>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="name"/>
+                            <field name="location_id"/>
+                            <field name="warehouse_id"/>
+                        </group>
+                        <group>
+                            <field name="date_start"/>
+                            <field name="date_end"/>
+                            <field name="operator_id"/>
+                        </group>
+                    </group>
+
+                    <notebook>
+                        <page string="Configuration">
+                            <group>
+                                <field name="include_sublocations"/>
+                                <field name="count_zero"/>
+                                <field name="exclude_products"/>
+                            </group>
+                        </page>
+
+                        <page string="Readers and Equipment">
+                            <group>
+                                <field name="reader_ids" widget="many2many_tags"/>
+                                <field name="equipment_used" widget="many2many_tags"/>
+                            </group>
+                        </page>
+
+                        <page string="Excluded Products">
+                            <field name="excluded_product_ids" widget="many2many_tags" attrs="{'invisible': [('exclude_products', '=', False)]}"/>
+                        </page>
+
+                        <page string="Results">
+                            <group>
+                                <field name="items_counted"/>
+                                <field name="discrepancies_found"/>
+                                <field name="accuracy_rate"/>
+                                <field name="variance_value"/>
+                            </group>
+                        </page>
+
+                        <page string="Traceability">
+                            <group>
+                                <field name="owner_id"/>
+                            </group>
+                        </page>
+
+                        <page string="Notes">
+                            <field name="notes"/>
+                        </page>
+                    </notebook>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids"/>
+                    <field name="activity_ids"/>
+                    <field name="message_ids"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <!-- Menu Items -->
+    <menuitem id="menu_wms_rfid_root"
+              name="RFID Integration"
+              parent="stock.menu_stock_warehouse_mgmt"
+              sequence="108"/>
+
+    <menuitem id="menu_wms_rfid_tags"
+              name="RFID Tags"
+              parent="menu_wms_rfid_root"
+              action="action_wms_rfid_tag"
+              sequence="10"/>
+
+    <menuitem id="menu_wms_rfid_readers"
+              name="RFID Readers"
+              parent="menu_wms_rfid_root"
+              action="action_wms_rfid_reader"
+              sequence="20"/>
+
+    <menuitem id="menu_wms_rfid_transactions"
+              name="RFID Transactions"
+              parent="menu_wms_rfid_root"
+              action="action_wms_rfid_transaction"
+              sequence="30"/>
+
+    <menuitem id="menu_wms_rfid_inventory"
+              name="RFID Inventory"
+              parent="menu_wms_rfid_root"
+              action="action_wms_rfid_inventory"
+              sequence="40"/>
+
+</odoo>

@@ -7,7 +7,7 @@
         Inventory freeze management for Third Party Logistics warehouses.
         Provides inventory freezing capabilities for quality control and investigations.
     ''',
-    'depends': ['base', 'stock', 'wms_owner'],
+    'depends': ['base', 'stock', 'wms_owner', 'wms_quality_control'],
     'data': [
         'data/sequence_data.xml',
         'security/ir.model.access.csv',

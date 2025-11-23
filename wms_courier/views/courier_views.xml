@@ -1,0 +1,424 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- Actions -->
+    <record id="action_wms_courier_company" model="ir.actions.act_window">
+        <field name="name">Courier Companies</field>
+        <field name="res_model">wms.courier.company</field>
+        <field name="view_mode">tree,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create courier companies
+            </p>
+            <p>
+                Define courier service providers with their API configurations.
+            </p>
+        </field>
+    </record>
+
+    <record id="action_wms_courier_service" model="ir.actions.act_window">
+        <field name="name">Courier Services</field>
+        <field name="res_model">wms.courier.service</field>
+        <field name="view_mode">tree,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create courier services
+            </p>
+            <p>
+                Define specific shipping services offered by courier companies.
+            </p>
+        </field>
+    </record>
+
+    <record id="action_wms_shipment_order" model="ir.actions.act_window">
+        <field name="name">Shipment Orders</field>
+        <field name="res_model">wms.shipment.order</field>
+        <field name="view_mode">tree,form,pivot,graph</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create shipment orders
+            </p>
+            <p>
+                Manage individual shipping orders to courier companies.
+            </p>
+        </field>
+    </record>
+
+    <!-- Tree View for Courier Companies -->
+    <record id="view_wms_courier_company_tree" model="ir.ui.view">
+        <field name="name">wms.courier.company.tree</field>
+        <field name="model">wms.courier.company</field>
+        <field name="arch" type="xml">
+            <tree string="Courier Companies">
+                <field name="name"/>
+                <field name="code"/>
+                <field name="contact_email"/>
+                <field name="contact_phone"/>
+                <field name="active"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Form View for Courier Companies -->
+    <record id="view_wms_courier_company_form" model="ir.ui.view">
+        <field name="name">wms.courier.company.form</field>
+        <field name="model">wms.courier.company</field>
+        <field name="arch" type="xml">
+            <form string="Courier Company">
+                <header>
+                    <button name="toggle_active"
+                            type="object"
+                            class="oe_stat_button"
+                            icon="fa-check-circle-o">
+                        <field name="active"
+                               widget="boolean_button"
+                               options='{"terminology": "active"}'/>
+                    </button>
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="toggle_active"
+                                type="object"
+                                class="oe_stat_button"
+                                icon="fa-check-circle-o">
+                            <field name="active"
+                                   widget="boolean_button"
+                                   options='{"terminology": "active"}'/>
+                        </button>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="name"/>
+                            <field name="code"/>
+                            <field name="contact_email"/>
+                            <field name="contact_phone"/>
+                        </group>
+                        <group>
+                            <field name="active"/>
+                            <field name="website"/>
+                            <field name="tracking_prefix"/>
+                        </group>
+                    </group>
+
+                    <notebook>
+                        <page string="API Configuration">
+                            <group>
+                                <field name="is_integrated"/>
+                                <field name="api_url"/>
+                                <field name="api_key"/>
+                                <field name="api_secret"/>
+                                <field name="username"/>
+                                <field name="password"/>
+                            </group>
+                        </page>
+
+                        <page string="Features">
+                            <group>
+                                <field name="supports_cod"/>
+                                <field name="supports_insurance"/>
+                                <field name="supports_signature"/>
+                            </group>
+                        </page>
+
+                        <page string="Services">
+                            <field name="service_ids" nolabel="1"/>
+                        </page>
+
+                        <page string="Description">
+                            <field name="description"/>
+                        </page>
+
+                        <page string="Notes">
+                            <field name="notes"/>
+                        </page>
+                    </notebook>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids"/>
+                    <field name="activity_ids"/>
+                    <field name="message_ids"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <!-- Tree View for Courier Services -->
+    <record id="view_wms_courier_service_tree" model="ir.ui.view">
+        <field name="name">wms.courier.service.tree</field>
+        <field name="model">wms.courier.service</field>
+        <field name="arch" type="xml">
+            <tree string="Courier Services">
+                <field name="name"/>
+                <field name="code"/>
+                <field name="courier_company_id"/>
+                <field name="service_type"/>
+                <field name="base_cost"/>
+                <field name="active"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Form View for Courier Services -->
+    <record id="view_wms_courier_service_form" model="ir.ui.view">
+        <field name="name">wms.courier.service.form</field>
+        <field name="model">wms.courier.service</field>
+        <field name="arch" type="xml">
+            <form string="Courier Service">
+                <header>
+                    <button name="toggle_active"
+                            type="object"
+                            class="oe_stat_button"
+                            icon="fa-check-circle-o">
+                        <field name="active"
+                               widget="boolean_button"
+                               options='{"terminology": "active"}'/>
+                    </button>
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="toggle_active"
+                                type="object"
+                                class="oe_stat_button"
+                                icon="fa-check-circle-o">
+                            <field name="active"
+                                   widget="boolean_button"
+                                   options='{"terminology": "active"}'/>
+                        </button>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="name"/>
+                            <field name="code"/>
+                            <field name="courier_company_id"/>
+                            <field name="service_type"/>
+                        </group>
+                        <group>
+                            <field name="active"/>
+                            <field name="delivery_time_days"/>
+                            <field name="tracking_url"/>
+                        </group>
+                    </group>
+
+                    <notebook>
+                        <page string="Pricing">
+                            <group>
+                                <field name="base_cost"/>
+                                <field name="cost_per_kg"/>
+                                <field name="cost_per_km"/>
+                            </group>
+                        </page>
+
+                        <page string="Configuration">
+                            <group>
+                                <field name="is_integrated"/>
+                                <field name="requires_label_print"/>
+                                <field name="requires_pickup"/>
+                            </group>
+                            <group>
+                                <field name="api_config"/>
+                            </group>
+                        </page>
+
+                        <page string="Description">
+                            <field name="description"/>
+                        </page>
+
+                        <page string="Notes">
+                            <field name="notes"/>
+                        </page>
+                    </notebook>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids"/>
+                    <field name="activity_ids"/>
+                    <field name="message_ids"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <!-- Tree View for Shipment Orders -->
+    <record id="view_wms_shipment_order_tree" model="ir.ui.view">
+        <field name="name">wms.shipment.order.tree</field>
+        <field name="model">wms.shipment.order</field>
+        <field name="arch" type="xml">
+            <tree string="Shipment Orders" decoration-info="state=='draft'" decoration-primary="state=='confirmed'" decoration-success="state=='delivered'" decoration-warning="state=='in_transit'" decoration-muted="state=='cancelled'">
+                <field name="name"/>
+                <field name="tracking_number"/>
+                <field name="courier_company_id"/>
+                <field name="courier_service_id"/>
+                <field name="recipient_city"/>
+                <field name="recipient_country"/>
+                <field name="package_weight"/>
+                <field name="total_cost"/>
+                <field name="state"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Form View for Shipment Orders -->
+    <record id="view_wms_shipment_order_form" model="ir.ui.view">
+        <field name="name">wms.shipment.order.form</field>
+        <field name="model">wms.shipment.order</field>
+        <field name="arch" type="xml">
+            <form string="Shipment Order">
+                <header>
+                    <button name="action_confirm_shipment"
+                            string="Confirm Shipment"
+                            type="object"
+                            class="oe_highlight"
+                            states="draft"
+                            help="Confirm the shipment with the courier company"/>
+                    <button name="action_ship_shipment"
+                            string="Ship Order"
+                            type="object"
+                            class="oe_highlight"
+                            states="confirmed"
+                            help="Ship the order and send to courier"/>
+                    <button name="action_deliver_shipment"
+                            string="Mark Delivered"
+                            type="object"
+                            class="oe_highlight"
+                            states="in_transit"
+                            help="Mark the shipment as delivered"/>
+                    <button name="action_track_shipment"
+                            string="Track Shipment"
+                            type="object"
+                            states="in_transit,delivered"
+                            help="Track the shipment using courier's tracking system"/>
+                    <field name="state" widget="statusbar" statusbar_visible="draft,confirmed,in_transit,delivered"/>
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <field name="total_cost" widget="statinfo" string="Total Cost"/>
+                        <field name="package_weight" widget="statinfo" string="Weight"/>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="name"/>
+                            <field name="tracking_number"/>
+                            <field name="source_document"/>
+                        </group>
+                        <group>
+                            <field name="date_created"/>
+                            <field name="date_expected"/>
+                            <field name="date_delivered"/>
+                        </group>
+                    </group>
+
+                    <notebook>
+                        <page string="Courier Information">
+                            <group>
+                                <field name="courier_company_id"/>
+                                <field name="courier_service_id"/>
+                            </group>
+                        </page>
+
+                        <page string="Shipping Addresses">
+                            <group string="Sender Address">
+                                <field name="sender_address" nolabel="1"/>
+                                <group>
+                                    <field name="sender_city"/>
+                                    <field name="sender_state"/>
+                                    <field name="sender_zip"/>
+                                    <field name="sender_country"/>
+                                </group>
+                            </group>
+                            <group string="Recipient Address">
+                                <field name="recipient_address" nolabel="1"/>
+                                <group>
+                                    <field name="recipient_city"/>
+                                    <field name="recipient_state"/>
+                                    <field name="recipient_zip"/>
+                                    <field name="recipient_country"/>
+                                </group>
+                            </group>
+                        </page>
+
+                        <page string="Package Details">
+                            <group>
+                                <field name="package_weight"/>
+                                <field name="package_length"/>
+                                <field name="package_width"/>
+                                <field name="package_height"/>
+                                <field name="package_volume"/>
+                            </group>
+                        </page>
+
+                        <page string="Products">
+                            <field name="product_line_ids" nolabel="1"/>
+                            <group col="4">
+                                <field name="total_value"/>
+                                <field name="declared_value"/>
+                            </group>
+                        </page>
+
+                        <page string="Costs">
+                            <group>
+                                <field name="base_cost"/>
+                                <field name="weight_cost"/>
+                                <field name="distance_cost"/>
+                                <field name="other_charges"/>
+                                <field name="total_cost"/>
+                            </group>
+                        </page>
+
+                        <page string="Special Services">
+                            <group>
+                                <field name="is_insured"/>
+                                <field name="insurance_value"/>
+                                <field name="requires_signature"/>
+                                <field name="is_cod"/>
+                                <field name="cod_amount"/>
+                            </group>
+                        </page>
+
+                        <page string="Integration">
+                            <group>
+                                <field name="api_response"/>
+                            </group>
+                            <group string="Shipping Label">
+                                <field name="label_data"/>
+                                <field name="label_name"/>
+                            </group>
+                        </page>
+
+                        <page string="Notes">
+                            <field name="notes"/>
+                        </page>
+                    </notebook>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids"/>
+                    <field name="activity_ids"/>
+                    <field name="message_ids"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <!-- Menu Items -->
+    <menuitem id="menu_wms_courier_root"
+              name="Courier Integration"
+              parent="stock.menu_stock_warehouse_mgmt"
+              sequence="106"/>
+
+    <menuitem id="menu_wms_courier_companies"
+              name="Courier Companies"
+              parent="menu_wms_courier_root"
+              action="action_wms_courier_company"
+              sequence="10"/>
+
+    <menuitem id="menu_wms_courier_services"
+              name="Courier Services"
+              parent="menu_wms_courier_root"
+              action="action_wms_courier_service"
+              sequence="20"/>
+
+    <menuitem id="menu_wms_shipment_orders"
+              name="Shipment Orders"
+              parent="menu_wms_courier_root"
+              action="action_wms_shipment_order"
+              sequence="30"/>
+
+</odoo>

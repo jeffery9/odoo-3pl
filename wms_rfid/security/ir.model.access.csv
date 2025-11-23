@@ -1,0 +1,5 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_wms_rfid_tag_user,wms.rfid.tag.user,model_wms_rfid_tag,base.group_user,1,1,1,1
+access_wms_rfid_reader_user,wms.rfid.reader.user,model_wms_rfid_reader,base.group_user,1,1,1,1
+access_wms_rfid_transaction_user,wms.rfid_transaction.user,model_wms_rfid_transaction,base.group_user,1,1,1,1
+access_wms_rfid_inventory_user,wms.rfid_inventory.user,model_wms_rfid_inventory,base.group_user,1,1,1,1

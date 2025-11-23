@@ -1,0 +1,5 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_wms_wcs_system_user,wms.wcs.system.user,model_wms_wcs_system,base.group_user,1,1,1,1
+access_wms_wcs_device_user,wms.wcs.device.user,model_wms_wcs_device,base.group_user,1,1,1,1
+access_wms_wcs_task_user,wms.wcs_task.user,model_wms_wcs_task,base.group_user,1,1,1,1
+access_wms_wcs_integration_log_user,wms.wcs.integration.log.user,model_wms_wcs_integration_log,base.group_user,1,1,1,1

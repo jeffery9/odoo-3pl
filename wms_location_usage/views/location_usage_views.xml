@@ -1,0 +1,268 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- Actions -->
+    <record id="action_wms_location_usage" model="ir.actions.act_window">
+        <field name="name">库位使用分析</field>
+        <field name="res_model">wms.location.usage</field>
+        <field name="view_mode">tree,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                创建库位使用分析
+            </p>
+            <p>
+                分析仓库中各库位的使用情况和效率，优化库位分配和空间利用率。
+            </p>
+        </field>
+    </record>
+
+    <record id="action_wms_location_utilization" model="ir.actions.act_window">
+        <field name="name">库位利用率明细</field>
+        <field name="res_model">wms.location.utilization</field>
+        <field name="view_mode">tree,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                库位利用率详情
+            </p>
+            <p>
+                查看各库位的具体使用情况和效率明细。
+            </p>
+        </field>
+    </record>
+
+    <record id="action_wms_location_usage_report" model="ir.actions.act_window">
+        <field name="name">生成库位使用报告</field>
+        <field name="res_model">wms.location.usage.report</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+        <field name="binding_model_id" ref="model_wms_location_usage_report"/>
+        <field name="binding_view_types">form</field>
+    </record>
+
+    <!-- Tree View for Location Usage Analysis -->
+    <record id="view_wms_location_usage_tree" model="ir.ui.view">
+        <field name="name">wms.location.usage.tree</field>
+        <field name="model">wms.location.usage</field>
+        <field name="arch" type="xml">
+            <tree string="库位使用分析" decoration-info="state=='draft'" decoration-success="state=='generated'" decoration-muted="state=='validated'">
+                <field name="name"/>
+                <field name="analysis_date"/>
+                <field name="period_start"/>
+                <field name="period_end"/>
+                <field name="owner_id"/>
+                <field name="warehouse_id"/>
+                <field name="total_locations"/>
+                <field name="usage_rate"/>
+                <field name="capacity_usage_rate"/>
+                <field name="state"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Form View for Location Usage Analysis -->
+    <record id="view_wms_location_usage_form" model="ir.ui.view">
+        <field name="name">wms.location.usage.form</field>
+        <field name="model">wms.location.usage</field>
+        <field name="arch" type="xml">
+            <form string="库位使用分析">
+                <header>
+                    <button name="action_generate_analysis"
+                            string="生成分析"
+                            type="object"
+                            class="oe_highlight"
+                            states="draft"
+                            help="根据设定的期间和条件生成库位使用分析"/>
+                    <field name="state" widget="statusbar" statusbar_visible="draft,generated,validated"/>
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                    </div>
+                    <group>
+                        <group>
+                            <field name="name"/>
+                            <field name="analysis_date"/>
+                            <field name="analysis_type"/>
+                        </group>
+                        <group>
+                            <field name="owner_id"/>
+                            <field name="warehouse_id"/>
+                            <field name="period_start"/>
+                            <field name="period_end"/>
+                        </group>
+                    </group>
+
+                    <notebook>
+                        <page string="总体统计">
+                            <group>
+                                <group string="库位统计">
+                                    <field name="total_locations"/>
+                                    <field name="occupied_locations"/>
+                                    <field name="empty_locations"/>
+                                    <field name="usage_rate" widget="percentage"/>
+                                    <field name="unused_locations"/>
+                                </group>
+                                <group string="容量统计">
+                                    <field name="total_capacity"/>
+                                    <field name="used_capacity"/>
+                                    <field name="capacity_usage_rate" widget="percentage"/>
+                                </group>
+                            </group>
+                        </page>
+
+                        <page string="效率分析">
+                            <group>
+                                <field name="high_usage_locations"/>
+                                <field name="low_usage_locations"/>
+                                <field name="turnover_rate"/>
+                                <field name="avg_residence_time"/>
+                            </group>
+                        </page>
+
+                        <page string="分析结果">
+                            <field name="analysis_results" invisible="1"/>
+                        </page>
+
+                        <page string="优化建议">
+                            <field name="recommendations"/>
+                        </page>
+
+                        <page string="按库区统计">
+                            <field name="stats_by_zone"/>
+                        </page>
+
+                        <page string="按类别统计">
+                            <field name="stats_by_category"/>
+                        </page>
+
+                        <page string="使用趋势">
+                            <field name="usage_trend"/>
+                        </page>
+
+                        <page string="附加信息">
+                            <field name="notes"/>
+                        </page>
+                    </notebook>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids"/>
+                    <field name="activity_ids"/>
+                    <field name="message_ids"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <!-- Tree View for Location Utilization -->
+    <record id="view_wms_location_utilization_tree" model="ir.ui.view">
+        <field name="name">wms.location.utilization.tree</field>
+        <field name="model">wms.location.utilization</field>
+        <field name="arch" type="xml">
+            <tree string="库位利用率明细" decoration-danger="efficiency_category=='low'" decoration-warning="efficiency_category=='medium'" decoration-success="efficiency_category=='high'" decoration-muted="efficiency_category=='unused'">
+                <field name="location_name"/>
+                <field name="zone_name"/>
+                <field name="is_occupied"/>
+                <field name="capacity"/>
+                <field name="used_volume"/>
+                <field name="usage_rate" widget="percentage"/>
+                <field name="efficiency_category"/>
+                <field name="turnover_frequency"/>
+                <field name="owner_id"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Form View for Location Utilization -->
+    <record id="view_wms_location_utilization_form" model="ir.ui.view">
+        <field name="name">wms.location.utilization.form</field>
+        <field name="model">wms.location.utilization</field>
+        <field name="arch" type="xml">
+            <form string="库位利用率明细">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="location_name"/>
+                            <field name="zone_name"/>
+                            <field name="owner_id"/>
+                            <field name="efficiency_category"/>
+                        </group>
+                        <group>
+                            <field name="is_occupied"/>
+                            <field name="usage_rate" widget="percentage"/>
+                            <field name="turnover_frequency"/>
+                        </group>
+                    </group>
+                    <group string="容量信息">
+                        <field name="capacity"/>
+                        <field name="used_volume"/>
+                        <field name="used_weight"/>
+                    </group>
+                    <group string="商品信息">
+                        <field name="product_count"/>
+                        <field name="total_quantity"/>
+                    </group>
+                    <group string="时间信息">
+                        <field name="first_used_date"/>
+                        <field name="last_used_date"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Form View for Location Usage Report Wizard -->
+    <record id="view_wms_location_usage_report_form" model="ir.ui.view">
+        <field name="name">wms.location.usage.report.form</field>
+        <field name="model">wms.location.usage.report</field>
+        <field name="arch" type="xml">
+            <form string="生成库位使用报告">
+                <group>
+                    <group>
+                        <field name="period_start"/>
+                        <field name="period_end"/>
+                    </group>
+                    <group>
+                        <field name="owner_id"/>
+                        <field name="warehouse_id"/>
+                    </group>
+                    <group>
+                        <field name="analysis_type"/>
+                    </group>
+                </group>
+                <footer>
+                    <button name="action_generate_report"
+                            string="生成报告"
+                            type="object"
+                            class="btn-primary"/>
+                    <button string="取消"
+                            class="btn-secondary"
+                            special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <!-- Menu Items -->
+    <menuitem id="menu_wms_location_usage_root"
+              name="库位使用分析"
+              parent="stock.menu_stock_warehouse_mgmt"
+              sequence="103"/>
+
+    <menuitem id="menu_wms_location_usage"
+              name="库位使用分析"
+              parent="menu_wms_location_usage_root"
+              action="action_wms_location_usage"
+              sequence="10"/>
+
+    <menuitem id="menu_wms_location_utilization"
+              name="库位利用率明细"
+              parent="menu_wms_location_usage_root"
+              action="action_wms_location_utilization"
+              sequence="20"/>
+
+    <menuitem id="menu_wms_location_usage_report"
+              name="生成新分析"
+              parent="menu_wms_location_usage_root"
+              action="action_wms_location_usage_report"
+              sequence="30"/>
+
+</odoo>

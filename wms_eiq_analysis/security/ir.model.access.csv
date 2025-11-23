@@ -1,0 +1,5 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_wms_eiq_analysis_user,wms.eiq.analysis.user,model_wms_eiq_analysis,stock.group_stock_user,1,1,1,0
+access_wms_eiq_analysis_manager,wms.eiq.analysis.manager,model_wms_eiq_analysis,stock.group_stock_manager,1,1,1,1
+access_wms_eiq_analysis_report_user,wms.eiq.analysis.report.user,model_wms_eiq_analysis_report,stock.group_stock_user,1,1,1,1
+access_wms_eiq_analysis_report_manager,wms.eiq.analysis.report.manager,model_wms_eiq_analysis_report,stock.group_stock_manager,1,1,1,1

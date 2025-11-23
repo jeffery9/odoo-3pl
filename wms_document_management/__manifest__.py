@@ -18,7 +18,9 @@
         "base",
         "stock",
         "document",
-        "wms_owner"
+        "wms_owner",
+        "wms_quality_control",
+        "wms_returns_management"
     ],
     "data": [
         "data/sequence_data.xml",

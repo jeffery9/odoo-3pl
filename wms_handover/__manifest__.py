@@ -7,7 +7,7 @@
         Handover management for Third Party Logistics warehouses.
         Provides handover tracking and sign-off capabilities.
     ''',
-    'depends': ['base', 'stock', 'wms_owner'],
+    'depends': ['base', 'stock', 'wms_owner', 'wms_quality_control'],
     'data': [
         'data/sequence_data.xml',
         'security/ir.model.access.csv',

@@ -1,0 +1,335 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- Actions -->
+    <record id="action_wms_value_added_service" model="ir.actions.act_window">
+        <field name="name">Value Added Services</field>
+        <field name="res_model">wms.value.added.service</field>
+        <field name="view_mode">tree,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create value added services
+            </p>
+            <p>
+                Define services that add value to products in the warehouse.
+            </p>
+        </field>
+    </record>
+
+    <record id="action_wms_value_added_operation" model="ir.actions.act_window">
+        <field name="name">Value Added Operations</field>
+        <field name="res_model">wms.value.added.operation</field>
+        <field name="view_mode">tree,form,pivot,graph</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Track value added operations
+            </p>
+            <p>
+                Monitor and manage value added services performed on products.
+            </p>
+        </field>
+    </record>
+
+    <record id="action_wms_value_added_report" model="ir.actions.act_window">
+        <field name="name">Value Added Service Report</field>
+        <field name="res_model">wms.value.added.report</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+        <field name="binding_model_id" ref="model_wms_value_added_report"/>
+        <field name="binding_view_types">form</field>
+    </record>
+
+    <!-- Tree View for Value Added Services -->
+    <record id="view_wms_value_added_service_tree" model="ir.ui.view">
+        <field name="name">wms.value.added.service.tree</field>
+        <field name="model">wms.value.added.service</field>
+        <field name="arch" type="xml">
+            <tree string="Value Added Services" decoration-info="service_category=='product'" decoration-primary="service_category=='order'" decoration-success="service_category=='compliance'" decoration-warning="service_category=='logistics'" decoration-danger="service_category=='quality'">
+                <field name="name"/>
+                <field name="code"/>
+                <field name="service_type"/>
+                <field name="service_category"/>
+                <field name="cost_per_unit"/>
+                <field name="price_per_unit"/>
+                <field name="active"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Form View for Value Added Services -->
+    <record id="view_wms_value_added_service_form" model="ir.ui.view">
+        <field name="name">wms.value.added.service.form</field>
+        <field name="model">wms.value.added.service</field>
+        <field name="arch" type="xml">
+            <form string="Value Added Service">
+                <header>
+                    <button name="toggle_active"
+                            type="object"
+                            class="oe_stat_button"
+                            icon="fa-check-circle-o">
+                        <field name="active"
+                               widget="boolean_button"
+                               options='{"terminology": "active"}'/>
+                    </button>
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="toggle_active"
+                                type="object"
+                                class="oe_stat_button"
+                                icon="fa-check-circle-o">
+                            <field name="active"
+                                   widget="boolean_button"
+                                   options='{"terminology": "active"}'/>
+                        </button>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="name"/>
+                            <field name="code"/>
+                            <field name="service_type"/>
+                            <field name="service_category"/>
+                        </group>
+                        <group>
+                            <field name="active"/>
+                            <field name="standard_time"/>
+                            <field name="cost_per_unit"/>
+                            <field name="price_per_unit"/>
+                        </group>
+                    </group>
+
+                    <notebook>
+                        <page string="Configuration">
+                            <group>
+                                <field name="has_quality_check"/>
+                                <field name="requires_approval"/>
+                                <field name="creates_lot"/>
+                                <field name="integrated_with_erp"/>
+                                <field name="automatic_billing"/>
+                            </group>
+                        </page>
+
+                        <page string="Requirements">
+                            <group>
+                                <field name="required_skills" widget="many2many_tags"/>
+                                <field name="required_equipment" widget="many2many_tags"/>
+                            </group>
+                        </page>
+
+                        <page string="Description">
+                            <field name="description"/>
+                        </page>
+
+                        <page string="Notes">
+                            <field name="notes"/>
+                        </page>
+                    </notebook>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids"/>
+                    <field name="activity_ids"/>
+                    <field name="message_ids"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <!-- Tree View for Value Added Operations -->
+    <record id="view_wms_value_added_operation_tree" model="ir.ui.view">
+        <field name="name">wms.value.added.operation.tree</field>
+        <field name="model">wms.value.added.operation</field>
+        <field name="arch" type="xml">
+            <tree string="Value Added Operations" decoration-info="state=='draft'" decoration-primary="state=='scheduled'" decoration-success="state=='completed'" decoration-warning="state=='in_progress'" decoration-muted="state=='cancelled'">
+                <field name="name"/>
+                <field name="service_id"/>
+                <field name="owner_id"/>
+                <field name="assigned_to"/>
+                <field name="date_scheduled"/>
+                <field name="duration_minutes"/>
+                <field name="state"/>
+                <field name="progress"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Form View for Value Added Operations -->
+    <record id="view_wms_value_added_operation_form" model="ir.ui.view">
+        <field name="name">wms.value.added.operation.form</field>
+        <field name="model">wms.value.added.operation</field>
+        <field name="arch" type="xml">
+            <form string="Value Added Operation">
+                <header>
+                    <button name="action_start_operation"
+                            string="Start Operation"
+                            type="object"
+                            class="oe_highlight"
+                            states="scheduled"
+                            help="Start the value added operation"/>
+                    <button name="action_complete_operation"
+                            string="Complete Operation"
+                            type="object"
+                            class="oe_highlight"
+                            states="in_progress"
+                            help="Mark the operation as complete"/>
+                    <button name="action_approve_operation"
+                            string="Approve"
+                            type="object"
+                            class="oe_highlight"
+                            states="quality_check"
+                            help="Approve after quality check"/>
+                    <button name="action_cancel_operation"
+                            string="Cancel"
+                            type="object"
+                            states="draft,scheduled,in_progress"
+                            help="Cancel the operation"/>
+                    <field name="state" widget="statusbar" statusbar_visible="draft,scheduled,in_progress,quality_check,approved,completed"/>
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <field name="progress" widget="statinfo" string="Progress"/>
+                        <field name="efficiency_rate" widget="statinfo" string="Efficiency"/>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="name"/>
+                            <field name="service_id"/>
+                            <field name="priority"/>
+                            <field name="date_scheduled"/>
+                        </group>
+                        <group>
+                            <field name="owner_id"/>
+                            <field name="warehouse_id"/>
+                            <field name="assigned_to"/>
+                            <field name="completed_by"/>
+                        </group>
+                    </group>
+
+                    <notebook>
+                        <page string="Operation Details">
+                            <group>
+                                <field name="source_document"/>
+                                <field name="bom_id"/>
+                                <field name="date_started"/>
+                                <field name="date_completed"/>
+                            </group>
+                        </page>
+
+                        <page string="Products and Materials">
+                            <group string="Input Products">
+                                <field name="product_line_ids" nolabel="1" context="{'default_line_type': 'input'}">
+                                    <tree editable="bottom">
+                                        <field name="product_id"/>
+                                        <field name="product_uom"/>
+                                        <field name="quantity"/>
+                                        <field name="unit_cost"/>
+                                        <field name="total_cost"/>
+                                        <field name="lot_id"/>
+                                        <field name="location_id"/>
+                                    </tree>
+                                </field>
+                            </group>
+                            <group string="Materials Required">
+                                <field name="material_ids" nolabel="1">
+                                    <tree editable="bottom">
+                                        <field name="product_id"/>
+                                        <field name="product_uom"/>
+                                        <field name="planned_quantity"/>
+                                        <field name="used_quantity"/>
+                                        <field name="unit_cost"/>
+                                        <field name="total_cost"/>
+                                    </tree>
+                                </field>
+                            </group>
+                        </page>
+
+                        <page string="Quality and Compliance">
+                            <group string="Quality Checks">
+                                <field name="quality_check_ids" nolabel="1"/>
+                            </group>
+                            <group string="Compliance Checks">
+                                <field name="compliance_check_ids" nolabel="1"/>
+                            </group>
+                        </page>
+
+                        <page string="Performance">
+                            <group>
+                                <field name="progress"/>
+                                <field name="duration_minutes"/>
+                                <field name="efficiency_rate"/>
+                                <field name="cost"/>
+                                <field name="revenue"/>
+                                <field name="margin"/>
+                            </group>
+                        </page>
+
+                        <page string="Notes">
+                            <field name="notes"/>
+                        </page>
+                    </notebook>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids"/>
+                    <field name="activity_ids"/>
+                    <field name="message_ids"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <!-- Form View for Value Added Service Report Wizard -->
+    <record id="view_wms_value_added_report_form" model="ir.ui.view">
+        <field name="name">wms.value.added.report.form</field>
+        <field name="model">wms.value.added.report</field>
+        <field name="arch" type="xml">
+            <form string="Generate Value Added Service Report">
+                <group>
+                    <group>
+                        <field name="date_from"/>
+                        <field name="date_to"/>
+                    </group>
+                    <group>
+                        <field name="owner_id"/>
+                        <field name="warehouse_id"/>
+                    </group>
+                    <group>
+                        <field name="service_type"/>
+                    </group>
+                </group>
+                <footer>
+                    <button name="action_generate_report"
+                            string="Generate Report"
+                            type="object"
+                            class="btn-primary"/>
+                    <button string="Cancel"
+                            class="btn-secondary"
+                            special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <!-- Menu Items -->
+    <menuitem id="menu_wms_value_added_root"
+              name="Value Added Services"
+              parent="stock.menu_stock_warehouse_mgmt"
+              sequence="105"/>
+
+    <menuitem id="menu_wms_value_added_services"
+              name="Service Definitions"
+              parent="menu_wms_value_added_root"
+              action="action_wms_value_added_service"
+              sequence="10"/>
+
+    <menuitem id="menu_wms_value_added_operations"
+              name="Operations"
+              parent="menu_wms_value_added_root"
+              action="action_wms_value_added_operation"
+              sequence="20"/>
+
+    <menuitem id="menu_wms_value_added_report"
+              name="Generate Report"
+              parent="menu_wms_value_added_root"
+              action="action_wms_value_added_report"
+              sequence="30"/>
+
+</odoo>

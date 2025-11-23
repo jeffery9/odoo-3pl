@@ -1,0 +1,3 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_wms_wave_rule_user,wms.wave.rule.user,model_wms_wave_rule,stock.group_stock_user,1,1,1,0
+access_wms_wave_rule_manager,wms.wave.rule.manager,model_wms_wave_rule,stock.group_stock_manager,1,1,1,1

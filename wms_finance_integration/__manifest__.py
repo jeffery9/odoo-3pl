@@ -20,7 +20,8 @@
         "account",
         "sale",
         "purchase",
-        "wms_owner"
+        "wms_owner",
+        "wms_billing"
     ],
     "data": [
         "data/sequence_data.xml",

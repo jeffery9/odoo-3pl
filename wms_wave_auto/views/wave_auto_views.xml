@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- Action for Auto Wave Rules -->
+    <record id="action_wms_wave_rule" model="ir.actions.act_window">
+        <field name="name">自动波次规则</field>
+        <field name="res_model">wms.wave.rule</field>
+        <field name="view_mode">tree,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                创建自动波次生成规则
+            </p>
+            <p>
+                配置自动波次生成的规则和条件，包括时间触发、数量触发等方式。
+            </p>
+        </field>
+    </record>
+
+    <!-- Tree View for Auto Wave Rules -->
+    <record id="view_wms_wave_rule_tree" model="ir.ui.view">
+        <field name="name">wms.wave.rule.tree</field>
+        <field name="model">wms.wave.rule</field>
+        <field name="arch" type="xml">
+            <tree string="自动波次规则">
+                <field name="sequence" widget="handle"/>
+                <field name="name"/>
+                <field name="code"/>
+                <field name="trigger_type"/>
+                <field name="wave_strategy"/>
+                <field name="active"/>
+                <field name="last_execution"/>
+                <field name="execution_count"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Form View for Auto Wave Rules -->
+    <record id="view_wms_wave_rule_form" model="ir.ui.view">
+        <field name="name">wms.wave.rule.form</field>
+        <field name="model">wms.wave.rule</field>
+        <field name="arch" type="xml">
+            <form string="自动波次规则">
+                <header>
+                    <button name="action_execute_rule"
+                            string="立即执行"
+                            type="object"
+                            class="oe_highlight"
+                            help="立即根据此规则执行波次生成"/>
+                    <button name="%(action_wms_wave_rule)d"
+                            string="查看所有规则"
+                            type="action"/>
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="toggle_active"
+                                type="object"
+                                class="oe_stat_button"
+                                icon="fa-check-circle-o">
+                            <field name="active"
+                                   widget="boolean_button"
+                                   options='{"terminology": "active"}'/>
+                        </button>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="name"/>
+                            <field name="code"/>
+                            <field name="active"/>
+                            <field name="sequence"/>
+                        </group>
+                        <group>
+                            <field name="last_execution"/>
+                            <field name="execution_count"/>
+                            <field name="notes"/>
+                        </group>
+                    </group>
+
+                    <notebook>
+                        <page string="触发条件">
+                            <group>
+                                <field name="trigger_type"/>
+                            </group>
+
+                            <group string="时间触发条件" attrs="{'invisible': [('trigger_type', '!=', 'time_based')]}">
+                                <field name="time_trigger_type"/>
+                                <field name="fixed_time" attrs="{'invisible': [('time_trigger_type', '!=', 'fixed_time')]}"/>
+                                <field name="time_interval" attrs="{'invisible': [('time_trigger_type', '!=', 'interval')]}"/>
+                                <field name="rolling_window_minutes" attrs="{'invisible': [('time_trigger_type', '!=', 'rolling_window')]}"/>
+                            </group>
+
+                            <group string="数量触发条件" attrs="{'invisible': [('trigger_type', '=', 'time_based')]}">
+                                <field name="min_orders"/>
+                                <field name="max_orders"/>
+                                <field name="min_volume"/>
+                                <field name="max_volume"/>
+                                <field name="min_weight"/>
+                                <field name="max_weight"/>
+                            </group>
+                        </page>
+
+                        <page string="订单筛选">
+                            <group>
+                                <field name="warehouse_ids" widget="many2many_tags"/>
+                                <field name="picking_type_ids" widget="many2many_tags"/>
+                                <field name="priority_filter"/>
+                                <field name="carrier_filter_ids" widget="many2many_tags"/>
+                                <field name="delivery_date_filter"/>
+                            </group>
+                        </page>
+
+                        <page string="波次策略">
+                            <group>
+                                <field name="wave_strategy"/>
+                                <field name="max_wave_size"/>
+                            </group>
+
+                            <group string="分组优化">
+                                <field name="enable_batching"/>
+                                <field name="batching_strategy" attrs="{'invisible': [('enable_batching', '=', False)]}"/>
+                            </group>
+                        </page>
+
+                        <page string="执行配置">
+                            <group>
+                                <field name="auto_confirm"/>
+                                <field name="auto_assign"/>
+                            </group>
+                        </page>
+                    </notebook>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids"/>
+                    <field name="activity_ids"/>
+                    <field name="message_ids"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <!-- Menu Items -->
+    <menuitem id="menu_wms_wave_auto_root"
+              name="自动波次生成"
+              parent="stock.menu_stock_warehouse_mgmt"
+              sequence="100"/>
+
+    <menuitem id="menu_wms_wave_rules"
+              name="波次规则配置"
+              parent="menu_wms_wave_auto_root"
+              action="action_wms_wave_rule"
+              sequence="10"/>
+
+</odoo>

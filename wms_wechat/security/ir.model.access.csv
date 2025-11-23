@@ -1,0 +1,6 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_wms_wechat_app_user,wms.wechat.app.user,model_wms_wechat_app,base.group_user,1,1,1,1
+access_wms_wechat_user_user,wms.wechat.user.user,model_wms_wechat_user,base.group_user,1,1,1,1
+access_wms_wechat_message_user,wms.wechat.message.user,model_wms_wechat_message,base.group_user,1,1,1,1
+access_wms_wechat_inventory_check_user,wms.wechat.inventory.check.user,model_wms_wechat_inventory_check,base.group_user,1,1,1,1
+access_wms_wechat_picking_notification_user,wms.wechat.picking.notification.user,model_wms_wechat_picking_notification,base.group_user,1,1,1,1

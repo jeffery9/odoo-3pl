@@ -7,7 +7,7 @@
         Billing management for Third Party Logistics warehouses.
         Provides automated billing, invoice generation, and payment tracking.
     ''',
-    'depends': ['base', 'stock', 'account', 'wms_owner'],
+    'depends': ['base', 'stock', 'account', 'wms_owner', 'wms_quality_control'],
     'data': [
         'security/ir.model.access.csv',
         'data/sequences.xml',

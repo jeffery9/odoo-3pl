@@ -1,0 +1,383 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- Actions -->
+    <record id="action_wms_performance_indicator" model="ir.actions.act_window">
+        <field name="name">Performance Indicators</field>
+        <field name="res_model">wms.performance.indicator</field>
+        <field name="view_mode">tree,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create performance indicators
+            </p>
+            <p>
+                Define KPIs and metrics for warehouse performance tracking.
+            </p>
+        </field>
+    </record>
+
+    <record id="action_wms_performance_report" model="ir.actions.act_window">
+        <field name="name">Performance Reports</field>
+        <field name="res_model">wms.performance.report</field>
+        <field name="view_mode">tree,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create performance reports
+            </p>
+            <p>
+                Generate comprehensive performance analysis reports for warehouse operations.
+            </p>
+        </field>
+    </record>
+
+    <record id="action_wms_operator_performance" model="ir.actions.act_window">
+        <field name="name">Operator Performance</field>
+        <field name="res_model">wms.operator.performance</field>
+        <field name="view_mode">tree,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Track operator performance
+            </p>
+            <p>
+                Monitor individual operator productivity and efficiency metrics.
+            </p>
+        </field>
+    </record>
+
+    <record id="action_wms_performance_wizard" model="ir.actions.act_window">
+        <field name="name">Generate Performance Report</field>
+        <field name="res_model">wms.performance.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+        <field name="binding_model_id" ref="model_wms_performance_wizard"/>
+        <field name="binding_view_types">form</field>
+    </record>
+
+    <!-- Tree View for Performance Indicators -->
+    <record id="view_wms_performance_indicator_tree" model="ir.ui.view">
+        <field name="name">wms.performance.indicator.tree</field>
+        <field name="model">wms.performance.indicator</field>
+        <field name="arch" type="xml">
+            <tree string="Performance Indicators" decoration-info="category=='throughput'" decoration-primary="category=='efficiency'" decoration-success="category=='quality'" decoration-warning="category=='cost'" decoration-danger="category=='safety'">
+                <field name="name"/>
+                <field name="code"/>
+                <field name="category"/>
+                <field name="indicator_type"/>
+                <field name="calculation_method"/>
+                <field name="target_value"/>
+                <field name="active"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Form View for Performance Indicators -->
+    <record id="view_wms_performance_indicator_form" model="ir.ui.view">
+        <field name="name">wms.performance.indicator.form</field>
+        <field name="model">wms.performance.indicator</field>
+        <field name="arch" type="xml">
+            <form string="Performance Indicator">
+                <header>
+                    <button name="toggle_active"
+                            type="object"
+                            class="oe_stat_button"
+                            icon="fa-check-circle-o">
+                        <field name="active"
+                               widget="boolean_button"
+                               options='{"terminology": "active"}'/>
+                    </button>
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="toggle_active"
+                                type="object"
+                                class="oe_stat_button"
+                                icon="fa-check-circle-o">
+                            <field name="active"
+                                   widget="boolean_button"
+                                   options='{"terminology": "active"}'/>
+                        </button>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="name"/>
+                            <field name="code"/>
+                            <field name="category"/>
+                            <field name="indicator_type"/>
+                        </group>
+                        <group>
+                            <field name="active"/>
+                            <field name="sequence"/>
+                            <field name="owner_id"/>
+                        </group>
+                    </group>
+
+                    <notebook>
+                        <page string="Configuration">
+                            <group>
+                                <field name="calculation_method"/>
+                                <field name="source_model"/>
+                                <field name="source_field"/>
+                                <field name="filter_domain"/>
+                            </group>
+                        </page>
+
+                        <page string="Targets and Benchmarks">
+                            <group>
+                                <field name="target_value"/>
+                                <field name="benchmark_value"/>
+                                <field name="unit_of_measure"/>
+                                <field name="precision_digits"/>
+                            </group>
+                        </page>
+
+                        <page string="Display Settings">
+                            <group>
+                                <field name="display_format"/>
+                                <field name="alert_threshold"/>
+                                <field name="alert_type"/>
+                            </group>
+                        </page>
+
+                        <page string="Description">
+                            <field name="description"/>
+                        </page>
+                    </notebook>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids"/>
+                    <field name="activity_ids"/>
+                    <field name="message_ids"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <!-- Tree View for Performance Reports -->
+    <record id="view_wms_performance_report_tree" model="ir.ui.view">
+        <field name="name">wms.performance.report.tree</field>
+        <field name="model">wms.performance.report</field>
+        <field name="arch" type="xml">
+            <tree string="Performance Reports" decoration-info="state=='draft'" decoration-success="state=='generated'" decoration-muted="state=='validated'" decoration-warning="state=='published'">
+                <field name="name"/>
+                <field name="report_date"/>
+                <field name="period_start"/>
+                <field name="period_end"/>
+                <field name="owner_id"/>
+                <field name="warehouse_id"/>
+                <field name="overall_score"/>
+                <field name="status"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Form View for Performance Reports -->
+    <record id="view_wms_performance_report_form" model="ir.ui.view">
+        <field name="name">wms.performance.report.form</field>
+        <field name="model">wms.performance.report</field>
+        <field name="arch" type="xml">
+            <form string="Performance Report">
+                <header>
+                    <button name="action_generate_report"
+                            string="Generate Report"
+                            type="object"
+                            class="oe_highlight"
+                            states="draft"
+                            help="Generate performance report based on configured parameters"/>
+                    <field name="status" widget="statusbar" statusbar_visible="draft,generated,validated,published"/>
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                    </div>
+                    <group>
+                        <group>
+                            <field name="name"/>
+                            <field name="report_code"/>
+                            <field name="report_date"/>
+                            <field name="report_type"/>
+                        </group>
+                        <group>
+                            <field name="owner_id"/>
+                            <field name="warehouse_id"/>
+                            <field name="period_start"/>
+                            <field name="period_end"/>
+                        </group>
+                    </group>
+
+                    <notebook>
+                        <page string="Performance Metrics">
+                            <group>
+                                <group string="Key Metrics">
+                                    <field name="overall_score"/>
+                                    <field name="total_indicators"/>
+                                    <field name="indicators_above_target"/>
+                                    <field name="indicators_below_target"/>
+                                </group>
+                                <group string="Performance by Category">
+                                    <field name="throughput_performance" widget="percentage"/>
+                                    <field name="efficiency_performance" widget="percentage"/>
+                                    <field name="quality_performance" widget="percentage"/>
+                                    <field name="cost_performance" widget="percentage"/>
+                                    <field name="safety_performance" widget="percentage"/>
+                                    <field name="service_performance" widget="percentage"/>
+                                </group>
+                            </group>
+                        </page>
+
+                        <page string="Executive Summary">
+                            <field name="executive_summary"/>
+                        </page>
+
+                        <page string="Detailed Analysis">
+                            <field name="detailed_analysis"/>
+                        </page>
+
+                        <page string="Recommendations">
+                            <field name="recommendations"/>
+                        </page>
+
+                        <page string="Performance Trends">
+                            <field name="performance_trends"/>
+                        </page>
+
+                        <page string="Alerts and Issues">
+                            <field name="alert_summary"/>
+                        </page>
+
+                        <page string="Configuration">
+                            <field name="notes"/>
+                        </page>
+                    </notebook>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids"/>
+                    <field name="activity_ids"/>
+                    <field name="message_ids"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <!-- Tree View for Operator Performance -->
+    <record id="view_wms_operator_performance_tree" model="ir.ui.view">
+        <field name="name">wms.operator.performance.tree</field>
+        <field name="model">wms.operator.performance</field>
+        <field name="arch" type="xml">
+            <tree string="Operator Performance">
+                <field name="date"/>
+                <field name="operator_id"/>
+                <field name="owner_id"/>
+                <field name="operations_completed"/>
+                <field name="time_spent_hours"/>
+                <field name="efficiency_rate" widget="percentage"/>
+                <field name="accuracy_rate" widget="percentage"/>
+                <field name="overall_score" widget="percentage"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Form View for Operator Performance -->
+    <record id="view_wms_operator_performance_form" model="ir.ui.view">
+        <field name="name">wms.operator.performance.form</field>
+        <field name="model">wms.operator.performance</field>
+        <field name="arch" type="xml">
+            <form string="Operator Performance">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="date"/>
+                            <field name="operator_id"/>
+                            <field name="owner_id"/>
+                            <field name="warehouse_id"/>
+                        </group>
+                        <group>
+                            <field name="operations_assigned"/>
+                            <field name="operations_completed"/>
+                            <field name="error_count"/>
+                        </group>
+                    </group>
+                    <group string="Time Metrics">
+                        <field name="time_spent_hours"/>
+                        <field name="standard_time_hours"/>
+                        <field name="efficiency_rate" widget="percentage"/>
+                    </group>
+                    <group string="Quality Metrics">
+                        <field name="accuracy_rate" widget="percentage"/>
+                        <field name="error_count"/>
+                    </group>
+                    <group string="Performance Scores">
+                        <field name="productivity_score" widget="percentage"/>
+                        <field name="quality_score" widget="percentage"/>
+                        <field name="overall_score" widget="percentage"/>
+                    </group>
+                    <group string="Additional Information">
+                        <field name="status"/>
+                        <field name="notes"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Form View for Performance Report Wizard -->
+    <record id="view_wms_performance_wizard_form" model="ir.ui.view">
+        <field name="name">wms.performance.wizard.form</field>
+        <field name="model">wms.performance.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Generate Performance Report">
+                <group>
+                    <group>
+                        <field name="period_start"/>
+                        <field name="period_end"/>
+                    </group>
+                    <group>
+                        <field name="owner_id"/>
+                        <field name="warehouse_id"/>
+                    </group>
+                    <group>
+                        <field name="report_type"/>
+                    </group>
+                </group>
+                <footer>
+                    <button name="action_generate_report"
+                            string="Generate Report"
+                            type="object"
+                            class="btn-primary"/>
+                    <button string="Cancel"
+                            class="btn-secondary"
+                            special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <!-- Menu Items -->
+    <menuitem id="menu_wms_performance_root"
+              name="Performance Management"
+              parent="stock.menu_stock_warehouse_mgmt"
+              sequence="104"/>
+
+    <menuitem id="menu_wms_performance_indicators"
+              name="Performance Indicators"
+              parent="menu_wms_performance_root"
+              action="action_wms_performance_indicator"
+              sequence="10"/>
+
+    <menuitem id="menu_wms_performance_reports"
+              name="Performance Reports"
+              parent="menu_wms_performance_root"
+              action="action_wms_performance_report"
+              sequence="20"/>
+
+    <menuitem id="menu_wms_operator_performance"
+              name="Operator Performance"
+              parent="menu_wms_performance_root"
+              action="action_wms_operator_performance"
+              sequence="30"/>
+
+    <menuitem id="menu_wms_performance_wizard"
+              name="Generate New Report"
+              parent="menu_wms_performance_root"
+              action="action_wms_performance_wizard"
+              sequence="40"/>
+
+</odoo>

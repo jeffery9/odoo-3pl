@@ -7,7 +7,7 @@
         Batch receiving for Third Party Logistics warehouses.
         Provides batch receiving capabilities for multiple orders simultaneously.
     ''',
-    'depends': ['base', 'stock', 'wms_owner'],
+    'depends': ['base', 'stock', 'wms_owner', 'wms_quality_control'],
     'data': [
         'data/sequence_data.xml',
         'security/ir.model.access.csv',

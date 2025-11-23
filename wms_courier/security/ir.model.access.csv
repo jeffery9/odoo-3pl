@@ -1,0 +1,5 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_wms_courier_company_user,wms.courier.company.user,model_wms_courier_company,base.group_user,1,1,1,1
+access_wms_courier_service_user,wms.courier.service.user,model_wms_courier_service,base.group_user,1,1,1,1
+access_wms_shipment_order_user,wms.shipment_order.user,model_wms_shipment_order,base.group_user,1,1,1,1
+access_wms_shipment_product_line_user,wms.shipment.product.line.user,model_wms_shipment_product_line,base.group_user,1,1,1,1

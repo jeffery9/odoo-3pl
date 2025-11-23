@@ -18,7 +18,8 @@
         "stock",
         "sale",
         "purchase",
-        "wms_owner"
+        "wms_owner",
+        "wms_quality_control"
     ],
     "data": [
         "data/sequence_data.xml",

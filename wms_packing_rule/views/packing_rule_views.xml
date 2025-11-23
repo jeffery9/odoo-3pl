@@ -1,0 +1,273 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- Actions -->
+    <record id="action_wms_packing_rule" model="ir.actions.act_window">
+        <field name="name">装箱规则</field>
+        <field name="res_model">wms.packing.rule</field>
+        <field name="view_mode">tree,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                创建装箱规则
+            </p>
+            <p>
+                配置自动装箱建议的规则和优化策略，提高装箱效率和空间利用率。
+            </p>
+        </field>
+    </record>
+
+    <record id="action_wms_packing_box_type" model="ir.actions.act_window">
+        <field name="name">装箱类型</field>
+        <field name="res_model">wms.packing.box.type</field>
+        <field name="view_mode">tree,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                管理装箱类型
+            </p>
+            <p>
+                定义各种装箱类型及其规格参数，用于装箱优化。
+            </p>
+        </field>
+    </record>
+
+    <!-- Tree Views -->
+    <record id="view_wms_packing_rule_tree" model="ir.ui.view">
+        <field name="name">wms.packing.rule.tree</field>
+        <field name="model">wms.packing.rule</field>
+        <field name="arch" type="xml">
+            <tree string="装箱规则">
+                <field name="sequence" widget="handle"/>
+                <field name="name"/>
+                <field name="code"/>
+                <field name="rule_type"/>
+                <field name="strategy"/>
+                <field name="active"/>
+                <field name="success_rate"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_wms_packing_box_type_tree" model="ir.ui.view">
+        <field name="name">wms.packing.box.type.tree</field>
+        <field name="model">wms.packing.box.type</field>
+        <field name="arch" type="xml">
+            <tree string="装箱类型">
+                <field name="name"/>
+                <field name="code"/>
+                <field name="length"/>
+                <field name="width"/>
+                <field name="height"/>
+                <field name="max_weight"/>
+                <field name="active"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Form Views -->
+    <record id="view_wms_packing_rule_form" model="ir.ui.view">
+        <field name="name">wms.packing.rule.form</field>
+        <field name="model">wms.packing.rule</field>
+        <field name="arch" type="xml">
+            <form string="装箱规则">
+                <header>
+                    <button name="toggle_active"
+                            type="object"
+                            class="oe_stat_button"
+                            icon="fa-check-circle-o">
+                        <field name="active"
+                               widget="boolean_button"
+                               options='{"terminology": "active"}'/>
+                    </button>
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="toggle_active"
+                                type="object"
+                                class="oe_stat_button"
+                                icon="fa-check-circle-o">
+                            <field name="active"
+                                   widget="boolean_button"
+                                   options='{"terminology": "active"}'/>
+                        </button>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="name"/>
+                            <field name="code"/>
+                            <field name="active"/>
+                            <field name="sequence"/>
+                            <field name="rule_type"/>
+                        </group>
+                        <group>
+                            <field name="last_calculated"/>
+                            <field name="success_rate"/>
+                            <field name="avg_utilization"/>
+                        </group>
+                    </group>
+
+                    <notebook>
+                        <page string="适用条件">
+                            <group>
+                                <field name="warehouse_ids" widget="many2many_tags"/>
+                                <field name="product_category_ids" widget="many2many_tags"/>
+                                <field name="owner_ids" widget="many2many_tags"/>
+                                <field name="picking_type_ids" widget="many2many_tags"/>
+                            </group>
+                        </page>
+
+                        <page string="装箱限制">
+                            <group>
+                                <field name="max_box_weight"/>
+                                <field name="max_box_volume"/>
+                                <field name="max_items_per_box"/>
+                                <field name="max_boxes_per_order"/>
+                            </group>
+                            <group string="尺寸限制">
+                                <field name="max_length"/>
+                                <field name="max_width"/>
+                                <field name="max_height"/>
+                                <field name="max_dimension_sum"/>
+                            </group>
+                        </page>
+
+                        <page string="装箱策略">
+                            <group>
+                                <field name="strategy"/>
+                                <field name="optimization_target"/>
+                                <field name="min_volume_utilization"/>
+                                <field name="max_volume_utilization"/>
+                            </group>
+                        </page>
+
+                        <page string="特殊规则">
+                            <group>
+                                <field name="separate_hazardous"/>
+                                <field name="separate_fragile"/>
+                                <field name="max_fragile_per_box"/>
+                                <field name="avoid_mixed_temperature"/>
+                                <field name="max_stack_height"/>
+                            </group>
+                        </page>
+
+                        <page string="箱型配置">
+                            <field name="box_type_ids" widget="many2many_tags"/>
+                        </page>
+
+                        <page string="统计信息">
+                            <group>
+                                <field name="last_calculated"/>
+                                <field name="success_rate"/>
+                                <field name="avg_utilization"/>
+                                <field name="notes"/>
+                            </group>
+                        </page>
+                    </notebook>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids"/>
+                    <field name="activity_ids"/>
+                    <field name="message_ids"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_wms_packing_box_type_form" model="ir.ui.view">
+        <field name="name">wms.packing.box.type.form</field>
+        <field name="model">wms.packing.box.type</field>
+        <field name="arch" type="xml">
+            <form string="装箱类型">
+                <header>
+                    <button name="toggle_active"
+                            type="object"
+                            class="oe_stat_button"
+                            icon="fa-check-circle-o">
+                        <field name="active"
+                               widget="boolean_button"
+                               options='{"terminology": "active"}'/>
+                    </button>
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="toggle_active"
+                                type="object"
+                                class="oe_stat_button"
+                                icon="fa-check-circle-o">
+                            <field name="active"
+                                   widget="boolean_button"
+                                   options='{"terminology": "active"}'/>
+                        </button>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="name"/>
+                            <field name="code"/>
+                            <field name="description"/>
+                            <field name="active"/>
+                        </group>
+                        <group>
+                            <field name="owner_id"/>
+                            <field name="material"/>
+                            <field name="is_thermal"/>
+                            <field name="is_reinforced"/>
+                        </group>
+                    </group>
+
+                    <notebook>
+                        <page string="尺寸规格">
+                            <group>
+                                <field name="length"/>
+                                <field name="width"/>
+                                <field name="height"/>
+                                <field name="max_volume"/>
+                            </group>
+                            <group>
+                                <field name="max_weight"/>
+                                <field name="max_items"/>
+                                <field name="tare_weight"/>
+                            </group>
+                        </page>
+
+                        <page string="特殊属性" attrs="{'invisible': [('is_thermal', '=', False)]}">
+                            <group>
+                                <field name="temperature_range"/>
+                                <field name="max_drop_height"/>
+                            </group>
+                        </page>
+
+                        <page string="成本信息">
+                            <group>
+                                <field name="cost"/>
+                                <field name="rental_cost_per_day"/>
+                            </group>
+                        </page>
+                    </notebook>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids"/>
+                    <field name="activity_ids"/>
+                    <field name="message_ids"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <!-- Menu Items -->
+    <menuitem id="menu_wms_packing_rule_root"
+              name="装箱规则管理"
+              parent="stock.menu_stock_warehouse_mgmt"
+              sequence="101"/>
+
+    <menuitem id="menu_wms_packing_rules"
+              name="装箱规则"
+              parent="menu_wms_packing_rule_root"
+              action="action_wms_packing_rule"
+              sequence="10"/>
+
+    <menuitem id="menu_wms_packing_box_types"
+              name="装箱类型"
+              parent="menu_wms_packing_rule_root"
+              action="action_wms_packing_box_type"
+              sequence="20"/>
+
+</odoo>

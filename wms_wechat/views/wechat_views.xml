@@ -1,0 +1,644 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- Actions -->
+    <record id="action_wms_wechat_app" model="ir.actions.act_window">
+        <field name="name">WeChat Apps</field>
+        <field name="res_model">wms.wechat.app</field>
+        <field name="view_mode">tree,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create WeChat apps
+            </p>
+            <p>
+                Configure WeChat Mini Programs for warehouse operations.
+            </p>
+        </field>
+    </record>
+
+    <record id="action_wms_wechat_user" model="ir.actions.act_window">
+        <field name="name">WeChat Users</field>
+        <field name="res_model">wms.wechat.user</field>
+        <field name="view_mode">tree,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Manage WeChat users
+            </p>
+            <p>
+                Manage users registered through WeChat integration.
+            </p>
+        </field>
+    </record>
+
+    <record id="action_wms_wechat_message" model="ir.actions.act_window">
+        <field name="name">WeChat Messages</field>
+        <field name="res_model">wms.wechat.message</field>
+        <field name="view_mode">tree,form,pivot,graph</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Manage messages
+            </p>
+            <p>
+                Monitor messages sent to and from WeChat users.
+            </p>
+        </field>
+    </record>
+
+    <record id="action_wms_wechat_inventory_check" model="ir.actions.act_window">
+        <field name="name">WeChat Inventory Checks</field>
+        <field name="res_model">wms.wechat.inventory.check</field>
+        <field name="view_mode">tree,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Manage inventory checks
+            </p>
+            <p>
+                Track inventory checks initiated through WeChat.
+            </p>
+        </field>
+    </record>
+
+    <record id="action_wms_wechat_picking_notification" model="ir.actions.act_window">
+        <field name="name">Picking Notifications</field>
+        <field name="res_model">wms.wechat.picking.notification</field>
+        <field name="view_mode">tree,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Manage notifications
+            </p>
+            <p>
+                Manage notifications sent to WeChat users about picking tasks.
+            </p>
+        </field>
+    </record>
+
+    <!-- Tree View for WeChat Apps -->
+    <record id="view_wms_wechat_app_tree" model="ir.ui.view">
+        <field name="name">wms.wechat.app.tree</field>
+        <field name="model">wms.wechat.app</field>
+        <field name="arch" type="xml">
+            <tree string="WeChat Apps">
+                <field name="name"/>
+                <field name="app_id"/>
+                <field name="app_type"/>
+                <field name="connection_status"/>
+                <field name="active"/>
+                <field name="last_sync"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Form View for WeChat Apps -->
+    <record id="view_wms_wechat_app_form" model="ir.ui.view">
+        <field name="name">wms.wechat.app.form</field>
+        <field name="model">wms.wechat.app</field>
+        <field name="arch" type="xml">
+            <form string="WeChat App">
+                <header>
+                    <button name="toggle_active"
+                            type="object"
+                            class="oe_stat_button"
+                            icon="fa-check-circle-o">
+                        <field name="active"
+                               widget="boolean_button"
+                               options='{"terminology": "active"}'/>
+                    </button>
+                    <button name="action_test_connection"
+                            string="Test Connection"
+                            type="object"
+                            class="oe_highlight"
+                            help="Test connection to WeChat API"/>
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="toggle_active"
+                                type="object"
+                                class="oe_stat_button"
+                                icon="fa-check-circle-o">
+                            <field name="active"
+                                   widget="boolean_button"
+                                   options='{"terminology": "active"}'/>
+                        </button>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="name"/>
+                            <field name="app_id"/>
+                            <field name="app_type"/>
+                        </group>
+                        <group>
+                            <field name="active"/>
+                            <field name="connection_status"/>
+                            <field name="last_sync"/>
+                        </group>
+                    </group>
+
+                    <notebook>
+                        <page string="Configuration">
+                            <group>
+                                <field name="app_secret"/>
+                                <field name="api_base_url"/>
+                                <field name="webhook_url"/>
+                                <field name="enable_webhook"/>
+                            </group>
+                        </page>
+
+                        <page string="Business Settings">
+                            <group>
+                                <field name="default_warehouse_id"/>
+                                <field name="warehouse_ids" widget="many2many_tags"/>
+                            </group>
+                            <group>
+                                <field name="enable_inventory_check"/>
+                                <field name="enable_location_search"/>
+                                <field name="enable_picking_notifications"/>
+                            </group>
+                        </page>
+
+                        <page string="User Management">
+                            <group>
+                                <field name="user_sync_enabled"/>
+                                <field name="auto_create_users"/>
+                            </group>
+                        </page>
+
+                        <page string="Access Token">
+                            <group>
+                                <field name="access_token"/>
+                                <field name="token_expires"/>
+                            </group>
+                        </page>
+
+                        <page string="Description">
+                            <field name="description"/>
+                        </page>
+
+                        <page string="Notes">
+                            <field name="notes"/>
+                        </page>
+                    </notebook>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids"/>
+                    <field name="activity_ids"/>
+                    <field name="message_ids"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <!-- Tree View for WeChat Users -->
+    <record id="view_wms_wechat_user_tree" model="ir.ui.view">
+        <field name="name">wms.wechat.user.tree</field>
+        <field name="model">wms.wechat.user</field>
+        <field name="arch" type="xml">
+            <tree string="WeChat Users">
+                <field name="name"/>
+                <field name="nickname"/>
+                <field name="openid"/>
+                <field name="user_type"/>
+                <field name="app_id"/>
+                <field name="subscribe"/>
+                <field name="active"/>
+                <field name="last_activity"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Form View for WeChat Users -->
+    <record id="view_wms_wechat_user_form" model="ir.ui.view">
+        <field name="name">wms.wechat.user.form</field>
+        <field name="model">wms.wechat.user</field>
+        <field name="arch" type="xml">
+            <form string="WeChat User">
+                <header>
+                    <button name="toggle_active"
+                            type="object"
+                            class="oe_stat_button"
+                            icon="fa-check-circle-o">
+                        <field name="active"
+                               widget="boolean_button"
+                               options='{"terminology": "active"}'/>
+                    </button>
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="toggle_active"
+                                type="object"
+                                class="oe_stat_button"
+                                icon="fa-check-circle-o">
+                            <field name="active"
+                                   widget="boolean_button"
+                                   options='{"terminology": "active"}'/>
+                        </button>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="name"/>
+                            <field name="openid"/>
+                            <field name="unionid"/>
+                        </group>
+                        <group>
+                            <field name="active"/>
+                            <field name="user_type"/>
+                            <field name="subscribe"/>
+                        </group>
+                    </group>
+                    <group>
+                        <group>
+                            <field name="nickname"/>
+                            <field name="gender"/>
+                        </group>
+                        <group>
+                            <field name="city"/>
+                            <field name="province"/>
+                            <field name="country"/>
+                        </group>
+                    </group>
+
+                    <notebook>
+                        <page string="User Information">
+                            <group>
+                                <field name="avatar_url" widget="image" options='{"size": [100, 100]}'/>
+                            </group>
+                        </page>
+
+                        <page string="Odoo Integration">
+                            <group>
+                                <field name="odoo_user_id"/>
+                                <field name="employee_id"/>
+                            </group>
+                        </page>
+
+                        <page string="Permissions">
+                            <group>
+                                <field name="allowed_warehouse_ids" widget="many2many_tags"/>
+                            </group>
+                        </page>
+
+                        <page string="WeChat App">
+                            <group>
+                                <field name="app_id"/>
+                            </group>
+                        </page>
+
+                        <page string="Activity">
+                            <group>
+                                <field name="subscribe_time"/>
+                                <field name="unsubscribe_time"/>
+                                <field name="last_login"/>
+                                <field name="last_activity"/>
+                            </group>
+                        </page>
+
+                        <page string="Notes">
+                            <field name="notes"/>
+                        </page>
+                    </notebook>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids"/>
+                    <field name="activity_ids"/>
+                    <field name="message_ids"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <!-- Tree View for WeChat Messages -->
+    <record id="view_wms_wechat_message_tree" model="ir.ui.view">
+        <field name="name">wms.wechat.message.tree</field>
+        <field name="model">wms.wechat.message</field>
+        <field name="arch" type="xml">
+            <tree string="WeChat Messages" decoration-info="status=='pending'" decoration-primary="status=='sent'" decoration-success="status=='delivered'" decoration-warning="status=='read'" decoration-danger="status=='failed'">
+                <field name="name"/>
+                <field name="message_type"/>
+                <field name="direction"/>
+                <field name="sender_openid"/>
+                <field name="receiver_openid"/>
+                <field name="app_id"/>
+                <field name="timestamp"/>
+                <field name="status"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Form View for WeChat Messages -->
+    <record id="view_wms_wechat_message_form" model="ir.ui.view">
+        <field name="name">wms.wechat.message.form</field>
+        <field name="model">wms.wechat.message</field>
+        <field name="arch" type="xml">
+            <form string="WeChat Message">
+                <header>
+                    <button name="mark_as_read"
+                            string="Mark Read"
+                            type="object"
+                            states="direction == 'in' and not is_read"
+                            help="Mark message as read"/>
+                    <button name="mark_as_processed"
+                            string="Mark Processed"
+                            type="object"
+                            states="direction == 'in' and not is_processed"
+                            help="Mark message as processed"/>
+                    <field name="status" widget="statusbar" statusbar_visible="pending,sent,delivered,read,failed"/>
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <field name="is_read" widget="boolean_button" string="Read"/>
+                        <field name="is_processed" widget="boolean_button" string="Processed"/>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="name"/>
+                            <field name="message_type"/>
+                            <field name="direction"/>
+                        </group>
+                        <group>
+                            <field name="status"/>
+                            <field name="timestamp"/>
+                        </group>
+                    </group>
+
+                    <notebook>
+                        <page string="Message Details">
+                            <group>
+                                <field name="sender_openid"/>
+                                <field name="receiver_openid"/>
+                                <field name="app_id"/>
+                            </group>
+                        </page>
+
+                        <page string="Content">
+                            <group>
+                                <field name="content"/>
+                            </group>
+                        </page>
+
+                        <page string="Media and Technical">
+                            <group>
+                                <field name="media_id"/>
+                            </group>
+                        </page>
+
+                        <page string="Business Context">
+                            <group>
+                                <field name="related_model"/>
+                                <field name="related_id"/>
+                                <field name="operation"/>
+                            </group>
+                        </page>
+
+                        <page string="Response Tracking">
+                            <group>
+                                <field name="response_id"/>
+                            </group>
+                        </page>
+
+                        <page string="Results">
+                            <group>
+                                <field name="error_message"/>
+                            </group>
+                        </page>
+
+                        <page string="Notes">
+                            <field name="notes"/>
+                        </page>
+                    </notebook>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids"/>
+                    <field name="activity_ids"/>
+                    <field name="message_ids"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <!-- Tree View for WeChat Inventory Checks -->
+    <record id="view_wms_wechat_inventory_check_tree" model="ir.ui.view">
+        <field name="name">wms.wechat.inventory.check.tree</field>
+        <field name="model">wms.wechat.inventory.check</field>
+        <field name="arch" type="xml">
+            <tree string="WeChat Inventory Checks" decoration-info="state=='draft'" decoration-primary="state=='in_progress'" decoration-success="state=='completed'" decoration-muted="state=='cancelled'">
+                <field name="name"/>
+                <field name="state"/>
+                <field name="check_type"/>
+                <field name="operator_id"/>
+                <field name="warehouse_id"/>
+                <field name="date_created"/>
+                <field name="accuracy_rate"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Form View for WeChat Inventory Checks -->
+    <record id="view_wms_wechat_inventory_check_form" model="ir.ui.view">
+        <field name="name">wms.wechat.inventory.check.form</field>
+        <field name="model">wms.wechat.inventory.check</field>
+        <field name="arch" type="xml">
+            <form string="WeChat Inventory Check">
+                <header>
+                    <button name="action_start_check"
+                            string="Start Check"
+                            type="object"
+                            class="oe_highlight"
+                            states="state == 'draft'"
+                            help="Start the inventory check"/>
+                    <button name="action_complete_check"
+                            string="Complete Check"
+                            type="object"
+                            class="oe_highlight"
+                            states="state == 'in_progress'"
+                            help="Complete the inventory check"/>
+                    <button name="action_cancel_check"
+                            string="Cancel Check"
+                            type="object"
+                            class="btn-secondary"
+                            states="state in ('draft','in_progress')"
+                            help="Cancel the inventory check"/>
+                    <field name="state" widget="statusbar" statusbar_visible="draft,in_progress,completed,cancelled"/>
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <field name="items_checked" widget="statinfo" string="Items Checked"/>
+                        <field name="discrepancies_found" widget="statinfo" string="Discrepancies"/>
+                        <field name="accuracy_rate" widget="statinfo" string="Accuracy Rate"/>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="name"/>
+                            <field name="check_type"/>
+                            <field name="operator_id"/>
+                        </group>
+                        <group>
+                            <field name="warehouse_id"/>
+                            <field name="app_id"/>
+                        </group>
+                    </group>
+                    <group>
+                        <group>
+                            <field name="date_created"/>
+                            <field name="date_started"/>
+                            <field name="date_completed"/>
+                        </group>
+                        <group>
+                            <field name="location_id"/>
+                            <field name="product_id"/>
+                            <field name="lot_id"/>
+                        </group>
+                    </group>
+
+                    <notebook>
+                        <page string="Results">
+                            <group>
+                                <field name="items_checked"/>
+                                <field name="discrepancies_found"/>
+                                <field name="accuracy_rate"/>
+                            </group>
+                        </page>
+
+                        <page string="Notes">
+                            <field name="notes"/>
+                        </page>
+                    </notebook>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids"/>
+                    <field name="activity_ids"/>
+                    <field name="message_ids"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <!-- Tree View for WeChat Picking Notifications -->
+    <record id="view_wms_wechat_picking_notification_tree" model="ir.ui.view">
+        <field name="name">wms.wechat.picking.notification.tree</field>
+        <field name="model">wms.wechat.picking.notification</field>
+        <field name="arch" type="xml">
+            <tree string="WeChat Picking Notifications" decoration-info="status=='pending'" decoration-primary="status=='sent'" decoration-success="status=='delivered'" decoration-warning="status=='read'" decoration-danger="status=='failed'">
+                <field name="name"/>
+                <field name="notification_type"/>
+                <field name="stock_picking_id"/>
+                <field name="recipient_user_id"/>
+                <field name="priority"/>
+                <field name="date_created"/>
+                <field name="status"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Form View for WeChat Picking Notifications -->
+    <record id="view_wms_wechat_picking_notification_form" model="ir.ui.view">
+        <field name="name">wms.wechat.picking.notification.form</field>
+        <field name="model">wms.wechat.picking.notification</field>
+        <field name="arch" type="xml">
+            <form string="WeChat Picking Notification">
+                <header>
+                    <button name="send_notification"
+                            string="Send Notification"
+                            type="object"
+                            class="oe_highlight"
+                            states="status == 'pending'"
+                            help="Send notification to WeChat user"/>
+                    <button name="mark_as_read"
+                            string="Mark Read"
+                            type="object"
+                            states="status in ('sent','delivered') and recipient_user_id.openid != False"
+                            help="Mark notification as read"/>
+                    <field name="status" widget="statusbar" statusbar_visible="pending,sent,delivered,read,failed"/>
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <field name="date_sent"/>
+                        <field name="date_read"/>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="name"/>
+                            <field name="notification_type"/>
+                            <field name="priority"/>
+                        </group>
+                        <group>
+                            <field name="status"/>
+                            <field name="date_created"/>
+                        </group>
+                    </group>
+
+                    <notebook>
+                        <page string="Picking Information">
+                            <group>
+                                <field name="stock_picking_id"/>
+                            </group>
+                        </page>
+
+                        <page string="Recipient">
+                            <group>
+                                <field name="recipient_user_id"/>
+                                <field name="app_id"/>
+                            </group>
+                        </page>
+
+                        <page string="Notification Content">
+                            <group>
+                                <field name="title"/>
+                            </group>
+                            <group>
+                                <field name="message"/>
+                            </group>
+                        </page>
+
+                        <page string="Results">
+                            <group>
+                                <field name="response_data"/>
+                                <field name="error_message"/>
+                            </group>
+                        </page>
+                    </notebook>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids"/>
+                    <field name="activity_ids"/>
+                    <field name="message_ids"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <!-- Menu Items -->
+    <menuitem id="menu_wms_wechat_root"
+              name="WeChat Integration"
+              parent="stock.menu_stock_warehouse_mgmt"
+              sequence="109"/>
+
+    <menuitem id="menu_wms_wechat_apps"
+              name="WeChat Apps"
+              parent="menu_wms_wechat_root"
+              action="action_wms_wechat_app"
+              sequence="10"/>
+
+    <menuitem id="menu_wms_wechat_users"
+              name="WeChat Users"
+              parent="menu_wms_wechat_root"
+              action="action_wms_wechat_user"
+              sequence="20"/>
+
+    <menuitem id="menu_wms_wechat_messages"
+              name="Messages"
+              parent="menu_wms_wechat_root"
+              action="action_wms_wechat_message"
+              sequence="30"/>
+
+    <menuitem id="menu_wms_wechat_inventory_checks"
+              name="Inventory Checks"
+              parent="menu_wms_wechat_root"
+              action="action_wms_wechat_inventory_check"
+              sequence="40"/>
+
+    <menuitem id="menu_wms_wechat_notifications"
+              name="Picking Notifications"
+              parent="menu_wms_wechat_root"
+              action="action_wms_wechat_picking_notification"
+              sequence="50"/>
+
+</odoo>

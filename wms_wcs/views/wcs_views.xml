@@ -1,0 +1,499 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- Actions -->
+    <record id="action_wms_wcs_system" model="ir.actions.act_window">
+        <field name="name">WCS Systems</field>
+        <field name="res_model">wms.wcs.system</field>
+        <field name="view_mode">tree,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create WCS systems
+            </p>
+            <p>
+                Define warehouse control systems for automation integration.
+            </p>
+        </field>
+    </record>
+
+    <record id="action_wms_wcs_device" model="ir.actions.act_window">
+        <field name="name">WCS Devices</field>
+        <field name="res_model">wms.wcs.device</field>
+        <field name="view_mode">tree,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create WCS devices
+            </p>
+            <p>
+                Define individual devices managed by WCS systems.
+            </p>
+        </field>
+    </record>
+
+    <record id="action_wms_wcs_task" model="ir.actions.act_window">
+        <field name="name">WCS Tasks</field>
+        <field name="res_model">wms.wcs.task</field>
+        <field name="view_mode">tree,form,pivot,graph</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create WCS tasks
+            </p>
+            <p>
+                Manage tasks sent to WCS systems for execution.
+            </p>
+        </field>
+    </record>
+
+    <record id="action_wms_wcs_integration_log" model="ir.actions.act_window">
+        <field name="name">WCS Integration Logs</field>
+        <field name="res_model">wms.wcs.integration.log</field>
+        <field name="view_mode">tree,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                View integration logs
+            </p>
+            <p>
+                Monitor all interactions with WCS systems.
+            </p>
+        </field>
+    </record>
+
+    <!-- Tree View for WCS Systems -->
+    <record id="view_wms_wcs_system_tree" model="ir.ui.view">
+        <field name="name">wms.wcs.system.tree</field>
+        <field name="model">wms.wcs.system</field>
+        <field name="arch" type="xml">
+            <tree string="WCS Systems">
+                <field name="name"/>
+                <field name="code"/>
+                <field name="system_type"/>
+                <field name="connection_status"/>
+                <field name="last_sync"/>
+                <field name="active"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Form View for WCS Systems -->
+    <record id="view_wms_wcs_system_form" model="ir.ui.view">
+        <field name="name">wms.wcs.system.form</field>
+        <field name="model">wms.wcs.system</field>
+        <field name="arch" type="xml">
+            <form string="WCS System">
+                <header>
+                    <button name="toggle_active"
+                            type="object"
+                            class="oe_stat_button"
+                            icon="fa-check-circle-o">
+                        <field name="active"
+                               widget="boolean_button"
+                               options='{"terminology": "active"}'/>
+                    </button>
+                    <button name="action_test_connection"
+                            string="Test Connection"
+                            type="object"
+                            class="oe_highlight"
+                            help="Test connection to the WCS system"/>
+                    <button name="action_sync_devices"
+                            string="Sync Devices"
+                            type="object"
+                            help="Synchronize devices with the WCS system"/>
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="toggle_active"
+                                type="object"
+                                class="oe_stat_button"
+                                icon="fa-check-circle-o">
+                            <field name="active"
+                                   widget="boolean_button"
+                                   options='{"terminology": "active"}'/>
+                        </button>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="name"/>
+                            <field name="code"/>
+                            <field name="system_type"/>
+                            <field name="connection_status"/>
+                        </group>
+                        <group>
+                            <field name="active"/>
+                            <field name="last_sync"/>
+                        </group>
+                    </group>
+
+                    <notebook>
+                        <page string="Connection Configuration">
+                            <group>
+                                <field name="host"/>
+                                <field name="port"/>
+                                <field name="protocol"/>
+                            </group>
+                            <group>
+                                <field name="username"/>
+                                <field name="password"/>
+                            </group>
+                        </page>
+
+                        <page string="API Configuration">
+                            <group>
+                                <field name="api_url"/>
+                                <field name="api_key"/>
+                            </group>
+                        </page>
+
+                        <page string="Devices">
+                            <field name="device_ids" nolabel="1"/>
+                        </page>
+
+                        <page string="Description">
+                            <field name="description"/>
+                        </page>
+
+                        <page string="Notes">
+                            <field name="notes"/>
+                        </page>
+                    </notebook>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids"/>
+                    <field name="activity_ids"/>
+                    <field name="message_ids"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <!-- Tree View for WCS Devices -->
+    <record id="view_wms_wcs_device_tree" model="ir.ui.view">
+        <field name="name">wms.wcs.device.tree</field>
+        <field name="model">wms.wcs.device</field>
+        <field name="arch" type="xml">
+            <tree string="WCS Devices" decoration-info="device_status=='idle'" decoration-primary="device_status=='working'" decoration-success="device_status=='offline'" decoration-warning="device_status=='maintenance'" decoration-danger="device_status=='error'">
+                <field name="name"/>
+                <field name="code"/>
+                <field name="device_type"/>
+                <field name="wcs_system_id"/>
+                <field name="location_id"/>
+                <field name="device_status"/>
+                <field name="efficiency_rate"/>
+                <field name="is_active"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Form View for WCS Devices -->
+    <record id="view_wms_wcs_device_form" model="ir.ui.view">
+        <field name="name">wms.wcs.device.form</field>
+        <field name="model">wms.wcs.device</field>
+        <field name="arch" type="xml">
+            <form string="WCS Device">
+                <header>
+                    <button name="toggle_active"
+                            type="object"
+                            class="oe_stat_button"
+                            icon="fa-check-circle-o">
+                        <field name="is_active"
+                               widget="boolean_button"
+                               options='{"terminology": "active"}'/>
+                    </button>
+                    <button name="action_refresh_status"
+                            string="Refresh Status"
+                            type="object"
+                            help="Refresh device status from WCS system"/>
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="toggle_active"
+                                type="object"
+                                class="oe_stat_button"
+                                icon="fa-check-circle-o">
+                            <field name="is_active"
+                                   widget="boolean_button"
+                                   options='{"terminology": "active"}'/>
+                        </button>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="name"/>
+                            <field name="code"/>
+                            <field name="device_type"/>
+                            <field name="wcs_system_id"/>
+                        </group>
+                        <group>
+                            <field name="is_active"/>
+                            <field name="location_id"/>
+                            <field name="device_status"/>
+                        </group>
+                    </group>
+
+                    <notebook>
+                        <page string="Technical Specifications">
+                            <group>
+                                <field name="ip_address"/>
+                                <field name="max_capacity"/>
+                                <field name="current_load"/>
+                                <field name="efficiency_rate"/>
+                            </group>
+                        </page>
+
+                        <page string="Connection Details">
+                            <group>
+                                <field name="last_heartbeat"/>
+                                <field name="last_command"/>
+                                <field name="command_queue_size"/>
+                            </group>
+                        </page>
+
+                        <page string="Description">
+                            <field name="description"/>
+                        </page>
+
+                        <page string="Notes">
+                            <field name="notes"/>
+                        </page>
+                    </notebook>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids"/>
+                    <field name="activity_ids"/>
+                    <field name="message_ids"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <!-- Tree View for WCS Tasks -->
+    <record id="view_wms_wcs_task_tree" model="ir.ui.view">
+        <field name="name">wms.wcs.task.tree</field>
+        <field name="model">wms.wcs.task</field>
+        <field name="arch" type="xml">
+            <tree string="WCS Tasks" decoration-info="state=='draft'" decoration-primary="state=='confirmed'" decoration-warning="state=='sent'" decoration-success="state=='completed'" decoration-muted="state=='cancelled'" decoration-danger="state=='failed'">
+                <field name="name"/>
+                <field name="task_type"/>
+                <field name="priority"/>
+                <field name="wcs_system_id"/>
+                <field name="device_id"/>
+                <field name="state"/>
+                <field name="date_created"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Form View for WCS Tasks -->
+    <record id="view_wms_wcs_task_form" model="ir.ui.view">
+        <field name="name">wms.wcs.task.form</field>
+        <field name="model">wms.wcs.task</field>
+        <field name="arch" type="xml">
+            <form string="WCS Task">
+                <header>
+                    <button name="action_confirm_task"
+                            string="Confirm Task"
+                            type="object"
+                            class="oe_highlight"
+                            states="draft"
+                            help="Confirm the task and prepare for sending to WCS"/>
+                    <button name="action_send_to_wcs"
+                            string="Send to WCS"
+                            type="object"
+                            class="oe_highlight"
+                            states="confirmed"
+                            help="Send the task to the WCS system"/>
+                    <button name="action_start_task"
+                            string="Start Task"
+                            type="object"
+                            class="oe_highlight"
+                            states="sent"
+                            help="Mark the task as started by the WCS system"/>
+                    <button name="action_complete_task"
+                            string="Complete Task"
+                            type="object"
+                            class="oe_highlight"
+                            states="in_progress"
+                            help="Mark the task as completed by the WCS system"/>
+                    <button name="action_cancel_task"
+                            string="Cancel Task"
+                            type="object"
+                            states="draft,confirmed,sent"
+                            help="Cancel the WCS task"/>
+                    <button name="action_retry_task"
+                            string="Retry Task"
+                            type="object"
+                            states="failed"
+                            help="Retry the failed task"/>
+                    <field name="state" widget="statusbar" statusbar_visible="draft,confirmed,sent,in_progress,completed"/>
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <field name="duration_seconds" widget="statinfo" string="Duration"/>
+                        <field name="success_rate" widget="statinfo" string="Success Rate"/>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="name"/>
+                            <field name="task_type"/>
+                            <field name="priority"/>
+                        </group>
+                        <group>
+                            <field name="date_created"/>
+                            <field name="date_completed"/>
+                        </group>
+                    </group>
+
+                    <notebook>
+                        <page string="WCS Information">
+                            <group>
+                                <field name="wcs_system_id"/>
+                                <field name="device_id"/>
+                            </group>
+                        </page>
+
+                        <page string="Task Details">
+                            <group>
+                                <field name="task_data"/>
+                            </group>
+                        </page>
+
+                        <page string="Locations">
+                            <group>
+                                <field name="source_location_id"/>
+                                <field name="destination_location_id"/>
+                            </group>
+                        </page>
+
+                        <page string="Product Information">
+                            <group>
+                                <field name="product_id"/>
+                                <field name="product_uom"/>
+                                <field name="quantity"/>
+                                <field name="lot_id"/>
+                            </group>
+                        </page>
+
+                        <page string="Related Documents">
+                            <group>
+                                <field name="source_document"/>
+                            </group>
+                        </page>
+
+                        <page string="Execution Details">
+                            <group>
+                                <field name="start_time"/>
+                                <field name="end_time"/>
+                                <field name="duration_seconds"/>
+                            </group>
+                        </page>
+
+                        <page string="Integration Feedback">
+                            <group>
+                                <field name="wcs_response"/>
+                                <field name="error_message"/>
+                                <field name="retry_count"/>
+                            </group>
+                        </page>
+
+                        <page string="Notes">
+                            <field name="notes"/>
+                        </page>
+                    </notebook>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids"/>
+                    <field name="activity_ids"/>
+                    <field name="message_ids"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <!-- Tree View for WCS Integration Logs -->
+    <record id="view_wms_wcs_integration_log_tree" model="ir.ui.view">
+        <field name="name">wms.wcs.integration.log.tree</field>
+        <field name="model">wms.wcs.integration.log</field>
+        <field name="arch" type="xml">
+            <tree string="WCS Integration Logs" decoration-success="status=='success'" decoration-warning="status=='warning'" decoration-danger="status=='error'">
+                <field name="timestamp"/>
+                <field name="wcs_system_id"/>
+                <field name="operation"/>
+                <field name="status"/>
+                <field name="message"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Form View for WCS Integration Logs -->
+    <record id="view_wms_wcs_integration_log_form" model="ir.ui.view">
+        <field name="name">wms.wcs.integration.log.form</field>
+        <field name="model">wms.wcs.integration.log</field>
+        <field name="arch" type="xml">
+            <form string="WCS Integration Log">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="timestamp"/>
+                            <field name="wcs_system_id"/>
+                            <field name="operation"/>
+                        </group>
+                        <group>
+                            <field name="status"/>
+                            <field name="duration"/>
+                        </group>
+                    </group>
+
+                    <notebook>
+                        <page string="Message">
+                            <field name="message"/>
+                        </page>
+
+                        <page string="Request Data">
+                            <field name="request_data"/>
+                        </page>
+
+                        <page string="Response Data">
+                            <field name="response_data"/>
+                        </page>
+
+                        <page string="Related Entities">
+                            <group>
+                                <field name="task_id"/>
+                                <field name="device_id"/>
+                            </group>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Menu Items -->
+    <menuitem id="menu_wms_wcs_root"
+              name="WCS Integration"
+              parent="stock.menu_stock_warehouse_mgmt"
+              sequence="107"/>
+
+    <menuitem id="menu_wms_wcs_systems"
+              name="WCS Systems"
+              parent="menu_wms_wcs_root"
+              action="action_wms_wcs_system"
+              sequence="10"/>
+
+    <menuitem id="menu_wms_wcs_devices"
+              name="WCS Devices"
+              parent="menu_wms_wcs_root"
+              action="action_wms_wcs_device"
+              sequence="20"/>
+
+    <menuitem id="menu_wms_wcs_tasks"
+              name="WCS Tasks"
+              parent="menu_wms_wcs_root"
+              action="action_wms_wcs_task"
+              sequence="30"/>
+
+    <menuitem id="menu_wms_wcs_logs"
+              name="Integration Logs"
+              parent="menu_wms_wcs_root"
+              action="action_wms_wcs_integration_log"
+              sequence="40"/>
+
+</odoo>

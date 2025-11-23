@@ -1,0 +1,7 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_wms_location_usage_user,wms.location.usage.user,model_wms_location_usage,stock.group_stock_user,1,1,1,0
+access_wms_location_usage_manager,wms.location.usage.manager,model_wms_location_usage,stock.group_stock_manager,1,1,1,1
+access_wms_location_utilization_user,wms.location.utilization.user,model_wms_location_utilization,stock.group_stock_user,1,1,1,0
+access_wms_location_utilization_manager,wms.location.utilization.manager,model_wms_location_utilization,stock.group_stock_manager,1,1,1,1
+access_wms_location_usage_report_user,wms.location.usage.report.user,model_wms_location_usage_report,stock.group_stock_user,1,1,1,1
+access_wms_location_usage_report_manager,wms.location.usage.report.manager,model_wms_location_usage_report,stock.group_stock_manager,1,1,1,1

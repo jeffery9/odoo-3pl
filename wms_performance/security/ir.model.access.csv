@@ -1,0 +1,9 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_wms_performance_indicator_user,wms.performance.indicator.user,model_wms_performance_indicator,stock.group_stock_user,1,1,1,0
+access_wms_performance_indicator_manager,wms.performance.indicator.manager,model_wms_performance_indicator,stock.group_stock_manager,1,1,1,1
+access_wms_performance_report_user,wms.performance.report.user,model_wms_performance_report,stock.group_stock_user,1,1,1,0
+access_wms_performance_report_manager,wms.performance.report.manager,model_wms_performance_report,stock.group_stock_manager,1,1,1,1
+access_wms_operator_performance_user,wms.operator.performance.user,model_wms_operator_performance,stock.group_stock_user,1,1,1,0
+access_wms_operator_performance_manager,wms.operator.performance.manager,model_wms_operator_performance,stock.group_stock_manager,1,1,1,1
+access_wms_performance_wizard_user,wms.performance.wizard.user,model_wms_performance_wizard,stock.group_stock_user,1,1,1,1
+access_wms_performance_wizard_manager,wms.performance.wizard.manager,model_wms_performance_wizard,stock.group_stock_manager,1,1,1,1

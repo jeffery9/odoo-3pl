@@ -1,0 +1,193 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- Actions -->
+    <record id="action_wms_eiq_analysis" model="ir.actions.act_window">
+        <field name="name">EIQ分析</field>
+        <field name="res_model">wms.eiq.analysis</field>
+        <field name="view_mode">tree,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                创建EIQ分析
+            </p>
+            <p>
+                进行入库(Entry)-品项(Item)-数量(Quantity)分析，优化仓库布局和作业流程。
+            </p>
+        </field>
+    </record>
+
+    <record id="action_wms_eiq_analysis_report" model="ir.actions.act_window">
+        <field name="name">生成EIQ分析报告</field>
+        <field name="res_model">wms.eiq.analysis.report</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+        <field name="binding_model_id" ref="model_wms_eiq_analysis_report"/>
+        <field name="binding_view_types">form</field>
+    </record>
+
+    <!-- Tree View for EIQ Analysis -->
+    <record id="view_wms_eiq_analysis_tree" model="ir.ui.view">
+        <field name="name">wms.eiq.analysis.tree</field>
+        <field name="model">wms.eiq.analysis</field>
+        <field name="arch" type="xml">
+            <tree string="EIQ分析" decoration-info="state=='draft'" decoration-success="state=='generated'" decoration-muted="state=='validated'">
+                <field name="name"/>
+                <field name="analysis_date"/>
+                <field name="period_start"/>
+                <field name="period_end"/>
+                <field name="owner_id"/>
+                <field name="analysis_type"/>
+                <field name="entries"/>
+                <field name="items"/>
+                <field name="quantity"/>
+                <field name="eoq"/>
+                <field name="state"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Form View for EIQ Analysis -->
+    <record id="view_wms_eiq_analysis_form" model="ir.ui.view">
+        <field name="name">wms.eiq.analysis.form</field>
+        <field name="model">wms.eiq.analysis</field>
+        <field name="arch" type="xml">
+            <form string="EIQ分析">
+                <header>
+                    <button name="action_generate_analysis"
+                            string="生成分析"
+                            type="object"
+                            class="oe_highlight"
+                            states="draft"
+                            help="根据设定的期间和条件生成EIQ分析"/>
+                    <field name="state" widget="statusbar" statusbar_visible="draft,generated,validated"/>
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                    </div>
+                    <group>
+                        <group>
+                            <field name="name"/>
+                            <field name="analysis_date"/>
+                            <field name="analysis_type"/>
+                            <field name="calculation_method"/>
+                        </group>
+                        <group>
+                            <field name="owner_id"/>
+                            <field name="warehouse_id"/>
+                            <field name="period_start"/>
+                            <field name="period_end"/>
+                        </group>
+                    </group>
+
+                    <notebook>
+                        <page string="核心指标">
+                            <group>
+                                <group string="EIQ基础指标">
+                                    <field name="entries"/>
+                                    <field name="items"/>
+                                    <field name="quantity"/>
+                                </group>
+                                <group string="EIQ比例指标">
+                                    <field name="eoq" string="平均订单品项数(I/E)"/>
+                                    <field name="qoe" string="平均订单数量(Q/E)"/>
+                                    <field name="qoi" string="平均品项数量(Q/I)"/>
+                                </group>
+                            </group>
+                        </page>
+
+                        <page string="订单分析">
+                            <group>
+                                <field name="total_orders"/>
+                                <field name="max_items_per_order"/>
+                                <field name="min_items_per_order"/>
+                                <field name="avg_items_per_order"/>
+                            </group>
+                        </page>
+
+                        <page string="品项分析">
+                            <group>
+                                <field name="total_items"/>
+                                <field name="max_orders_per_item"/>
+                                <field name="min_orders_per_item"/>
+                                <field name="avg_orders_per_item"/>
+                            </group>
+                        </page>
+
+                        <page string="分析结果">
+                            <field name="analysis_results"/>
+                        </page>
+
+                        <page string="优化建议">
+                            <field name="recommendations"/>
+                        </page>
+
+                        <page string="详细统计">
+                            <field name="detailed_stats"/>
+                        </page>
+
+                        <page string="附加信息">
+                            <field name="notes"/>
+                        </page>
+                    </notebook>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids"/>
+                    <field name="activity_ids"/>
+                    <field name="message_ids"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <!-- Form View for EIQ Analysis Report Wizard -->
+    <record id="view_wms_eiq_analysis_report_form" model="ir.ui.view">
+        <field name="name">wms.eiq.analysis.report.form</field>
+        <field name="model">wms.eiq.analysis.report</field>
+        <field name="arch" type="xml">
+            <form string="生成EIQ分析报告">
+                <group>
+                    <group>
+                        <field name="period_start"/>
+                        <field name="period_end"/>
+                    </group>
+                    <group>
+                        <field name="owner_id"/>
+                        <field name="warehouse_id"/>
+                    </group>
+                    <group>
+                        <field name="analysis_type"/>
+                        <field name="calculation_method"/>
+                    </group>
+                </group>
+                <footer>
+                    <button name="action_generate_report"
+                            string="生成报告"
+                            type="object"
+                            class="btn-primary"/>
+                    <button string="取消"
+                            class="btn-secondary"
+                            special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <!-- Menu Items -->
+    <menuitem id="menu_wms_eiq_analysis_root"
+              name="EIQ分析"
+              parent="stock.menu_stock_warehouse_mgmt"
+              sequence="102"/>
+
+    <menuitem id="menu_wms_eiq_analysis"
+              name="EIQ分析报告"
+              parent="menu_wms_eiq_analysis_root"
+              action="action_wms_eiq_analysis"
+              sequence="10"/>
+
+    <menuitem id="menu_wms_eiq_analysis_report"
+              name="生成新分析"
+              parent="menu_wms_eiq_analysis_root"
+              action="action_wms_eiq_analysis_report"
+              sequence="20"/>
+
+</odoo>

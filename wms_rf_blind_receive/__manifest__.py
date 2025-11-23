@@ -7,7 +7,7 @@
         RF blind receiving for Third Party Logistics warehouses.
         Provides blind receiving capabilities with RF scanning for verification.
     ''',
-    'depends': ['base', 'stock', 'wms_owner'],
+    'depends': ['base', 'stock', 'wms_owner', 'wms_quality_control'],
     'data': [
         'data/sequence_data.xml',
         'security/ir.model.access.csv',

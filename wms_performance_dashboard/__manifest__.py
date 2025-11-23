@@ -21,7 +21,13 @@
         "sale",
         "board",
         "web",
-        "wms_owner"
+        "wms_owner",
+        "wms_quality_control",
+        "wms_labor_management",
+        "wms_energy_management",
+        "wms_safety_management",
+        "wms_finance_integration",
+        "wms_returns_management"
     ],
     "data": [
         "security/ir.model.access.csv",
