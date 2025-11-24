@@ -12,7 +12,7 @@
         - Overtime and premium pay tracking
         - Labor analytics and dashboards
     """,
-    "version": "17.0.1.0.0",
+    "version": "18.0.1.0.0",
     "category": "Human Resources/Human Resources",
     "depends": [
         "base",

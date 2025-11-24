@@ -1,6 +1,6 @@
 {
     'name': 'WMS RFID Integration',
-    'version': '1.0',
+    'version': '18.0.1.0.0',
     'category': 'Warehouse Management',
     'summary': 'RFID Integration for 3PL warehouses',
     'description': '''
