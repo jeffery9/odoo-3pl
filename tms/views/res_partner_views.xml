@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Extend Customer Form to Add Route Area -->
+    <record id="view_partner_form_route_area" model="ir.ui.view">
+        <field name="name">res.partner.form.route.area</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base.view_partner_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//group[@name='sale_shipping']" position="after">
+                <group string="TMS Routing" name="tms_routing">
+                    <field name="route_area_id"/>
+                    <field name="route_area_code" readonly="1"/>
+                    <field name="delivery_priority"/>
+                    <field name="preferred_delivery_time"/>
+                    <field name="estimated_service_time"/>
+                </group>
+            </xpath>
+            <xpath expr="//notebook" position="inside">
+                <page string="Delivery Information" name="delivery_info">
+                    <group>
+                        <field name="special_delivery_instructions" placeholder="Enter special delivery instructions..."/>
+                    </group>
+                </page>
+            </xpath>
+        </field>
+    </record>
+</odoo>

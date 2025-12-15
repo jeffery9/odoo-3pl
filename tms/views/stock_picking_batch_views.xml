@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- Extend Stock Picking Batch Form to Add TMS Route Creation -->
+    <record id="view_stock_picking_batch_form_tms" model="ir.ui.view">
+        <field name="name">stock.picking.batch.form.tms</field>
+        <field name="model">stock.picking.batch</field>
+        <field name="inherit_id" ref="stock_picking_batch.stock_picking_batch_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//header" position="inside">
+                <button name="action_check_split_picking_requirements" type="object" string="Check Capacity Requirements" class="btn-secondary" invisible="state not in ('assigned', 'confirmed', 'in_progress')"/>
+                <button name="action_create_tms_route" type="object" string="Create TMS Route" invisible="state not in ('assigned', 'confirmed', 'in_progress') or tms_route_id" class="btn-primary"/>
+                <button name="action_create_area_split_batch_if_needed" type="object" string="Create Area-Split Route" invisible="state not in ('assigned', 'confirmed', 'in_progress') or tms_route_id" class="btn-info"/>
+            </xpath>
+            <xpath expr="//sheet/group[1]" position="after">
+                <group string="TMS Routing" attrs="{'invisible': [('tms_route_id', '=', False)]}">
+                    <field name="tms_route_id" readonly="1"/>
+                    <field name="current_route_id" invisible="1"/>  <!-- Keep for compatibility -->
+                </group>
+            </xpath>
+            <xpath expr="//sheet/div[@name='button_box']" position="inside">
+                <button name="%(action_view_tms_routes)d" type="action" class="oe_stat_button" icon="fa-truck" invisible="not tms_route_id">
+                    <field string="TMS Route" name="tms_route_id" widget="statinfo"/>
+                </button>
+                <button name="action_view_route_stops" type="object" class="oe_stat_button" icon="fa-map-marker" invisible="not route_stop_ids">
+                    <field name="route_stop_count" string="Route Stops" widget="statinfo"/>
+                </button>
+            </xpath>
+        </field>
+    </record>
+
+</odoo>

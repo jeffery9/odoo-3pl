@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Extend Stock Picking Form to Add Route Information -->
+    <record id="view_stock_picking_form_route" model="ir.ui.view">
+        <field name="name">stock.picking.form.route</field>
+        <field name="model">stock.picking</field>
+        <field name="inherit_id" ref="stock.view_picking_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//header" position="inside">
+                <button name="action_view_route" type="object" string="View Route" invisible="not route_id" class="btn-secondary"/>
+            </xpath>
+            <xpath expr="//sheet/group[1]" position="after">
+                <group string="TMS Route Information" invisible="not route_id">
+                    <field name="route_id"/>
+                    <field name="route_stop_id"/>
+                </group>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- Action to Create Area-based Batches -->
+    <record id="action_create_batch_by_area_from_pickings" model="ir.actions.server">
+        <field name="name">Create Area-based Batches</field>
+        <field name="model_id" ref="stock.model_stock_picking"/>
+        <field name="binding_model_id" ref="stock.model_stock_picking"/>
+        <field name="state">code</field>
+        <field name="code">
+            action = {
+                'name': 'Create Area-based Batches',
+                'type': 'ir.actions.act_window',
+                'res_model': 'stock.picking.batch',
+                'view_mode': 'form',
+                'target': 'new',
+                'context': {
+                    'active_ids': active_ids,
+                    'default_action_method': 'action_create_batch_by_area'
+                }
+            }
+        </field>
+    </record>
+
+</odoo>

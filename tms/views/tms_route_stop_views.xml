@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- TMS Route Stop Tree View -->
+    <record id="view_tms_route_stop_tree" model="ir.ui.view">
+        <field name="name">tms.route.stop.tree</field>
+        <field name="model">tms.route.stop</field>
+        <field name="arch" type="xml">
+            <tree string="Route Stops" decoration-danger="state == 'failed'" decoration-success="state == 'delivered'" decoration-info="state == 'arrived'">
+                <field name="sequence" widget="handle"/>
+                <field name="adjusted_sequence" invisible="not is_adjusted"/>
+                <field name="route_id"/>
+                <field name="area_id"/>
+                <field name="is_priority_stop" decoration-danger="is_priority_stop"/>
+                <field name="partner_id"/>
+                <field name="address"/>
+                <field name="time_window_start"/>
+                <field name="planned_arrival"/>
+                <field name="actual_arrival"/>
+                <field name="delivery_count"/>
+                <field name="total_weight"/>
+                <field name="total_volume"/>
+                <field name="is_adjusted" decoration-warning="is_adjusted"/>
+                <field name="state"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- TMS Route Stop Form View -->
+    <record id="view_tms_route_stop_form" model="ir.ui.view">
+        <field name="name">tms.route.stop.form</field>
+        <field name="model">tms.route.stop</field>
+        <field name="arch" type="xml">
+            <form string="Route Stop">
+                <header>
+                    <button name="action_arrive_stop" type="object" string="Arrive" invisible="state not in ('pending')" class="btn-primary"/>
+                    <button name="action_start_delivery" type="object" string="Start Delivery" invisible="state != 'arrived'" class="btn-secondary"/>
+                    <button name="action_complete_stop" type="object" string="Complete Delivery" invisible="state not in ('arrived', 'in_progress')" class="btn-primary"/>
+                    <button name="action_fail_stop" type="object" string="Mark as Failed" invisible="state not in ('pending', 'arrived')" class="btn-danger"/>
+                    <button name="action_split_stop" type="object" string="Split Stop" invisible="state != 'pending'" class="btn-warning"/>
+                    <button name="%(action_tms_route_stop_adjust_wizard)d" type="action" string="Adjust Stop" invisible="state not in ('pending', 'arrived')" class="btn-info"/>
+                    <button name="action_apply_adjustments" type="object" string="Apply Adjustments" invisible="not is_adjusted" class="btn-success"/>
+                    <button name="action_reset_adjustment" type="object" string="Reset Adjustment" invisible="not is_adjusted" class="btn-secondary"/>
+                    <field name="state" widget="statusbar" statusbar_visible="pending,arrived,in_progress,delivered"/>
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <label for="partner_id" class="oe_edit_only"/>
+                        <h1>
+                            <field name="partner_id"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="route_id"/>
+                            <field name="area_id"/>
+                            <field name="sequence"/>
+                            <field name="partner_id"/>
+                            <field name="is_adjusted"/>
+                            <field name="adjustment_reason" invisible="not is_adjusted"/>
+                        </group>
+                        <group>
+                            <field name="address"/>
+                            <field name="delivery_count"/>
+                            <field name="is_return_warehouse"/>
+                        </group>
+                        <group string="Cargo Details">
+                            <field name="total_weight"/>
+                            <field name="total_volume"/>
+                        </group>
+                    </group>
+                    <group string="Timing">
+                        <group>
+                            <field name="time_window_start"/>
+                            <field name="time_window_end"/>
+                            <field name="adjusted_time_window_start" invisible="not is_adjusted"/>
+                            <field name="adjusted_time_window_end" invisible="not is_adjusted"/>
+                        </group>
+                        <group>
+                            <field name="planned_arrival"/>
+                            <field name="planned_departure"/>
+                            <field name="actual_arrival"/>
+                            <field name="actual_departure"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Delivery Orders">
+                            <field name="delivery_order_ids" widget="many2many_tags" options="{'color_field': 'state'}"/>
+                        </page>
+                        <page string="Deliveries">
+                            <field name="picking_ids" widget="many2many_tags" options="{'color_field': 'state'}"/>
+                        </page>
+                        <page string="Location">
+                            <group>
+                                <field name="latitude"/>
+                                <field name="longitude"/>
+                            </group>
+                        </page>
+                        <page string="Notes">
+                            <field name="notes"/>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+</odoo>

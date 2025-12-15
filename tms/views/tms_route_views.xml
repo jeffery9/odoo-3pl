@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- TMS Route Tree View -->
+    <record id="view_tms_route_tree" model="ir.ui.view">
+        <field name="name">tms.route.tree</field>
+        <field name="model">tms.route</field>
+        <field name="arch" type="xml">
+            <tree string="TMS Routes" decoration-danger="state == 'cancelled'" decoration-success="state == 'delivered'" decoration-info="state == 'in_transit'">
+                <field name="name"/>
+                <field name="area_id"/>
+                <field name="picking_batch_id"/>
+                <field name="vehicle_id"/>
+                <field name="driver_id"/>
+                <field name="departure_time"/>
+                <field name="return_time"/>
+                <field name="total_customers"/>
+                <field name="total_deliveries"/>
+                <field name="state"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- TMS Route Form View -->
+    <record id="view_tms_route_form" model="ir.ui.view">
+        <field name="name">tms.route.form</field>
+        <field name="model">tms.route</field>
+        <field name="arch" type="xml">
+            <form string="TMS Route">
+                <header>
+                    <button name="action_confirm" type="object" string="Confirm" class="oe_highlight" invisible="state != 'draft'"/>
+                    <button name="action_check_capacity_constraints" type="object" string="Check Capacity" class="btn-secondary" invisible="state != 'draft'"/>
+                    <button name="action_suggest_optimal_sequence" type="object" string="Suggest Sequence" class="btn-secondary" invisible="state != 'draft'"/>
+                    <button name="action_optimize_route_by_distance" type="object" string="Optimize for Distance" class="btn-success" invisible="state != 'draft'"/>
+                    <button name="action_calculate_stop_timing" type="object" string="Calculate Timing" class="btn-secondary" invisible="state != 'draft'"/>
+                    <button name="action_assign_familiar_driver" type="object" string="Assign Familiar Driver" class="btn-secondary" invisible="state != 'draft'"/>
+                    <button name="action_split_route_for_multiple_drivers" type="object" string="Split for Multiple Drivers" class="btn-warning" invisible="state != 'draft' or total_weight &lt;= vehicle_id.max_weight"/>
+                    <button name="action_split_route_by_area_capacity" type="object" string="Split Route by Area Capacity" class="btn-warning" invisible="state != 'draft'"/>
+                    <button name="action_combine_nearby_areas_route" type="object" string="Combine Nearby Areas" class="btn-info" invisible="state != 'draft' or not area_id"/>
+                    <button name="action_split_combine_for_adjacent_areas" type="object" string="Group Nearby Areas" class="btn-info" invisible="state != 'draft' or not vehicle_id"/>
+                    <button name="action_optimize_all_routes_for_distance" type="object" string="Optimize All for Distance" class="btn-primary" invisible="state != 'draft' or not vehicle_id"/>
+                    <button name="action_smart_split_combine_route" type="object" string="Smart Split/Combine" class="btn-success" invisible="state != 'draft' or not vehicle_id"/>
+                    <button name="action_get_related_sale_orders_status" type="object" string="SO Status" class="btn-secondary" invisible="not related_sale_order_ids"/>
+                    <button name="action_start_route" type="object" string="Start Route" class="oe_highlight" invisible="state != 'confirmed'"/>
+                    <button name="action_complete_route" type="object" string="Complete Route" class="oe_highlight" invisible="state != 'in_transit'"/>
+                    <field name="state" widget="statusbar" statusbar_visible="draft,confirmed,in_transit,delivered"/>
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="%(action_view_route_stops)d" type="action" class="oe_stat_button" icon="fa-map-marker">
+                            <field name="total_customers" string="Stops" widget="statinfo"/>
+                        </button>
+                        <button name="%(action_view_route_deliveries)d" type="action" class="oe_stat_button" icon="fa-truck">
+                            <field name="total_deliveries" string="Deliveries" widget="statinfo"/>
+                        </button>
+                    </div>
+                    <div class="oe_title">
+                        <label for="name" class="oe_edit_only"/>
+                        <h1>
+                            <field name="name"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="area_id"/>
+                            <field name="picking_batch_id"/>
+                            <field name="vehicle_id"/>
+                            <field name="driver_id"/>
+                            <field name="driver_familiarity_score" widget="percentage"/>
+                            <field name="last_driver_id"/>
+                        </group>
+                        <group>
+                            <field name="departure_time"/>
+                            <field name="return_time"/>
+                            <field name="total_distance"/>
+                        </group>
+                        <group string="Capacity">
+                            <field name="total_weight"/>
+                            <field name="total_volume"/>
+                        </group>
+                        <group string="Driver Information">
+                            <field name="driver_notes"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Route Stops">
+                            <header>
+                                <button name="action_optimize_route" type="object" string="Optimize Route" class="btn-secondary" help="Optimize the sequence of stops based on distance and time windows"/>
+                            </header>
+                            <field name="stop_ids" context="{'default_route_id': id}">
+                                <tree editable="bottom" decoration-info="state == 'in_transit'" decoration-success="state == 'delivered'" decoration-danger="state == 'failed'">
+                                    <field name="sequence" widget="handle"/>
+                                    <field name="adjusted_sequence" invisible="not is_adjusted"/>
+                                    <field name="partner_id"/>
+                                    <field name="area_id"/>
+                                    <field name="address"/>
+                                    <field name="delivery_count"/>
+                                    <field name="total_weight"/>
+                                    <field name="total_volume"/>
+                                    <field name="is_priority_stop" decoration-danger="is_priority_stop"/>
+                                    <field name="is_adjusted" decoration-warning="is_adjusted"/>
+                                    <field name="time_window_start"/>
+                                    <field name="time_window_end"/>
+                                    <field name="planned_arrival"/>
+                                    <field name="actual_arrival"/>
+                                    <field name="state"/>
+                                    <button name="action_arrive_stop" type="object" string="Arrive" invisible="state != 'pending'" icon="fa-sign-in"/>
+                                    <button name="action_complete_stop" type="object" string="Deliver" invisible="state != 'arrived'" icon="fa-check"/>
+                                    <button name="action_fail_stop" type="object" string="Fail" invisible="state not in ('pending', 'arrived')" icon="fa-times"/>
+                                </tree>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+</odoo>

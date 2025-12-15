@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_tms_route_stop_adjust_wizard_form" model="ir.ui.view">
+        <field name="name">tms.route.stop.adjust.wizard.form</field>
+        <field name="model">tms.route.stop.adjust.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Adjust Route Stop">
+                <group>
+                    <field name="stop_id" invisible="1"/>
+                    <field name="adjustment_reason"/>
+                    <field name="new_sequence"/>
+                    <field name="new_time_window_start"/>
+                    <field name="new_time_window_end"/>
+                </group>
+                <footer>
+                    <button name="action_adjust_stop" string="Adjust Stop" type="object" class="btn-primary"/>
+                    <button string="Cancel" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_tms_route_stop_adjust_wizard" model="ir.actions.act_window">
+        <field name="name">Adjust Route Stop</field>
+        <field name="res_model">tms.route.stop.adjust.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+        <field name="binding_model_id" ref="model_tms_route_stop"/>
+        <field name="binding_view_types">form,list</field>
+    </record>
+</odoo>

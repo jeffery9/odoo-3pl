@@ -1,0 +1,7 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_tms_route_user,tms.route.user,model_tms_route,stock.group_stock_user,1,1,1,0
+access_tms_route_manager,tms.route.manager,model_tms_route,stock.group_stock_manager,1,1,1,1
+access_tms_route_stop_user,tms.route.stop.user,model_tms_route_stop,stock.group_stock_user,1,1,1,0
+access_tms_route_stop_manager,tms.route.stop.manager,model_tms_route_stop,stock.group_stock_manager,1,1,1,1
+access_route_area_user,route.area.user,model_route_area,stock.group_stock_user,1,1,1,0
+access_route_area_manager,route.area.manager,model_route_area,stock.group_stock_manager,1,1,1,1

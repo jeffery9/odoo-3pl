@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Route Area Form View -->
+    <record id="view_route_area_form" model="ir.ui.view">
+        <field name="name">route.area.form</field>
+        <field name="model">route.area</field>
+        <field name="arch" type="xml">
+            <form string="Route Area">
+                <header>
+                    <button name="toggle_active" type="object" class="btn btn-secondary"
+                            confirm="Are you sure you want to change the status of this area?"
+                            string="Toggle Active State" states="active"/>
+                    <button name="toggle_active" type="object" class="btn btn-secondary"
+                            confirm="Are you sure you want to change the status of this area?"
+                            string="Toggle Active State" states="!active"/>
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="%(action_view_area_partners)d" type="action" class="oe_stat_button" icon="fa-users">
+                            <field string="Customers" name="partner_ids" widget="statinfo"/>
+                        </button>
+                        <button name="%(action_view_area_routes)d" type="action" class="oe_stat_button" icon="fa-truck">
+                            <field string="Routes" name="route_ids" widget="statinfo"/>
+                        </button>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="name"/>
+                            <field name="code"/>
+                            <field name="active" invisible="1"/>
+                            <field name="sequence" widget="handle"/>
+                        </group>
+                        <group>
+                            <field name="service_level"/>
+                            <field name="manager_id"/>
+                            <field name="estimated_delivery_time"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Description">
+                            <field name="description"/>
+                        </page>
+                        <page string="Delivery Instructions">
+                            <field name="delivery_instructions"/>
+                        </page>
+                        <page string="Geographic Information">
+                            <group>
+                                <field name="geographic_coordinates" placeholder="Enter coordinates in JSON format..."/>
+                            </group>
+                        </page>
+                    </notebook>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids"/>
+                    <field name="activity_ids"/>
+                    <field name="message_ids"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <!-- Route Area Tree View -->
+    <record id="view_route_area_tree" model="ir.ui.view">
+        <field name="name">route.area.tree</field>
+        <field name="model">route.area</field>
+        <field name="arch" type="xml">
+            <tree string="Route Areas">
+                <field name="sequence" widget="handle"/>
+                <field name="name"/>
+                <field name="code"/>
+                <field name="partner_ids" widget="many2many_tags"/>
+                <field name="service_level"/>
+                <field name="estimated_delivery_time"/>
+                <field name="manager_id"/>
+                <field name="active"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Route Area Search View -->
+    <record id="view_route_area_search" model="ir.ui.view">
+        <field name="name">route.area.search</field>
+        <field name="model">route.area</field>
+        <field name="arch" type="xml">
+            <search string="Route Areas">
+                <field name="name" filter_domain="[('name', 'ilike', self)]" string="Name"/>
+                <field name="code" filter_domain="[('code', 'ilike', self)]" string="Code"/>
+                <field name="service_level"/>
+                <field name="manager_id"/>
+                <separator/>
+                <filter name="active" string="Active" domain="[('active', '=', True)]"/>
+                <filter name="inactive" string="Inactive" domain="[('active', '=', False)]"/>
+                <group expand="0" string="Group By">
+                    <filter name="group_by_manager" string="Manager" domain="[]" context="{'group_by':'manager_id'}"/>
+                    <filter name="group_by_service_level" string="Service Level" domain="[]" context="{'group_by':'service_level'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!-- Action to View Area Partners -->
+    <record id="action_view_area_partners" model="ir.actions.act_window">
+        <field name="name">Customers in Area</field>
+        <field name="res_model">res.partner</field>
+        <field name="view_mode">tree,form</field>
+        <field name="domain">[('route_area_id', '=', active_id)]</field>
+        <field name="context">{'default_route_area_id': active_id}</field>
+    </record>
+
+    <!-- Action to View Area Routes -->
+    <record id="action_view_area_routes" model="ir.actions.act_window">
+        <field name="name">Routes in Area</field>
+        <field name="res_model">tms.route</field>
+        <field name="view_mode">tree,form</field>
+        <field name="domain">[('area_id', '=', active_id)]</field>
+        <field name="context">{'default_area_id': active_id}</field>
+    </record>
+
+    <!-- Route Area Action -->
+    <record id="action_route_area" model="ir.actions.act_window">
+        <field name="name">Route Areas</field>
+        <field name="res_model">route.area</field>
+        <field name="view_mode">tree,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Add route coverage areas
+            </p><p>
+                Create route coverage areas to organize your delivery operations by geographic regions.
+            </p>
+        </field>
+    </record>
+
+</odoo>
