@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-    <!-- Batch Receive Tree View -->
+    <!-- Batch Receive List View -->
     <record id="view_wms_batch_receive_list" model="ir.ui.view">
-        <field name="name">wms.batch.receive.tree</field>
+        <field name="name">wms.batch.receive.list</field>
         <field name="model">wms.batch.receive</field>
         <field name="arch" type="xml">
-            <tree>
+            <list>
                 <field name="name"/>
                 <field name="owner_id"/>
                 <field name="status"/>
@@ -14,7 +14,7 @@
                 <field name="completed_pickings"/>
                 <field name="progress_percentage"/>
                 <field name="received_by"/>
-            </tree>
+            </list>
         </field>
     </record>
 
@@ -71,7 +71,7 @@
                     <notebook>
                         <page string="Batch Pickings">
                             <field name="batch_picking_ids">
-                                <tree editable="top">
+                                <list editable="top">
                                     <field name="sequence" widget="handle"/>
                                     <field name="picking_id"/>
                                     <field name="priority"/>
@@ -81,7 +81,7 @@
                                     <field name="received_by"/>
                                     <field name="receive_date"/>
                                     <field name="completion_date"/>
-                                </tree>
+                                </list>
                             </field>
                         </page>
                         <page string="Notes">
@@ -109,7 +109,7 @@
                 <filter name="partial" string="Partial" domain="[('status', '=', 'partial')]"/>
                 <filter name="completed" string="Completed" domain="[('status', '=', 'completed')]"/>
                 <filter name="high_progress" string="High Progress" domain="[('progress_percentage', '>=', 90.0)]"/>
-                <filter name="low_progress" string="Low Progress" domain="[('progress_percentage', '<', 50.0)]"/>
+                <filter name="low_progress" string="Low Progress" domain="[('progress_percentage', '&lt;', 50.0)]"/>
                 <group expand="0" string="Group By">
                     <filter name="group_by_owner" string="Owner" context="{'group_by': 'owner_id'}"/>
                     <filter name="group_by_status" string="Status" context="{'group_by': 'status'}"/>

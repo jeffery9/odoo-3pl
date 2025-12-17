@@ -1,19 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
     <!-- Actions -->
-    <record id="action_wms_billing_rule" model="ir.actions.act_window">
-        <field name="name">Billing Rules</field>
-        <field name="res_model">wms.billing.rule</field>
-        <field name="view_mode">tree,form</field>
-        <field name="help" type="html">
-            <p class="o_view_nocontent_smiling_face">Create billing rules</p>
-        </field>
-    </record>
-
     <record id="action_wms_billing_record" model="ir.actions.act_window">
         <field name="name">Billing Records</field>
         <field name="res_model">wms.billing.record</field>
-        <field name="view_mode">tree,form,pivot,graph</field>
+        <field name="view_mode">list,form,pivot,graph</field>
         <field name="help" type="html">
             <p class="o_view_nocontent_smiling_face">View billing records</p>
         </field>
@@ -31,19 +22,15 @@
         <field name="view_mode">graph</field>
     </record>
 
-    <!-- Billing Management Menu -->
-    <menuitem id="wms_billing_menu" name="Billing Management" parent="wms_main_menu" sequence="40"/>
-
-    <!-- Billing Rules Submenu -->
-    <menuitem id="wms_billing_rule_submenu" name="Billing Rules" parent="wms_billing_menu" sequence="10"
-              action="action_wms_billing_rule"/>
+    <!-- Billing Management Menu (under Finance Management > Billing) -->
+    <menuitem id="wms_billing_menu" name="Billing Management" parent="wms_owner.menu_3pl_finance_billing" sequence="15"/>
 
     <!-- Billing Records Submenu -->
-    <menuitem id="wms_billing_record_submenu" name="Billing Records" parent="wms_billing_menu" sequence="20"
+    <menuitem id="wms_billing_record_submenu" name="Billing Records" parent="wms_billing_menu" sequence="10"
               action="action_wms_billing_record"/>
 
     <!-- Billing Reports Submenu -->
-    <menuitem id="wms_billing_reports_submenu" name="Billing Reports" parent="wms_billing_menu" sequence="30">
+    <menuitem id="wms_billing_reports_submenu" name="Billing Reports" parent="wms_billing_menu" sequence="20">
         <menuitem id="wms_billing_analysis" name="Billing Analysis" action="action_wms_billing_record_pivot" sequence="1"/>
         <menuitem id="wms_billing_graph" name="Billing Graph" action="action_wms_billing_record_graph" sequence="2"/>
     </menuitem>

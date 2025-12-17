@@ -166,7 +166,7 @@ class StockLotTraceability(models.Model):
             'type': 'ir.actions.act_window',
             'name': 'Upstream Moves',
             'res_model': 'stock.move',
-            'view_mode': 'tree,form',
+            'view_mode': 'list,form',
             'domain': [('id', 'in', self.upstream_move_ids.ids)],
             'context': {'default_company_id': self.company_id.id}
         }
@@ -178,7 +178,7 @@ class StockLotTraceability(models.Model):
             'type': 'ir.actions.act_window',
             'name': 'Downstream Moves',
             'res_model': 'stock.move',
-            'view_mode': 'tree,form',
+            'view_mode': 'list,form',
             'domain': [('id', 'in', self.downstream_move_ids.ids)],
             'context': {'default_company_id': self.company_id.id}
         }
@@ -190,7 +190,7 @@ class StockLotTraceability(models.Model):
             'type': 'ir.actions.act_window',
             'name': 'Location History',
             'res_model': 'stock.location',
-            'view_mode': 'tree,form',
+            'view_mode': 'list,form',
             'domain': [('id', 'in', self.location_ids.ids)],
         }
 

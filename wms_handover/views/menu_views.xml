@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-    <!-- Handover Management Menu -->
+    <!-- Handover Management Menu (under Shipping & Transportation > Operations) -->
     <menuitem id="menu_wms_handover_root"
               name="Handover Management"
-              parent="stock.menu_stock_warehouse_mgmt"
-              sequence="80"/>
+              parent="wms_owner.menu_3pl_shipping_operations"
+              sequence="25"/>
 
     <menuitem id="menu_wms_handover_list"
               name="Handover Records"

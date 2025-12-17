@@ -413,7 +413,7 @@ class TestWmsRfid(TransactionCase):
         self.assertIsInstance(action, dict)
         self.assertEqual(action['type'], 'ir.actions.act_window')
         self.assertEqual(action['res_model'], 'wms.rfid.transaction')
-        self.assertEqual(action['view_mode'], 'tree,form')
+        self.assertEqual(action['view_mode'], 'list,form')
         self.assertIn('TEST_TAG_001', str(action.get('domain', [])))
 
     def test_rfid_tag_onchange_functionality(self):

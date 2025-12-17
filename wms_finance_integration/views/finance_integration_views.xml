@@ -173,19 +173,14 @@
         <field name="arch" type="xml">
             <form string="Financial Transaction">
                 <header>
-                    <button name="action_confirm" type="object" string="Confirm" states="draft" class="btn-primary"/>
-                    <button name="action_post" type="object" string="Post" states="draft,confirmed" class="btn-success"/>
-                    <button name="action_cancel" type="object" string="Cancel" states="draft,confirmed" class="btn-default"/>
+                    <button name="action_confirm" type="object" string="Confirm" invisible="status != 'draft'" class="btn-primary"/>
+                    <button name="action_post" type="object" string="Post" invisible="status not in ['draft', 'confirmed']" class="btn-success"/>
+                    <button name="action_cancel" type="object" string="Cancel" invisible="status not in ['draft', 'confirmed']" class="btn-default"/>
                     <field name="status" widget="statusbar" statusbar_visible="draft,confirmed,posted,cancelled"/>
                 </header>
                 <sheet>
                     <div class="oe_button_box" name="button_box">
-                        <button name="action_view_rmas" type="object" class="oe_stat_button" icon="fa-dollar">
-                            <div class="o_field_widget o_stat_info">
-                                <span class="o_stat_value"><field name="total_amount"/></span>
-                                <span class="o_stat_text">Total</span>
-                            </div>
-                        </button>
+                        <field name="total_amount" widget="statinfo" string="Total Amount" icon="fa-dollar"/>
                     </div>
                     <group>
                         <group>
@@ -234,11 +229,7 @@
                         </page>
                     </notebook>
                 </sheet>
-                <div class="oe_chatter">
-                    <field name="message_follower_ids"/>
-                    <field name="activity_ids"/>
-                    <field name="message_ids"/>
-                </div>
+                <chatter/>
             </form>
         </field>
     </record>
@@ -269,8 +260,8 @@
         <field name="arch" type="xml">
             <form string="Cost Allocation">
                 <header>
-                    <button name="action_confirm" type="object" string="Confirm" states="draft" class="btn-primary"/>
-                    <button name="action_post" type="object" string="Post" states="draft,confirmed" class="btn-success"/>
+                    <button name="action_confirm" type="object" string="Confirm" invisible="status != 'draft'" class="btn-primary"/>
+                    <button name="action_post" type="object" string="Post" invisible="status not in ['draft', 'confirmed']" class="btn-success"/>
                     <field name="status" widget="statusbar" statusbar_visible="draft,confirmed,posted"/>
                 </header>
                 <sheet>
@@ -340,24 +331,14 @@
         <field name="arch" type="xml">
             <form string="Financial Report">
                 <header>
-                    <button name="action_generate_report" type="object" string="Generate Report" states="draft" class="btn-primary"/>
-                    <button name="action_validate_report" type="object" string="Validate Report" states="generated" class="btn-success"/>
+                    <button name="action_generate_report" type="object" string="Generate Report" invisible="status != 'draft'" class="btn-primary"/>
+                    <button name="action_validate_report" type="object" string="Validate Report" invisible="status != 'generated'" class="btn-success"/>
                     <field name="status" widget="statusbar" statusbar_visible="draft,generated,validated,archived"/>
                 </header>
                 <sheet>
                     <div class="oe_button_box" name="button_box">
-                        <button name="action_view_rmas" type="object" class="oe_stat_button" icon="fa-dollar">
-                            <div class="o_field_widget o_stat_info">
-                                <span class="o_stat_value"><field name="total_revenue"/></span>
-                                <span class="o_stat_text">Revenue</span>
-                            </div>
-                        </button>
-                        <button name="action_view_rmas" type="object" class="oe_stat_button" icon="fa-bar-chart">
-                            <div class="o_field_widget o_stat_info">
-                                <span class="o_stat_value"><field name="net_income"/></span>
-                                <span class="o_stat_text">Net Income</span>
-                            </div>
-                        </button>
+                        <field name="total_revenue" widget="statinfo" string="Revenue" icon="fa-dollar"/>
+                        <field name="net_income" widget="statinfo" string="Net Income" icon="fa-bar-chart"/>
                     </div>
                     <group>
                         <group>
@@ -430,19 +411,14 @@
         <field name="arch" type="xml">
             <form string="Invoice Integration">
                 <header>
-                    <button name="action_send_invoice" type="object" string="Send Invoice" states="draft" class="btn-primary"/>
-                    <button name="action_mark_paid" type="object" string="Mark as Paid" states="sent,overdue" class="btn-success"/>
-                    <button name="action_cancel_invoice" type="object" string="Cancel Invoice" states="draft,sent" class="btn-danger"/>
+                    <button name="action_send_invoice" type="object" string="Send Invoice" invisible="status != 'draft'" class="btn-primary"/>
+                    <button name="action_mark_paid" type="object" string="Mark as Paid" invisible="status not in ['sent', 'overdue']" class="btn-success"/>
+                    <button name="action_cancel_invoice" type="object" string="Cancel Invoice" invisible="status not in ['draft', 'sent']" class="btn-danger"/>
                     <field name="status" widget="statusbar" statusbar_visible="draft,sent,paid,overdue,cancelled"/>
                 </header>
                 <sheet>
                     <div class="oe_button_box" name="button_box">
-                        <button name="action_view_rmas" type="object" class="oe_stat_button" icon="fa-dollar">
-                            <div class="o_field_widget o_stat_info">
-                                <span class="o_stat_value"><field name="total_amount"/></span>
-                                <span class="o_stat_text">Total</span>
-                            </div>
-                        </button>
+                        <field name="total_amount" widget="statinfo" string="Total Amount" icon="fa-dollar"/>
                     </div>
                     <group>
                         <group>

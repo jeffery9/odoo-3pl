@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- WMS Invoice List View -->
+    <record id="view_wms_invoice_list" model="ir.ui.view">
+        <field name="name">wms.invoice.list</field>
+        <field name="model">wms.invoice</field>
+        <field name="arch" type="xml">
+            <list string="WMS Invoices">
+                <field name="name"/>
+                <field name="partner_id"/>
+                <field name="owner_id"/>
+                <field name="date"/>
+                <field name="amount_total"/>
+                <field name="state"/>
+                <field name="billing_period_start"/>
+                <field name="billing_period_end"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- WMS Invoice Form View -->
+    <record id="view_wms_invoice_form" model="ir.ui.view">
+        <field name="name">wms.invoice.form</field>
+        <field name="model">wms.invoice</field>
+        <field name="arch" type="xml">
+            <form string="WMS Invoice">
+                <header>
+                    <button name="action_post_invoice" type="object" string="Post Invoice" class="btn-primary" invisible="state == 'posted'"/>
+                    <button name="mark_as_paid_invoice" type="object" string="Mark as Paid" class="btn-success" invisible="state != 'posted'"/>
+                    <field name="state" widget="statusbar" statusbar_visible="draft,posted,paid"/>
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <field name="owner_id" widget="statinfo" string="Owner"/>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="name"/>
+                            <field name="partner_id"/>
+                            <field name="owner_id"/>
+                        </group>
+                        <group>
+                            <field name="date"/>
+                            <field name="amount_total"/>
+                            <field name="currency_id"/>
+                        </group>
+                    </group>
+                    <group string="Billing Period">
+                        <field name="billing_period_start"/>
+                        <field name="billing_period_end"/>
+                    </group>
+                    <notebook>
+                        <page string="Billing Records">
+                            <field name="billing_records_ids">
+                                <list>
+                                    <field name="name"/>
+                                    <field name="service_type"/>
+                                    <field name="quantity"/>
+                                    <field name="unit_price"/>
+                                    <field name="amount"/>
+                                    <field name="state"/>
+                                </list>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- WMS Invoice Search View -->
+    <record id="view_wms_invoice_search" model="ir.ui.view">
+        <field name="name">wms.invoice.search</field>
+        <field name="model">wms.invoice</field>
+        <field name="arch" type="xml">
+            <search string="WMS Invoices">
+                <field name="name"/>
+                <field name="partner_id"/>
+                <field name="owner_id"/>
+                <field name="date"/>
+                <field name="state"/>
+                <filter name="draft" string="Draft" domain="[('state', '=', 'draft')]"/>
+                <filter name="posted" string="Posted" domain="[('state', '=', 'posted')]"/>
+                <filter name="paid" string="Paid" domain="[('state', '=', 'paid')]"/>
+                <group expand="0" string="Group By">
+                    <filter name="group_by_owner" string="Owner" context="{'group_by': 'owner_id'}"/>
+                    <filter name="group_by_date" string="Date" context="{'group_by': 'date'}"/>
+                    <filter name="group_by_state" string="State" context="{'group_by': 'state'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+</odoo>

@@ -11,6 +11,7 @@ class WmsLocationUsage(models.Model):
     """
     _name = 'wms.location.usage'
     _description = 'WMS Location Usage'
+    _inherit = ['mail.thread', 'mail.activity.mixin']
     _order = 'usage_rate desc'
 
     name = fields.Char('Analysis Name', required=True, copy=False)

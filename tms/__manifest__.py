@@ -23,6 +23,7 @@
         'sale',
         'contacts',
         'base_geolocalize',
+        'wms_owner',
     ],
     'data': [
         'security/ir.model.access.csv',

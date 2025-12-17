@@ -5,26 +5,12 @@ from odoo.exceptions import ValidationError
 
 class WmsWaveRule(models.Model):
     """
-    Auto Wave Rule Configuration
+    Auto Wave Rule Configuration (extension of base wave rule)
     Configure rules and conditions for automatic wave generation
     """
-    _name = 'wms.wave.rule'
-    _description = 'WMS Auto Wave Rule'
-    _order = 'sequence'
+    _inherit = 'wms.wave.rule'  # Inherit from the base wave rule model
 
-    name = fields.Char('Rule Name', required=True)
-    code = fields.Char('Rule Code', required=True, copy=False)
-    active = fields.Boolean('Active', default=True)
-    sequence = fields.Integer('Sequence', default=10)
-
-    # Trigger Conditions
-    trigger_type = fields.Selection([
-        ('time_based', 'Time Based'),
-        ('quantity_based', 'Quantity Based'),
-        ('mixed', 'Mixed'),
-    ], string='Trigger Type', required=True, default='time_based')
-
-    # Time-based conditions
+    # Time-based conditions (extending the base model)
     time_trigger_type = fields.Selection([
         ('fixed_time', 'Fixed Time'),
         ('interval', 'Time Interval'),
@@ -34,7 +20,7 @@ class WmsWaveRule(models.Model):
     time_interval = fields.Integer('Time Interval (minutes)')
     rolling_window_minutes = fields.Integer('Rolling Window (minutes)')
 
-    # Quantity-based conditions
+    # Quantity-based conditions (extending the base model)
     min_orders = fields.Integer('Minimum Orders', default=1)
     max_orders = fields.Integer('Maximum Orders')
     min_volume = fields.Float('Minimum Volume (m³)')
@@ -62,7 +48,7 @@ class WmsWaveRule(models.Model):
         ('delivery_date', 'Delivery Date First'),
         ('volume_weight', 'Volume Weight Optimization'),
         ('location_proximity', 'Location Proximity Optimization'),
-    ], string='Wave Strategy', required=True, default='priority')
+    ], string='Wave Strategy', default='priority')
 
     # Other configurations
     auto_confirm = fields.Boolean('Auto Confirm after Generation', default=True)

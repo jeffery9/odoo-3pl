@@ -588,8 +588,8 @@
     <!-- Menu Items -->
     <menuitem id="menu_wms_wechat_root"
               name="WeChat Integration"
-              parent="stock.menu_stock_warehouse_mgmt"
-              sequence="109"/>
+              parent="wms_owner.menu_3pl_integrations_systems"
+              sequence="25"/>
 
     <menuitem id="menu_wms_wechat_apps"
               name="WeChat Apps"

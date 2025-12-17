@@ -29,7 +29,7 @@ class WmsOwnerLotExtension(models.Model):
             'type': 'ir.actions.act_window',
             'name': 'Owner Lots/Serial Numbers',
             'res_model': 'stock.lot',
-            'view_mode': 'tree,form',
+            'view_mode': 'list,form',
             'domain': [('quant_ids.owner_id', '=', self.id)],
             'context': {'default_company_id': self.company_id.id if self.company_id else False}
         }

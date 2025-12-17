@@ -303,8 +303,8 @@
     <!-- Menu Items -->
     <menuitem id="menu_wms_value_added_root"
               name="Value Added Services"
-              parent="stock.menu_stock_warehouse_mgmt"
-              sequence="105"/>
+              parent="wms_owner.menu_3pl_vas_operations"
+              sequence="15"/>
 
     <menuitem id="menu_wms_value_added_services"
               name="Service Definitions"

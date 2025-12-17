@@ -28,7 +28,7 @@
     <record id="action_wms_stock_traceability_report" model="ir.actions.act_window">
         <field name="name">3PL Traceability Report</field>
         <field name="res_model">wms.stock.traceability.report</field>
-        <field name="view_mode">tree,form</field>
+        <field name="view_mode">list,form</field>
         <field name="context">{'search_default_lot_id': active_id}</field>
         <field name="help" type="html">
             <p class="o_view_nocontent_smiling_face">No traceability data found</p>

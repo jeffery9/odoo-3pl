@@ -28,11 +28,8 @@
         </field>
     </record>
 
-    <!-- Main Menu Item -->
-    <menuitem id="wms_main_menu" name="WMS" sequence="10"/>
-
-    <!-- Owner Management Menu -->
-    <menuitem id="wms_owner_menu" name="Owner Management" parent="wms_main_menu" sequence="10"/>
+    <!-- Owner Management Menu (under Finance Management) -->
+    <menuitem id="wms_owner_menu" name="Owner Management" parent="wms_owner.menu_3pl_finance_config" sequence="10"/>
 
     <!-- Owner Submenu -->
     <menuitem id="wms_owner_submenu" name="Owners" parent="wms_owner_menu" sequence="10"

@@ -3,21 +3,21 @@
 
     <!-- Actions -->
     <record id="action_wms_eiq_analysis" model="ir.actions.act_window">
-        <field name="name">EIQ分析</field>
+        <field name="name">EIQ Analysis</field>
         <field name="res_model">wms.eiq.analysis</field>
         <field name="view_mode">list,form</field>
         <field name="help" type="html">
             <p class="o_view_nocontent_smiling_face">
-                创建EIQ分析
+                Create EIQ analysis
             </p>
             <p>
-                进行入库(Entry)-品项(Item)-数量(Quantity)分析，优化仓库布局和作业流程。
+                Perform Entry-Item-Quantity analysis to optimize warehouse layout and operations.
             </p>
         </field>
     </record>
 
     <record id="action_wms_eiq_analysis_report" model="ir.actions.act_window">
-        <field name="name">生成EIQ分析报告</field>
+        <field name="name">Generate EIQ Analysis Report</field>
         <field name="res_model">wms.eiq.analysis.report</field>
         <field name="view_mode">form</field>
         <field name="target">new</field>
@@ -30,7 +30,7 @@
         <field name="name">wms.eiq.analysis.list</field>
         <field name="model">wms.eiq.analysis</field>
         <field name="arch" type="xml">
-            <list string="EIQ分析" decoration-info="state=='draft'" decoration-success="state=='generated'" decoration-muted="state=='validated'">
+            <list string="EIQ Analysis" decoration-info="state=='draft'" decoration-success="state=='generated'" decoration-muted="state=='validated'">
                 <field name="name"/>
                 <field name="analysis_date"/>
                 <field name="period_start"/>
@@ -51,14 +51,14 @@
         <field name="name">wms.eiq.analysis.form</field>
         <field name="model">wms.eiq.analysis</field>
         <field name="arch" type="xml">
-            <form string="EIQ分析">
+            <form string="EIQ Analysis">
                 <header>
                     <button name="action_generate_analysis"
-                            string="生成分析"
+                            string="Generate Analysis"
                             type="object"
                             class="oe_highlight"
                             invisible="state != 'draft'"
-                            help="根据设定的期间和条件生成EIQ分析"/>
+                            help="Generate EIQ analysis based on the set period and conditions"/>
                     <field name="state" widget="statusbar" statusbar_visible="draft,generated,validated"/>
                 </header>
                 <sheet>
@@ -80,22 +80,22 @@
                     </group>
 
                     <notebook>
-                        <page string="核心指标">
+                        <page string="Core Metrics">
                             <group>
-                                <group string="EIQ基础指标">
+                                <group string="Basic EIQ Metrics">
                                     <field name="entries"/>
                                     <field name="items"/>
                                     <field name="quantity"/>
                                 </group>
-                                <group string="EIQ比例指标">
-                                    <field name="eoq" string="平均订单品项数(I/E)"/>
-                                    <field name="qoe" string="平均订单数量(Q/E)"/>
-                                    <field name="qoi" string="平均品项数量(Q/I)"/>
+                                <group string="EIQ Ratio Metrics">
+                                    <field name="eoq" string="Avg Items per Entry (I/E)"/>
+                                    <field name="qoe" string="Avg Quantity per Entry (Q/E)"/>
+                                    <field name="qoi" string="Avg Quantity per Item (Q/I)"/>
                                 </group>
                             </group>
                         </page>
 
-                        <page string="订单分析">
+                        <page string="Order Analysis">
                             <group>
                                 <field name="total_orders"/>
                                 <field name="max_items_per_order"/>
@@ -104,7 +104,7 @@
                             </group>
                         </page>
 
-                        <page string="品项分析">
+                        <page string="Item Analysis">
                             <group>
                                 <field name="total_items"/>
                                 <field name="max_orders_per_item"/>
@@ -113,19 +113,19 @@
                             </group>
                         </page>
 
-                        <page string="分析结果">
+                        <page string="Analysis Results">
                             <field name="analysis_results"/>
                         </page>
 
-                        <page string="优化建议">
+                        <page string="Optimization Recommendations">
                             <field name="recommendations"/>
                         </page>
 
-                        <page string="详细统计">
+                        <page string="Detailed Statistics">
                             <field name="detailed_stats"/>
                         </page>
 
-                        <page string="附加信息">
+                        <page string="Additional Information">
                             <field name="notes"/>
                         </page>
                     </notebook>
@@ -139,7 +139,7 @@
         <field name="name">wms.eiq.analysis.report.form</field>
         <field name="model">wms.eiq.analysis.report</field>
         <field name="arch" type="xml">
-            <form string="生成EIQ分析报告">
+            <form string="Generate EIQ Analysis Report">
                 <group>
                     <group>
                         <field name="period_start"/>
@@ -156,10 +156,10 @@
                 </group>
                 <footer>
                     <button name="action_generate_report"
-                            string="生成报告"
+                            string="Generate Report"
                             type="object"
                             class="btn-primary"/>
-                    <button string="取消"
+                    <button string="Cancel"
                             class="btn-secondary"
                             special="cancel"/>
                 </footer>
@@ -169,18 +169,18 @@
 
     <!-- Menu Items -->
     <menuitem id="menu_wms_eiq_analysis_root"
-              name="EIQ分析"
-              parent="stock.menu_stock_warehouse_mgmt"
-              sequence="102"/>
+              name="EIQ Analysis"
+              parent="wms_owner.menu_3pl_storage_reporting"
+              sequence="30"/>
 
     <menuitem id="menu_wms_eiq_analysis"
-              name="EIQ分析报告"
+              name="EIQ Analysis Reports"
               parent="menu_wms_eiq_analysis_root"
               action="action_wms_eiq_analysis"
               sequence="10"/>
 
     <menuitem id="menu_wms_eiq_analysis_report"
-              name="生成新分析"
+              name="Generate New Analysis"
               parent="menu_wms_eiq_analysis_root"
               action="action_wms_eiq_analysis_report"
               sequence="20"/>

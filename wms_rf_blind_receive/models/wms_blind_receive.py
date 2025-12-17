@@ -66,7 +66,22 @@ class WmsBlindReceive(models.Model):
     def action_generate_report(self):
         """Generate discrepancy report"""
         self.ensure_one()
-        return self.env.ref('wms_rf_blind_receive.action_report_blind_receive').report_action(self)
+        # Check if the report action exists, if not show a notification
+        try:
+            report_action = self.env.ref('wms_rf_blind_receive.action_report_blind_receive')
+            return report_action.report_action(self)
+        except ValueError:
+            # If the report action doesn't exist, show a notification
+            return {
+                'type': 'ir.actions.client',
+                'tag': 'display_notification',
+                'params': {
+                    'title': 'Report Not Available',
+                    'message': 'The discrepancy report is not yet configured for this module.',
+                    'type': 'warning',
+                    'sticky': True
+                }
+            }
 
 
 class WmsBlindReceiveExpected(models.Model):

@@ -130,22 +130,6 @@ class WmsInventoryAgeReportLine(models.TransientModel):
         for line in self:
             line.total_value = line.quantity * line.unit_cost
 
-    @api.depends('age_days')
-    def _compute_aging_period(self):
-        """Compute aging period based on age in days"""
-        for line in self:
-            if line.age_days <= 30:
-                line.aging_period = 'current'
-            elif line.age_days <= 60:
-                line.aging_period = '30_60'
-            elif line.age_days <= 90:
-                line.aging_period = '60_90'
-            elif line.age_days <= 180:
-                line.aging_period = '90_180'
-            elif line.age_days <= 365:
-                line.aging_period = '180_365'
-            else:
-                line.aging_period = 'over_365'
 
 
 class WmsInventoryAgeAlert(models.Model):

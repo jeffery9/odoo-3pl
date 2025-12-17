@@ -357,6 +357,7 @@ class WmsFinancialReport(models.Model):
 class WmsInvoiceIntegration(models.Model):
     _name = 'wms.invoice.integration'
     _description = 'WMS Invoice Integration'
+    _inherit = ['mail.thread', 'mail.activity.mixin']
     _order = 'invoice_date desc'
 
     name = fields.Char('Invoice Number', required=True)

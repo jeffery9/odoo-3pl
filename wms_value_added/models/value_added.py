@@ -372,7 +372,7 @@ class WmsValueAddedReport(models.TransientModel):
         action = {
             'type': 'ir.actions.act_window',
             'res_model': 'wms.value.added.operation',
-            'view_mode': 'tree,form',
+            'view_mode': 'list,form',
             'domain': [('id', 'in', operations.ids)],
             'context': {
                 'search_default_date_from': self.date_from,

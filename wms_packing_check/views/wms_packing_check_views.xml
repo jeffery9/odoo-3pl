@@ -72,18 +72,18 @@
                     <notebook>
                         <page string="Required Checks">
                             <field name="required_checks">
-                                <tree editable="bottom">
+                                <list editable="bottom">
                                     <field name="product_id"/>
                                     <field name="expected_quantity"/>
                                     <field name="lot_id"/>
                                     <field name="uom_id"/>
                                     <field name="notes"/>
-                                </tree>
+                                </list>
                             </field>
                         </page>
                         <page string="Performed Checks">
                             <field name="performed_checks">
-                                <tree editable="bottom">
+                                <list editable="bottom">
                                     <field name="product_id"/>
                                     <field name="checked_quantity"/>
                                     <field name="lot_id"/>
@@ -92,7 +92,7 @@
                                     <field name="container_id"/>
                                     <field name="checked_by"/>
                                     <field name="check_date"/>
-                                </tree>
+                                </list>
                             </field>
                         </page>
                         <page string="Notes">

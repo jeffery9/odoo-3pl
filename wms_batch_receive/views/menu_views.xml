@@ -1,22 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-    <!-- Batch Receive Management Menu -->
-    <menuitem id="menu_wms_batch_receive_root"
-              name="Batch Receive"
-              parent="stock.menu_stock_warehouse_mgmt"
-              sequence="90"/>
-
-    <menuitem id="menu_wms_batch_receive_list"
-              name="Batch Receive Sessions"
-              parent="menu_wms_batch_receive_root"
-              action="action_wms_batch_receive_list"
-              sequence="10"/>
-
     <!-- Actions -->
     <record id="action_wms_batch_receive_list" model="ir.actions.act_window">
         <field name="name">Batch Receive Sessions</field>
         <field name="res_model">wms.batch.receive</field>
-        <field name="view_mode">tree,form</field>
+        <field name="view_mode">list,form</field>
         <field name="help" type="html">
             <p class="o_view_nocontent_smiling_face">
                 Create a new batch receive session
@@ -25,4 +13,16 @@
             </p>
         </field>
     </record>
+
+    <!-- Batch Receive Management Menu (under Receiving Management > Operations) -->
+    <menuitem id="menu_wms_batch_receive_root"
+              name="Batch Receive"
+              parent="wms_owner.menu_3pl_receiving_operations"
+              sequence="20"/>
+
+    <menuitem id="menu_wms_batch_receive_list"
+              name="Batch Receive Sessions"
+              parent="menu_wms_batch_receive_root"
+              action="action_wms_batch_receive_list"
+              sequence="10"/>
 </odoo>

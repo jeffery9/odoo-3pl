@@ -40,6 +40,21 @@ class WmsWaveRule(models.Model):
     max_pickers = fields.Integer('Max Pickers per Wave', default=5)
     active = fields.Boolean('Active', default=True)
 
+    # Fields for auto wave functionality (base fields that may be extended)
+    sequence = fields.Integer('Sequence', default=10)
+    code = fields.Char('Rule Code')
+    wave_strategy = fields.Selection([
+        ('fifo', 'First In First Out'),
+        ('lifo', 'Last In First Out'),
+        ('priority', 'Priority First'),
+        ('delivery_date', 'Delivery Date First'),
+        ('volume_weight', 'Volume Weight Optimization'),
+        ('location_proximity', 'Location Proximity Optimization'),
+    ], string='Wave Strategy')
+    last_execution = fields.Datetime('Last Execution Time')
+    execution_count = fields.Integer('Execution Count', default=0)
+    notes = fields.Text('Notes')
+
     @api.model
     def _cron_generate_waves(self):
         """Scheduled action to automatically generate waves based on rules"""
@@ -100,3 +115,13 @@ class WmsWaveRule(models.Model):
         """Generate wave manually from action button"""
         self.ensure_one()
         return self._generate_wave()
+
+    def action_execute_rule(self):
+        """Manually execute rule to create wave - stub method for base model"""
+        # This method is implemented in the auto wave extension
+        return True
+
+    def toggle_active(self):
+        """Toggle the active state of the rule"""
+        self.active = not self.active
+        return True

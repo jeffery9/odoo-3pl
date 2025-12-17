@@ -564,8 +564,8 @@
     <!-- Menu Items -->
     <menuitem id="menu_wms_rfid_root"
               name="RFID Integration"
-              parent="stock.menu_stock_warehouse_mgmt"
-              sequence="108"/>
+              parent="wms_owner.menu_3pl_integrations_systems"
+              sequence="10"/>
 
     <menuitem id="menu_wms_rfid_tags"
               name="RFID Tags"

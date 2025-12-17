@@ -3,29 +3,29 @@
 
     <!-- Actions -->
     <record id="action_wms_packing_rule" model="ir.actions.act_window">
-        <field name="name">装箱规则</field>
+        <field name="name">Packing Rules</field>
         <field name="res_model">wms.packing.rule</field>
         <field name="view_mode">list,form</field>
         <field name="help" type="html">
             <p class="o_view_nocontent_smiling_face">
-                创建装箱规则
+                Create packing rules
             </p>
             <p>
-                配置自动装箱建议的规则和优化策略，提高装箱效率和空间利用率。
+                Configure rules and optimization strategies for automatic packing suggestions to improve efficiency and space utilization.
             </p>
         </field>
     </record>
 
     <record id="action_wms_packing_box_type" model="ir.actions.act_window">
-        <field name="name">装箱类型</field>
+        <field name="name">Box Types</field>
         <field name="res_model">wms.packing.box.type</field>
         <field name="view_mode">list,form</field>
         <field name="help" type="html">
             <p class="o_view_nocontent_smiling_face">
-                管理装箱类型
+                Manage box types
             </p>
             <p>
-                定义各种装箱类型及其规格参数，用于装箱优化。
+                Define various box types and their specification parameters for packing optimization.
             </p>
         </field>
     </record>
@@ -35,7 +35,7 @@
         <field name="name">wms.packing.rule.list</field>
         <field name="model">wms.packing.rule</field>
         <field name="arch" type="xml">
-            <list string="装箱规则">
+            <list string="Packing Rules">
                 <field name="sequence" widget="handle"/>
                 <field name="name"/>
                 <field name="code"/>
@@ -51,7 +51,7 @@
         <field name="name">wms.packing.box.type.list</field>
         <field name="model">wms.packing.box.type</field>
         <field name="arch" type="xml">
-            <list string="装箱类型">
+            <list string="Box Types">
                 <field name="name"/>
                 <field name="code"/>
                 <field name="length"/>
@@ -68,7 +68,7 @@
         <field name="name">wms.packing.rule.form</field>
         <field name="model">wms.packing.rule</field>
         <field name="arch" type="xml">
-            <form string="装箱规则">
+            <form string="Packing Rules">
                 <header>
                     <button name="toggle_active"
                             type="object"
@@ -106,7 +106,7 @@
                     </group>
 
                     <notebook>
-                        <page string="适用条件">
+                        <page string="Application Conditions">
                             <group>
                                 <field name="warehouse_ids" widget="many2many_tags"/>
                                 <field name="product_category_ids" widget="many2many_tags"/>
@@ -115,14 +115,14 @@
                             </group>
                         </page>
 
-                        <page string="装箱限制">
+                        <page string="Packing Constraints">
                             <group>
                                 <field name="max_box_weight"/>
                                 <field name="max_box_volume"/>
                                 <field name="max_items_per_box"/>
                                 <field name="max_boxes_per_order"/>
                             </group>
-                            <group string="尺寸限制">
+                            <group string="Dimension Limits">
                                 <field name="max_length"/>
                                 <field name="max_width"/>
                                 <field name="max_height"/>
@@ -130,7 +130,7 @@
                             </group>
                         </page>
 
-                        <page string="装箱策略">
+                        <page string="Packing Strategy">
                             <group>
                                 <field name="strategy"/>
                                 <field name="optimization_target"/>
@@ -139,7 +139,7 @@
                             </group>
                         </page>
 
-                        <page string="特殊规则">
+                        <page string="Special Rules">
                             <group>
                                 <field name="separate_hazardous"/>
                                 <field name="separate_fragile"/>
@@ -149,11 +149,11 @@
                             </group>
                         </page>
 
-                        <page string="箱型配置">
+                        <page string="Box Type Configuration">
                             <field name="box_type_ids" widget="many2many_tags"/>
                         </page>
 
-                        <page string="统计信息">
+                        <page string="Statistics">
                             <group>
                                 <field name="last_calculated"/>
                                 <field name="success_rate"/>
@@ -171,7 +171,7 @@
         <field name="name">wms.packing.box.type.form</field>
         <field name="model">wms.packing.box.type</field>
         <field name="arch" type="xml">
-            <form string="装箱类型">
+            <form string="Box Types">
                 <header>
                     <button name="toggle_active"
                             type="object"
@@ -209,7 +209,7 @@
                     </group>
 
                     <notebook>
-                        <page string="尺寸规格">
+                        <page string="Dimension Specifications">
                             <group>
                                 <field name="length"/>
                                 <field name="width"/>
@@ -223,14 +223,14 @@
                             </group>
                         </page>
 
-                        <page string="特殊属性" invisible="is_thermal == False">
+                        <page string="Special Properties" invisible="is_thermal == False">
                             <group>
                                 <field name="temperature_range"/>
                                 <field name="max_drop_height"/>
                             </group>
                         </page>
 
-                        <page string="成本信息">
+                        <page string="Cost Information">
                             <group>
                                 <field name="cost"/>
                                 <field name="rental_cost_per_day"/>
@@ -244,18 +244,18 @@
 
     <!-- Menu Items -->
     <menuitem id="menu_wms_packing_rule_root"
-              name="装箱规则管理"
-              parent="stock.menu_stock_warehouse_mgmt"
-              sequence="101"/>
+              name="Packing Rule Management"
+              parent="wms_owner.menu_3pl_picking_config"
+              sequence="25"/>
 
     <menuitem id="menu_wms_packing_rules"
-              name="装箱规则"
+              name="Packing Rules"
               parent="menu_wms_packing_rule_root"
               action="action_wms_packing_rule"
               sequence="10"/>
 
     <menuitem id="menu_wms_packing_box_types"
-              name="装箱类型"
+              name="Box Types"
               parent="menu_wms_packing_rule_root"
               action="action_wms_packing_box_type"
               sequence="20"/>

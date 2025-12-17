@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-    <!-- Billing Rule Tree View -->
+    <!-- Billing Rule List View -->
     <record id="view_wms_billing_rule_list" model="ir.ui.view">
-        <field name="name">wms.billing.rule.tree</field>
+        <field name="name">wms.billing.rule.list</field>
         <field name="model">wms.billing.rule</field>
         <field name="arch" type="xml">
-            <tree>
+            <list>
                 <field name="name"/>
                 <field name="owner_id"/>
                 <field name="operation_type"/>
@@ -14,7 +14,7 @@
                 <field name="price_type"/>
                 <field name="min_charge"/>
                 <field name="active"/>
-            </tree>
+            </list>
         </field>
     </record>
 
@@ -52,7 +52,7 @@
                         </group>
                         <group>
                             <field name="apply_seasonal_factor"/>
-                            <field name="seasonal_factor" attrs="{'invisible': [('apply_seasonal_factor', '=', False)]}"/>
+                            <field name="seasonal_factor" invisible="apply_seasonal_factor == False"/>
                         </group>
                     </group>
                     <field name="active" invisible="1"/>

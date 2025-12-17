@@ -13,15 +13,13 @@
                 <button name="action_create_area_split_batch_if_needed" type="object" string="Create Area-Split Route" invisible="state not in ('assigned', 'confirmed', 'in_progress') or tms_route_id" class="btn-info"/>
             </xpath>
             <xpath expr="//sheet/group[1]" position="after">
-                <group string="TMS Routing" attrs="{'invisible': [('tms_route_id', '=', False)]}">
+                <group string="TMS Routing" invisible="not tms_route_id">
                     <field name="tms_route_id" readonly="1"/>
                     <field name="current_route_id" invisible="1"/>  <!-- Keep for compatibility -->
                 </group>
             </xpath>
             <xpath expr="//sheet/div[@name='button_box']" position="inside">
-                <button name="%(action_view_tms_routes)d" type="action" class="oe_stat_button" icon="fa-truck" invisible="not tms_route_id">
-                    <field string="TMS Route" name="tms_route_id" widget="statinfo"/>
-                </button>
+                <field name="tms_route_id" widget="statinfo" string="TMS Route" icon="fa-truck" invisible="not tms_route_id"/>
                 <button name="action_view_route_stops" type="object" class="oe_stat_button" icon="fa-map-marker" invisible="not route_stop_ids">
                     <field name="route_stop_count" string="Route Stops" widget="statinfo"/>
                 </button>

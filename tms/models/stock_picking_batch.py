@@ -51,6 +51,16 @@ class StockPickingBatch(models.Model):
         string='Route Stop Count'
     )
 
+    # Transportation management fields
+    departure_time = fields.Datetime(
+        string='Departure Time',
+        help='Time when the batch departs for delivery'
+    )
+    return_time = fields.Datetime(
+        string='Return Time',
+        help='Time when the batch returns from delivery'
+    )
+
     @api.depends('tms_route_ids')
     def _compute_tms_route_count(self):
         for batch in self:
@@ -86,7 +96,7 @@ class StockPickingBatch(models.Model):
             'name': _('Route Stops'),
             'type': 'ir.actions.act_window',
             'res_model': 'tms.route.stop',
-            'view_mode': 'tree,form',
+            'view_mode': 'list,form',
             'domain': [('route_id', 'in', self.tms_route_ids.ids)],
             'context': {'default_route_id': self.current_route_id.id if self.current_route_id else False},
         }
@@ -132,7 +142,7 @@ class StockPickingBatch(models.Model):
         for picking in self.picking_ids:
             picking_weight = 0.0
             picking_volume = 0.0
-            for move in picking.move_lines:
+            for move in picking.move_ids:
                 picking_weight += move.product_id.weight * move.product_uom_qty
                 picking_volume += move.product_id.volume * move.product_uom_qty
 
@@ -171,7 +181,7 @@ class StockPickingBatch(models.Model):
                 for picking in self.picking_ids:
                     picking_weight = 0.0
                     picking_volume = 0.0
-                    for move in picking.move_lines:
+                    for move in picking.move_ids:
                         picking_weight += move.product_id.weight * move.product_uom_qty
                         picking_volume += move.product_id.volume * move.product_uom_qty
 
@@ -280,7 +290,7 @@ class StockPickingBatch(models.Model):
         for picking in self.picking_ids:
             picking_weight = 0.0
             picking_volume = 0.0
-            for move in picking.move_lines:
+            for move in picking.move_ids:
                 picking_weight += move.product_id.weight * move.product_uom_qty
                 picking_volume += move.product_id.volume * move.product_uom_qty
 
@@ -339,7 +349,7 @@ class StockPickingBatch(models.Model):
             'name': _('TMS Routes'),
             'type': 'ir.actions.act_window',
             'res_model': 'tms.route',
-            'view_mode': 'tree,form',
+            'view_mode': 'list,form',
             'domain': [('picking_batch_id', '=', self.id)],
             'context': {'default_picking_batch_id': self.id},
         }
@@ -394,7 +404,7 @@ class StockPickingBatch(models.Model):
                 'name': _('Area-based Batches'),
                 'type': 'ir.actions.act_window',
                 'res_model': 'stock.picking.batch',
-                'view_mode': 'tree,form',
+                'view_mode': 'list,form',
                 'domain': [('id', 'in', created_batches)],
                 'context': {'search_default_draft': 1},
             }
@@ -465,7 +475,7 @@ class StockPickingBatch(models.Model):
             # Calculate weight and volume for this picking
             picking_weight = 0.0
             picking_volume = 0.0
-            for move in picking.move_lines:
+            for move in picking.move_ids:
                 picking_weight += move.product_id.weight * move.product_uom_qty
                 picking_volume += move.product_id.volume * move.product_uom_qty
 

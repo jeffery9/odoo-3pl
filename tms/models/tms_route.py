@@ -130,13 +130,14 @@ class TmsRoute(models.Model):
             route.total_weight = sum(stop.total_weight for stop in route.stop_ids)
             route.total_volume = sum(stop.total_volume for stop in route.stop_ids)
 
-    @api.depends('stop_ids', 'stop_ids.picking_ids', 'stop_ids.picking_ids.sale_id')
+    @api.depends('stop_ids', 'stop_ids.picking_ids')
     def _compute_related_sale_orders(self):
         for route in self:
             sale_orders = self.env['sale.order']
             for stop in route.stop_ids:
                 for picking in stop.picking_ids:
-                    if picking.sale_id:
+                    # Check if the sale_id field exists before accessing it
+                    if hasattr(picking, 'sale_id') and picking.sale_id:
                         sale_orders |= picking.sale_id
             route.related_sale_order_ids = sale_orders
 

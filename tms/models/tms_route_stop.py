@@ -348,6 +348,21 @@ class TmsRouteStop(models.Model):
             result.route_id.action_check_capacity_constraints()
         return result
 
+    def action_open_adjust_wizard(self):
+        """Open the adjust wizard"""
+        return {
+            'name': _('Adjust Route Stop'),
+            'type': 'ir.actions.act_window',
+            'res_model': 'tms.route.stop.adjust.wizard',
+            'view_mode': 'form',
+            'view_type': 'form',
+            'target': 'new',
+            'context': {
+                'default_stop_id': self.id,
+                'default_adjustment_reason': self.adjustment_reason or 'other',
+            }
+        }
+
     def action_adjust_stop(self):
         """Adjust stop based on real-world conditions"""
         # This method will be called from the UI, parameters will be passed through context

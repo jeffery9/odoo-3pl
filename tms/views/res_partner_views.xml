@@ -6,7 +6,7 @@
         <field name="model">res.partner</field>
         <field name="inherit_id" ref="base.view_partner_form"/>
         <field name="arch" type="xml">
-            <xpath expr="//group[@name='sale_shipping']" position="after">
+            <xpath expr="//div[@name='button_box']" position="after">
                 <group string="TMS Routing" name="tms_routing">
                     <field name="route_area_id"/>
                     <field name="route_area_code" readonly="1"/>

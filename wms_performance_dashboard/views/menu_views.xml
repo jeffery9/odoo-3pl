@@ -79,45 +79,45 @@
         </field>
     </record>
 
-    <!-- Performance Dashboard Menu -->
+    <!-- Performance Dashboard Menu (under Warehouse Dashboard) -->
     <menuitem id="menu_wms_performance_dashboard_root"
               name="Performance Dashboard"
-              parent="stock.menu_stock_warehouse_mgmt"
-              sequence="140"/>
+              parent="wms_owner.menu_3pl_storage_dashboard"
+              sequence="40"/>
 
     <menuitem id="menu_wms_performance_kpis"
               name="Performance KPIs"
               parent="menu_wms_performance_dashboard_root"
-              action="action_wms_performance_kpi_list"
+              action="wms_performance_dashboard.action_wms_performance_kpi_list"
               sequence="10"/>
 
     <menuitem id="menu_wms_performance_reports"
               name="Performance Reports"
               parent="menu_wms_performance_dashboard_root"
-              action="action_wms_performance_report_list"
+              action="wms_performance_dashboard.action_wms_performance_report_list"
               sequence="20"/>
 
     <menuitem id="menu_wms_alerts"
               name="Alerts &amp; Notifications"
               parent="menu_wms_performance_dashboard_root"
-              action="action_wms_alert_list"
+              action="wms_performance_dashboard.action_wms_alert_list"
               sequence="30"/>
 
     <menuitem id="menu_wms_benchmarks"
               name="Benchmarks"
               parent="menu_wms_performance_dashboard_root"
-              action="action_wms_benchmark_list"
+              action="wms_performance_dashboard.action_wms_benchmark_list"
               sequence="40"/>
 
     <menuitem id="menu_wms_dashboard_templates"
               name="Dashboard Templates"
               parent="menu_wms_performance_dashboard_root"
-              action="action_wms_dashboard_template_list"
+              action="wms_performance_dashboard.action_wms_dashboard_template_list"
               sequence="50"/>
 
     <menuitem id="menu_wms_dashboard_widgets"
               name="Dashboard Widgets"
               parent="menu_wms_performance_dashboard_root"
-              action="action_wms_dashboard_widget_list"
+              action="wms_performance_dashboard.action_wms_dashboard_widget_list"
               sequence="60"/>
 </odoo>

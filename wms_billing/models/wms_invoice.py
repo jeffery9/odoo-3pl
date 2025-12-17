@@ -4,7 +4,18 @@ from odoo import models, fields, api
 class WmsInvoice(models.Model):
     _name = 'wms.invoice'
     _description = 'WMS Invoice'
-    _inherit = 'account.move'
+
+    # Instead of inheriting from account.move (which can cause field conflicts),
+    # create a relationship to account.move
+    account_move_id = fields.Many2one('account.move', string='Account Move', ondelete='cascade')
+
+    # Copy relevant fields from account.move that are needed for WMS billing
+    name = fields.Char(related='account_move_id.name', string='Invoice Number', store=True)
+    partner_id = fields.Many2one('res.partner', related='account_move_id.partner_id', string='Customer', store=True)
+    date = fields.Date(related='account_move_id.date', string='Invoice Date', store=True)
+    state = fields.Selection(related='account_move_id.state', string='Status', store=True)
+    amount_total = fields.Monetary(related='account_move_id.amount_total', string='Total', store=True)
+    currency_id = fields.Many2one('res.currency', related='account_move_id.currency_id', string='Currency', store=True)
 
     billing_records_ids = fields.Many2many(
         'wms.billing.record',
@@ -24,24 +35,40 @@ class WmsInvoice(models.Model):
             owner = self.env['wms.owner'].search([('partner_id', '=', invoice.partner_id.id)], limit=1)
             invoice.owner_id = owner
 
-    def action_post(self):
-        """Override to update billing records state when invoice is posted"""
-        result = super().action_post()
-
-        # Update related billing records
+    def action_post_invoice(self):
+        """Post the related account move when this WMS invoice is processed"""
+        # Update billing records state when invoice is processed
         for invoice in self:
             if invoice.billing_records_ids:
                 invoice.billing_records_ids.write({'state': 'invoiced'})
 
-        return result
+        # If there's an associated account move, post it
+        if self.account_move_id:
+            return self.account_move_id._post()
+        return True
 
-    def mark_as_paid(self):
-        """Override to update billing records when invoice is marked as paid"""
-        result = super().mark_as_paid()
-
+    def mark_as_paid_invoice(self):
+        """Mark the related account move as paid when this WMS invoice is paid"""
         # Update related billing records
         for invoice in self:
             if invoice.billing_records_ids:
                 invoice.billing_records_ids.write({'state': 'paid'})
 
-        return result
+        # If there's an associated account move, mark it as paid
+        if self.account_move_id:
+            # Create a wizard to register payment
+            return {
+                'name': 'Register Payment',
+                'res_model': 'account.payment.register',
+                'view_mode': 'form',
+                'view_type': 'form',
+                'view_id': False,
+                'type': 'ir.actions.act_window',
+                'context': {
+                    'active_id': self.account_move_id.id,
+                    'active_ids': [self.account_move_id.id],
+                    'active_model': 'account.move',
+                },
+                'target': 'new',
+            }
+        return True

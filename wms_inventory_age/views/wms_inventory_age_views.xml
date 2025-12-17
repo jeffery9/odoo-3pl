@@ -25,7 +25,7 @@
                     <notebook>
                         <page string="Report Results">
                             <field name="report_lines" readonly="1">
-                                <tree>
+                                <list>
                                     <field name="product_id"/>
                                     <field name="location_id"/>
                                     <field name="lot_id"/>
@@ -35,7 +35,7 @@
                                     <field name="age_days"/>
                                     <field name="aging_period"/>
                                     <field name="expiry_date"/>
-                                </tree>
+                                </list>
                                 <form>
                                     <group>
                                         <field name="product_id"/>
@@ -57,12 +57,12 @@
         </field>
     </record>
 
-    <!-- Inventory Age Alert Tree View -->
+    <!-- Inventory Age Alert List View -->
     <record id="view_wms_inventory_age_alert_list" model="ir.ui.view">
-        <field name="name">wms.inventory.age.alert.tree</field>
+        <field name="name">wms.inventory.age.alert.list</field>
         <field name="model">wms.inventory.age.alert</field>
         <field name="arch" type="xml">
-            <tree>
+            <list>
                 <field name="name"/>
                 <field name="product_id"/>
                 <field name="location_id"/>
@@ -72,7 +72,7 @@
                 <field name="alert_type"/>
                 <field name="status"/>
                 <field name="alert_date"/>
-            </tree>
+            </list>
         </field>
     </record>
 
@@ -176,19 +176,19 @@
         </field>
     </record>
 
-    <!-- Inventory Age Configuration Tree View -->
+    <!-- Inventory Age Configuration List View -->
     <record id="view_wms_inventory_age_config_list" model="ir.ui.view">
-        <field name="name">wms.inventory.age.config.tree</field>
+        <field name="name">wms.inventory.age.config.list</field>
         <field name="model">wms.inventory.age.config</field>
         <field name="arch" type="xml">
-            <tree>
+            <list>
                 <field name="name"/>
                 <field name="owner_id"/>
                 <field name="warning_age_days"/>
                 <field name="critical_age_days"/>
                 <field name="auto_create_alerts"/>
                 <field name="alert_frequency"/>
-            </tree>
+            </list>
         </field>
     </record>
 </odoo>

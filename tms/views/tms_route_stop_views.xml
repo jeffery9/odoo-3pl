@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
 
-    <!-- TMS Route Stop Tree View -->
-    <record id="view_tms_route_stop_tree" model="ir.ui.view">
-        <field name="name">tms.route.stop.tree</field>
+    <!-- TMS Route Stop List View -->
+    <record id="view_tms_route_stop_list" model="ir.ui.view">
+        <field name="name">tms.route.stop.list</field>
         <field name="model">tms.route.stop</field>
         <field name="arch" type="xml">
-            <tree string="Route Stops" decoration-danger="state == 'failed'" decoration-success="state == 'delivered'" decoration-info="state == 'arrived'">
+            <list string="Route Stops" decoration-danger="state == 'failed'" decoration-success="state == 'delivered'" decoration-info="state == 'arrived'">
                 <field name="sequence" widget="handle"/>
                 <field name="adjusted_sequence" invisible="not is_adjusted"/>
                 <field name="route_id"/>
@@ -22,7 +22,7 @@
                 <field name="total_volume"/>
                 <field name="is_adjusted" decoration-warning="is_adjusted"/>
                 <field name="state"/>
-            </tree>
+            </list>
         </field>
     </record>
 
@@ -39,7 +39,7 @@
                     <button name="action_fail_stop" type="object" string="Mark as Failed" invisible="state not in ('pending', 'arrived')" class="btn-danger"/>
                     <button name="action_split_stop" type="object" string="Split Stop" invisible="state != 'pending'" class="btn-warning"/>
                     <button name="action_split_oversized_pickings_in_stop" type="object" string="Split Oversized Pickings" invisible="state != 'pending'" class="btn-danger"/>
-                    <button name="%(action_tms_route_stop_adjust_wizard)d" type="action" string="Adjust Stop" invisible="state not in ('pending', 'arrived')" class="btn-info"/>
+                    <button name="action_open_adjust_wizard" type="object" string="Adjust Stop" invisible="state not in ('pending', 'arrived')" class="btn-info"/>
                     <button name="action_apply_adjustments" type="object" string="Apply Adjustments" invisible="not is_adjusted" class="btn-success"/>
                     <button name="action_reset_adjustment" type="object" string="Reset Adjustment" invisible="not is_adjusted" class="btn-secondary"/>
                     <field name="state" widget="statusbar" statusbar_visible="pending,arrived,in_progress,delivered"/>

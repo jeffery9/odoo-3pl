@@ -6,7 +6,7 @@
         <field name="name">wms.location.usage.list</field>
         <field name="model">wms.location.usage</field>
         <field name="arch" type="xml">
-            <list string="库位使用分析" decoration-info="state=='draft'" decoration-success="state=='generated'" decoration-muted="state=='validated'">
+            <list string="Location Usage Analysis" decoration-info="state=='draft'" decoration-success="state=='generated'" decoration-muted="state=='validated'">
                 <field name="name"/>
                 <field name="analysis_date"/>
                 <field name="period_start"/>
@@ -26,14 +26,14 @@
         <field name="name">wms.location.usage.form</field>
         <field name="model">wms.location.usage</field>
         <field name="arch" type="xml">
-            <form string="库位使用分析">
+            <form string="Location Usage Analysis">
                 <header>
                     <button name="action_generate_analysis"
-                            string="生成分析"
+                            string="Generate Analysis"
                             type="object"
                             class="oe_highlight"
                             invisible="state != 'draft'"
-                            help="根据设定的期间和条件生成库位使用分析"/>
+                            help="Generate location usage analysis based on the set period and conditions"/>
                     <field name="state" widget="statusbar" statusbar_visible="draft,generated,validated"/>
                 </header>
                 <sheet>
@@ -54,16 +54,16 @@
                     </group>
 
                     <notebook>
-                        <page string="总体统计">
+                        <page string="Overall Statistics">
                             <group>
-                                <group string="库位统计">
+                                <group string="Location Statistics">
                                     <field name="total_locations"/>
                                     <field name="occupied_locations"/>
                                     <field name="empty_locations"/>
                                     <field name="usage_rate" widget="percentage"/>
                                     <field name="unused_locations"/>
                                 </group>
-                                <group string="容量统计">
+                                <group string="Capacity Statistics">
                                     <field name="total_capacity"/>
                                     <field name="used_capacity"/>
                                     <field name="capacity_usage_rate" widget="percentage"/>
@@ -71,7 +71,7 @@
                             </group>
                         </page>
 
-                        <page string="效率分析">
+                        <page string="Efficiency Analysis">
                             <group>
                                 <field name="high_usage_locations"/>
                                 <field name="low_usage_locations"/>
@@ -80,27 +80,27 @@
                             </group>
                         </page>
 
-                        <page string="分析结果">
+                        <page string="Analysis Results">
                             <field name="detailed_analysis" invisible="1"/>
                         </page>
 
-                        <page string="优化建议">
+                        <page string="Optimization Recommendations">
                             <field name="recommendations"/>
                         </page>
 
-                        <page string="按库区统计">
+                        <page string="Statistics by Zone">
                             <field name="stats_by_zone"/>
                         </page>
 
-                        <page string="按类别统计">
+                        <page string="Statistics by Category">
                             <field name="stats_by_category"/>
                         </page>
 
-                        <page string="使用趋势">
+                        <page string="Usage Trends">
                             <field name="usage_trend"/>
                         </page>
 
-                        <page string="附加信息">
+                        <page string="Additional Information">
                             <field name="notes"/>
                         </page>
                     </notebook>
@@ -114,7 +114,7 @@
         <field name="name">wms.location.utilization.list</field>
         <field name="model">wms.location.utilization</field>
         <field name="arch" type="xml">
-            <list string="库位利用率明细" decoration-danger="efficiency_category=='low'" decoration-warning="efficiency_category=='medium'" decoration-success="efficiency_category=='high'" decoration-muted="efficiency_category=='unused'">
+            <list string="Location Utilization Details" decoration-danger="efficiency_category=='low'" decoration-warning="efficiency_category=='medium'" decoration-success="efficiency_category=='high'" decoration-muted="efficiency_category=='unused'">
                 <field name="location_name"/>
                 <field name="zone_name"/>
                 <field name="is_occupied"/>
@@ -133,7 +133,7 @@
         <field name="name">wms.location.utilization.form</field>
         <field name="model">wms.location.utilization</field>
         <field name="arch" type="xml">
-            <form string="库位利用率明细">
+            <form string="Location Utilization Details">
                 <sheet>
                     <group>
                         <group>
@@ -148,16 +148,16 @@
                             <field name="turnover_frequency"/>
                         </group>
                     </group>
-                    <group string="容量信息">
+                    <group string="Capacity Information">
                         <field name="capacity"/>
                         <field name="used_volume"/>
                         <field name="used_weight"/>
                     </group>
-                    <group string="商品信息">
+                    <group string="Product Information">
                         <field name="product_count"/>
                         <field name="total_quantity"/>
                     </group>
-                    <group string="时间信息">
+                    <group string="Time Information">
                         <field name="first_used_date"/>
                         <field name="last_used_date"/>
                     </group>
@@ -171,7 +171,7 @@
         <field name="name">wms.location.usage.report.form</field>
         <field name="model">wms.location.usage.report</field>
         <field name="arch" type="xml">
-            <form string="生成库位使用报告">
+            <form string="Generate Location Usage Report">
                 <group>
                     <group>
                         <field name="period_start"/>
@@ -187,10 +187,10 @@
                 </group>
                 <footer>
                     <button name="action_generate_report"
-                            string="生成报告"
+                            string="Generate Report"
                             type="object"
                             class="btn-primary"/>
-                    <button string="取消"
+                    <button string="Cancel"
                             class="btn-secondary"
                             special="cancel"/>
                 </footer>
@@ -200,24 +200,24 @@
 
     <!-- Menu Items -->
     <menuitem id="menu_wms_location_usage_root"
-              name="库位使用分析"
-              parent="stock.menu_stock_warehouse_mgmt"
-              sequence="103"/>
+              name="Location Usage Analysis"
+              parent="wms_owner.menu_3pl_storage_reporting"
+              sequence="35"/>
 
     <menuitem id="menu_wms_location_usage"
-              name="库位使用分析"
+              name="Location Usage Analysis"
               parent="menu_wms_location_usage_root"
               action="wms_location_usage.action_wms_location_usage"
               sequence="10"/>
 
     <menuitem id="menu_wms_location_utilization"
-              name="库位利用率明细"
+              name="Location Utilization Details"
               parent="menu_wms_location_usage_root"
               action="wms_location_usage.action_wms_location_utilization"
               sequence="20"/>
 
     <menuitem id="menu_wms_location_usage_report"
-              name="生成新分析"
+              name="Generate New Analysis"
               parent="menu_wms_location_usage_root"
               action="wms_location_usage.action_wms_location_usage_report"
               sequence="30"/>

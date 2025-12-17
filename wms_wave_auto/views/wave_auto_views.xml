@@ -3,15 +3,15 @@
 
     <!-- Action for Auto Wave Rules -->
     <record id="action_wms_wave_rule" model="ir.actions.act_window">
-        <field name="name">自动波次规则</field>
+        <field name="name">Auto Wave Rules</field>
         <field name="res_model">wms.wave.rule</field>
         <field name="view_mode">list,form</field>
         <field name="help" type="html">
             <p class="o_view_nocontent_smiling_face">
-                创建自动波次生成规则
+                Create automatic wave generation rules
             </p>
             <p>
-                配置自动波次生成的规则和条件，包括时间触发、数量触发等方式。
+                Configure rules and conditions for automatic wave generation, including time-based, quantity-based triggers, etc.
             </p>
         </field>
     </record>
@@ -21,11 +21,12 @@
         <field name="name">wms.wave.rule.tree</field>
         <field name="model">wms.wave.rule</field>
         <field name="arch" type="xml">
-            <list string="自动波次规则">
+            <list string="Auto Wave Rules">
                 <field name="sequence" widget="handle"/>
                 <field name="name"/>
                 <field name="code"/>
                 <field name="trigger_type"/>
+                <field name="trigger_value"/>
                 <field name="wave_strategy"/>
                 <field name="active"/>
                 <field name="last_execution"/>
@@ -39,15 +40,20 @@
         <field name="name">wms.wave.rule.form</field>
         <field name="model">wms.wave.rule</field>
         <field name="arch" type="xml">
-            <form string="自动波次规则">
+            <form string="Auto Wave Rules">
                 <header>
                     <button name="action_execute_rule"
-                            string="立即执行"
+                            string="Execute Now"
                             type="object"
                             class="oe_highlight"
-                            help="立即根据此规则执行波次生成"/>
+                            help="Execute wave generation based on this rule now"/>
+                    <button name="generate_wave_manually"
+                            string="Generate Wave Now"
+                            type="object"
+                            class="oe_highlight"
+                            help="Generate wave based on rule configuration"/>
                     <button name="%(action_wms_wave_rule)d"
-                            string="查看所有规则"
+                            string="View All Rules"
                             type="action"/>
                 </header>
                 <sheet>
@@ -75,20 +81,43 @@
                         </group>
                     </group>
 
+                    <!-- Basic Wave Rule Fields (from wms_wave) -->
+                    <group string="Basic Configuration">
+                        <group>
+                            <field name="trigger_type"/>
+                            <field name="trigger_value"/>
+                        </group>
+                        <group>
+                            <field name="time_period"/>
+                            <field name="priority"/>
+                        </group>
+                    </group>
+
+                    <!-- Wave Limits (from wms_wave) -->
+                    <group string="Wave Limits">
+                        <group>
+                            <field name="max_orders_per_wave"/>
+                            <field name="max_volume_per_wave"/>
+                        </group>
+                        <group>
+                            <field name="max_weight_per_wave"/>
+                            <field name="max_pickers"/>
+                        </group>
+                    </group>
+
                     <notebook>
-                        <page string="触发条件">
+                        <page string="Advanced Trigger Conditions">
                             <group>
-                                <field name="trigger_type"/>
+                                <field name="time_trigger_type"/>
                             </group>
 
-                            <group string="时间触发条件" invisible="trigger_type != 'time_based'">
-                                <field name="time_trigger_type"/>
+                            <group string="Time-based Conditions" invisible="time_trigger_type != 'fixed_time' and time_trigger_type != 'interval' and time_trigger_type != 'rolling_window'">
                                 <field name="fixed_time" invisible="time_trigger_type != 'fixed_time'"/>
                                 <field name="time_interval" invisible="time_trigger_type != 'interval'"/>
                                 <field name="rolling_window_minutes" invisible="time_trigger_type != 'rolling_window'"/>
                             </group>
 
-                            <group string="数量触发条件" invisible="trigger_type == 'time_based'">
+                            <group string="Quantity-based Conditions">
                                 <field name="min_orders"/>
                                 <field name="max_orders"/>
                                 <field name="min_volume"/>
@@ -98,7 +127,7 @@
                             </group>
                         </page>
 
-                        <page string="订单筛选">
+                        <page string="Order Filtering">
                             <group>
                                 <field name="warehouse_ids" widget="many2many_tags"/>
                                 <field name="picking_type_ids" widget="many2many_tags"/>
@@ -108,19 +137,19 @@
                             </group>
                         </page>
 
-                        <page string="波次策略">
+                        <page string="Wave Strategy">
                             <group>
                                 <field name="wave_strategy"/>
                                 <field name="max_wave_size"/>
                             </group>
 
-                            <group string="分组优化">
+                            <group string="Batching Optimization">
                                 <field name="enable_batching"/>
                                 <field name="batching_strategy" invisible="enable_batching == False"/>
                             </group>
                         </page>
 
-                        <page string="执行配置">
+                        <page string="Execution Configuration">
                             <group>
                                 <field name="auto_confirm"/>
                                 <field name="auto_assign"/>
@@ -134,12 +163,12 @@
 
     <!-- Menu Items -->
     <menuitem id="menu_wms_wave_auto_root"
-              name="自动波次生成"
-              parent="stock.menu_stock_warehouse_mgmt"
-              sequence="100"/>
+              name="Auto Wave Generation"
+              parent="wms_owner.menu_3pl_picking_operations"
+              sequence="25"/>
 
     <menuitem id="menu_wms_wave_rules"
-              name="波次规则配置"
+              name="Wave Rule Configuration"
               parent="menu_wms_wave_auto_root"
               action="action_wms_wave_rule"
               sequence="10"/>

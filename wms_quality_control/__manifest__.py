@@ -12,7 +12,7 @@
     'data': [
         'data/sequence_data.xml',
         'security/ir.model.access.csv',
-        'views/wms_quality_control_views.xml',
+        'views/quality_control_views.xml',
         'views/stock_picking_views.xml',
         'views/menu_views.xml',
     ],

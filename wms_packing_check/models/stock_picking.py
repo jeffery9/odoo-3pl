@@ -31,7 +31,7 @@ class StockPicking(models.Model):
             'type': 'ir.actions.act_window',
             'name': 'Packing Checks',
             'res_model': 'wms.packing.check',
-            'view_mode': 'tree,form',
+            'view_mode': 'list,form',
             'domain': [('picking_id', '=', self.id)],
             'context': {'default_picking_id': self.id}
         }

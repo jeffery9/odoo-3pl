@@ -24,11 +24,11 @@
                     <notebook>
                         <page string="Child Categories">
                             <field name="child_ids">
-                                <tree>
+                                <list>
                                     <field name="name"/>
                                     <field name="code"/>
                                     <field name="is_active"/>
-                                </tree>
+                                </list>
                             </field>
                         </page>
                     </notebook>
@@ -37,18 +37,18 @@
         </field>
     </record>
 
-    <!-- Document Category Tree View -->
+    <!-- Document Category List View -->
     <record id="view_wms_document_category_list" model="ir.ui.view">
-        <field name="name">wms.document.category.tree</field>
+        <field name="name">wms.document.category.list</field>
         <field name="model">wms.document.category</field>
         <field name="arch" type="xml">
-            <tree string="Document Categories">
+            <list string="Document Categories">
                 <field name="name"/>
                 <field name="code"/>
                 <field name="parent_id"/>
                 <field name="document_count"/>
                 <field name="is_active"/>
-            </tree>
+            </list>
         </field>
     </record>
 
@@ -74,16 +74,16 @@
         </field>
     </record>
 
-    <!-- Document Tag Tree View -->
+    <!-- Document Tag List View -->
     <record id="view_wms_document_tag_list" model="ir.ui.view">
-        <field name="name">wms.document.tag.tree</field>
+        <field name="name">wms.document.tag.list</field>
         <field name="model">wms.document.tag</field>
         <field name="arch" type="xml">
-            <tree string="Document Tags">
+            <list string="Document Tags">
                 <field name="name"/>
                 <field name="color"/>
                 <field name="active"/>
-            </tree>
+            </list>
         </field>
     </record>
 
@@ -202,12 +202,12 @@
         </field>
     </record>
 
-    <!-- Document Tree View -->
+    <!-- Document List View -->
     <record id="view_wms_document_list" model="ir.ui.view">
-        <field name="name">wms.document.tree</field>
+        <field name="name">wms.document.list</field>
         <field name="model">wms.document</field>
         <field name="arch" type="xml">
-            <tree string="Documents">
+            <list string="Documents">
                 <field name="document_code"/>
                 <field name="name"/>
                 <field name="category_id"/>
@@ -218,7 +218,7 @@
                 <field name="file_size"/>
                 <field name="created_date"/>
                 <field name="is_latest"/>
-            </tree>
+            </list>
         </field>
     </record>
 
@@ -255,18 +255,18 @@
         </field>
     </record>
 
-    <!-- Document Template Tree View -->
+    <!-- Document Template List View -->
     <record id="view_wms_document_template_list" model="ir.ui.view">
-        <field name="name">wms.document.template.tree</field>
+        <field name="name">wms.document.template.list</field>
         <field name="model">wms.document.template</field>
         <field name="arch" type="xml">
-            <tree string="Document Templates">
+            <list string="Document Templates">
                 <field name="name"/>
                 <field name="code"/>
                 <field name="template_type"/>
                 <field name="category_id"/>
                 <field name="is_active"/>
-            </tree>
+            </list>
         </field>
     </record>
 
@@ -310,19 +310,19 @@
         </field>
     </record>
 
-    <!-- Document Workflow Tree View -->
+    <!-- Document Workflow List View -->
     <record id="view_wms_document_workflow_list" model="ir.ui.view">
-        <field name="name">wms.document.workflow.tree</field>
+        <field name="name">wms.document.workflow.list</field>
         <field name="model">wms.document.workflow</field>
         <field name="arch" type="xml">
-            <tree string="Document Workflows">
+            <list string="Document Workflows">
                 <field name="name"/>
                 <field name="code"/>
                 <field name="initial_status"/>
                 <field name="require_approval"/>
                 <field name="approval_steps"/>
                 <field name="is_active"/>
-            </tree>
+            </list>
         </field>
     </record>
 
@@ -357,17 +357,17 @@
         </field>
     </record>
 
-    <!-- Document Archive Tree View -->
+    <!-- Document Archive List View -->
     <record id="view_wms_document_archive_list" model="ir.ui.view">
-        <field name="name">wms.document.archive.tree</field>
+        <field name="name">wms.document.archive.list</field>
         <field name="model">wms.document.archive</field>
         <field name="arch" type="xml">
-            <tree string="Document Archives">
+            <list string="Document Archives">
                 <field name="name"/>
                 <field name="archived_date"/>
                 <field name="reason"/>
                 <field name="archived_by"/>
-            </tree>
+            </list>
         </field>
     </record>
 

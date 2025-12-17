@@ -397,7 +397,7 @@ class WmsRfidInventory(models.Model):
             action = {
                 'type': 'ir.actions.act_window',
                 'res_model': 'wms.rfid.transaction',
-                'view_mode': 'tree,form',
+                'view_mode': 'list,form',
                 'domain': [('tag_id.location_id', '=', inventory.location_id.id)],
                 'context': {
                     'search_default_date_from': inventory.date_start,

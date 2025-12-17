@@ -11,6 +11,7 @@
     'data': [
         'security/wms_owner_security.xml',
         'security/ir.model.access.csv',
+        'views/wms_main_menu.xml',
         'views/wms_owner_views.xml',
         'views/wms_billing_rule_views.xml',
         'views/menu_views.xml',

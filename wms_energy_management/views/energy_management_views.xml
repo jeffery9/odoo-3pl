@@ -68,7 +68,7 @@
         <field name="arch" type="xml">
             <form string="Energy Reading">
                 <header>
-                    <button name="action_validate_reading" type="object" string="Validate Reading" class="btn-success" states="!is_validated"/>
+                    <button name="action_validate_reading" type="object" string="Validate Reading" class="btn-success" invisible="is_validated"/>
                     <field name="is_validated" widget="statusbar" statusbar_visible="False,True"/>
                 </header>
                 <sheet>
@@ -124,25 +124,25 @@
         <field name="arch" type="xml">
             <form string="Energy Report">
                 <header>
-                    <button name="action_generate_report" type="object" string="Generate Report" class="btn-primary" states="draft"/>
-                    <button name="action_validate_report" type="object" string="Validate Report" class="btn-success" states="generated"/>
+                    <button name="action_generate_report" type="object" string="Generate Report" class="btn-primary" invisible="status != 'draft'"/>
+                    <button name="action_validate_report" type="object" string="Validate Report" class="btn-success" invisible="status != 'generated'"/>
                     <field name="status" widget="statusbar" statusbar_visible="draft,generated,validated"/>
                 </header>
                 <sheet>
                     <div class="oe_button_box" name="button_box">
-                        <button name="action_view_rmas" type="object" class="oe_stat_button" icon="fa-bolt">
+                        <button name="%(action_wms_energy_reading_list)d" type="action" class="oe_stat_button" icon="fa-bolt">
                             <div class="o_field_widget o_stat_info">
                                 <span class="o_stat_value"><field name="total_energy_consumed"/></span>
                                 <span class="o_stat_text">kWh</span>
                             </div>
                         </button>
-                        <button name="action_view_rmas" type="object" class="oe_stat_button" icon="fa-dollar">
+                        <button name="%(action_wms_energy_reading_list)d" type="action" class="oe_stat_button" icon="fa-dollar">
                             <div class="o_field_widget o_stat_info">
                                 <span class="o_stat_value"><field name="total_cost"/></span>
                                 <span class="o_stat_text">Cost</span>
                             </div>
                         </button>
-                        <button name="action_view_rmas" type="object" class="oe_stat_button" icon="fa-leaf">
+                        <button name="%(action_wms_energy_reading_list)d" type="action" class="oe_stat_button" icon="fa-leaf">
                             <div class="o_field_widget o_stat_info">
                                 <span class="o_stat_value"><field name="total_carbon_emissions"/></span>
                                 <span class="o_stat_text">kg CO2</span>
@@ -194,11 +194,7 @@
                         </page>
                     </notebook>
                 </sheet>
-                <div class="oe_chatter">
-                    <field name="message_follower_ids"/>
-                    <field name="activity_ids"/>
-                    <field name="message_ids"/>
-                </div>
+                <chatter/>
             </form>
         </field>
     </record>
@@ -282,7 +278,7 @@
         <field name="arch" type="xml">
             <form string="Energy Alert">
                 <header>
-                    <button name="action_resolve_alert" type="object" string="Resolve Alert" class="btn-success" states="!is_resolved"/>
+                    <button name="action_resolve_alert" type="object" string="Resolve Alert" class="btn-success" invisible="is_resolved"/>
                     <field name="is_resolved" widget="statusbar" statusbar_visible="False,True"/>
                 </header>
                 <sheet>

@@ -10,14 +10,11 @@
         </field>
     </record>
 
-    <!-- Wave Management Menu -->
-    <menuitem id="wms_wave_menu" name="Wave Management" parent="wms_owner.wms_main_menu" sequence="30"/>
-
-    <!-- Wave Rules Submenu -->
-    <menuitem id="wms_wave_rule_submenu" name="Wave Rules" parent="wms_wave_menu" sequence="10"
+    <!-- Wave Rules Menu (under Picking & Packing > Configuration) -->
+    <menuitem id="wms_wave_rule_menu" name="Wave Rules" parent="wms_owner.menu_3pl_picking_config" sequence="15"
               action="wms_wave.action_wms_wave_rule"/>
 
-    <!-- Wave Batches Submenu (inherits from stock_picking_batch) -->
-    <menuitem id="wms_wave_batch_submenu" name="Wave Batches" parent="wms_wave_menu" sequence="20"
+    <!-- Wave Batches Menu (under Picking & Packing > Operations) -->
+    <menuitem id="wms_wave_batch_menu" name="Wave Batches" parent="wms_owner.menu_3pl_picking_operations" sequence="20"
               action="stock_picking_batch.stock_picking_batch_action"/>
 </odoo>

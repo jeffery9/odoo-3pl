@@ -112,24 +112,9 @@
             <form string="Performance KPI">
                 <sheet>
                     <div class="oe_button_box" name="button_box">
-                        <button name="action_view_rmas" type="object" class="oe_stat_button" icon="fa-chart-line">
-                            <div class="o_field_widget o_stat_info">
-                                <span class="o_stat_value"><field name="current_value"/></span>
-                                <span class="o_stat_text">Current</span>
-                            </div>
-                        </button>
-                        <button name="action_view_rmas" type="object" class="oe_stat_button" icon="fa-arrow-up">
-                            <div class="o_field_widget o_stat_info">
-                                <span class="o_stat_value"><field name="trend"/>%</span>
-                                <span class="o_stat_text">Trend</span>
-                            </div>
-                        </button>
-                        <button name="action_view_rmas" type="object" class="oe_stat_button" icon="fa-bullseye">
-                            <div class="o_field_widget o_stat_info">
-                                <span class="o_stat_value"><field name="target_value"/></span>
-                                <span class="o_stat_text">Target</span>
-                            </div>
-                        </button>
+                        <field name="current_value" widget="statinfo" string="Current" icon="fa-chart-line"/>
+                        <field name="trend" widget="statinfo" string="Trend" icon="fa-arrow-up"/>
+                        <field name="target_value" widget="statinfo" string="Target" icon="fa-bullseye"/>
                     </div>
                     <group>
                         <group>
@@ -209,12 +194,7 @@
                 </header>
                 <sheet>
                     <div class="oe_button_box" name="button_box">
-                        <button name="action_view_rmas" type="object" class="oe_stat_button" icon="fa-calendar">
-                            <div class="o_field_widget o_stat_info">
-                                <span class="o_stat_value"><field name="report_type"/></span>
-                                <span class="o_stat_text">Type</span>
-                            </div>
-                        </button>
+                        <field name="report_type" widget="statinfo" string="Type" icon="fa-calendar"/>
                     </div>
                     <group>
                         <group>
@@ -264,11 +244,7 @@
                         <field name="recipients" widget="many2many_tags"/>
                     </group>
                 </sheet>
-                <div class="oe_chatter">
-                    <field name="message_follower_ids"/>
-                    <field name="activity_ids"/>
-                    <field name="message_ids"/>
-                </div>
+                <chatter/>
             </form>
         </field>
     </record>

@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Extend Stock Picking Form View to add Quality Control buttons -->
+    <record id="view_picking_form_quality_control" model="ir.ui.view">
+        <field name="name">stock.picking.form.quality.control</field>
+        <field name="model">stock.picking</field>
+        <field name="inherit_id" ref="stock.view_picking_form"/>
+        <field name="arch" type="xml">
+            <header position="inside">
+                <button name="action_create_quality_control" type="object"
+                        string="Create Quality Control"
+                        class="btn-primary"
+                        invisible="state not in ['assigned', 'confirmed', 'waiting']"/>
+                <button name="action_view_quality_controls" type="object"
+                        string="View QC Sessions"
+                        class="btn-secondary"
+                        invisible="quality_control_count == 0"/>
+            </header>
+            <div name="button_box" position="inside">
+                <field name="quality_control_count" widget="statinfo" string="Quality Controls"
+                       invisible="quality_control_count == 0"/>
+                <field name="tracking_compliance" widget="statinfo" string="Tracking Compliance"
+                       invisible="tracking_compliance == 100.0"/>
+                <button name="action_view_lots" type="object" class="oe_stat_button" icon="fa-sitemap"
+                        invisible="not lot_ids">
+                    <field name="lot_ids" widget="statinfo" string="Lots/Serials"/>
+                </button>
+            </div>
+        </field>
+    </record>
+
+    <!-- Add Quality Control fields to tree view -->
+    <record id="view_picking_list_quality_control" model="ir.ui.view">
+        <field name="name">stock.picking.list.quality.control</field>
+        <field name="model">stock.picking</field>
+        <field name="inherit_id" ref="stock.vpicktree"/>
+        <field name="arch" type="xml">
+            <field name="origin" position="after">
+                <field name="quality_control_count" optional="show"/>
+                <field name="tracking_compliance" optional="show" widget="float_percentage"/>
+            </field>
+        </field>
+    </record>
+
+    <!-- Add Quality Control filters to search view -->
+    <record id="view_picking_search_quality_control" model="ir.ui.view">
+        <field name="name">stock.picking.search.quality.control</field>
+        <field name="model">stock.picking</field>
+        <field name="inherit_id" ref="stock.view_picking_internal_search"/>
+        <field name="arch" type="xml">
+            <field name="product_id" position="after">
+                <field name="quality_control_ids"/>
+            </field>
+            <filter name="my_transfers" position="after">
+                <filter name="has_quality_control" string="Has QC"
+                        domain="[('quality_control_ids', '!=', [])]"/>
+                <filter name="no_quality_control" string="No QC"
+                        domain="[('quality_control_ids', '=', [])]"/>
+            </filter>
+            <filter name="late" position="after">
+                <filter name="low_tracking_compliance" string="Low Tracking Compliance"
+                        domain="[('quality_control_ids', '!=', []), ('state', 'not in', ['done', 'cancel'])]"/>
+            </filter>
+        </field>
+    </record>
+</odoo>

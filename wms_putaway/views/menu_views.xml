@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-    <!-- Add to existing WMS menu -->
-    <!-- Putaway Management Menu -->
-    <menuitem id="wms_putaway_menu" name="Putaway Management" parent="wms_owner.wms_main_menu" sequence="20"/>
+    <!-- Putaway Management Menu (under Storage Management > Configuration) -->
+    <menuitem id="wms_putaway_menu" name="Putaway Management" parent="wms_owner.menu_3pl_storage_config" sequence="15"/>
 
     <!-- Putaway Rules Submenu -->
     <menuitem id="wms_putaway_rule_submenu" name="Putaway Rules" parent="wms_putaway_menu" sequence="10"

@@ -79,10 +79,10 @@
         </field>
     </record>
 
-    <!-- Safety Management Menu -->
+    <!-- Safety Management Menu (App-level) -->
     <menuitem id="menu_wms_safety_management_root"
               name="Safety Management"
-              parent="hr.menu_hr_root"
+              parent="wms_owner.menu_3pl_storage_config_main"
               sequence="130"/>
 
     <menuitem id="menu_wms_safety_incidents"

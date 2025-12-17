@@ -7,10 +7,7 @@
         <field name="arch" type="xml">
             <list>
                 <field name="name"/>
-                <field name="warehouse_id"/>
                 <field name="trigger_type"/>
-                <field name="trigger_value"/>
-                <field name="priority"/>
                 <field name="active"/>
             </list>
         </field>
@@ -34,12 +31,10 @@
                     <group>
                         <group>
                             <field name="name"/>
-                            <field name="warehouse_id"/>
                             <field name="trigger_type"/>
                         </group>
                         <group>
                             <field name="trigger_value"/>
-                            <field name="priority"/>
                             <field name="time_period"/>
                         </group>
                     </group>
@@ -67,13 +62,10 @@
         <field name="arch" type="xml">
             <search>
                 <field name="name"/>
-                <field name="warehouse_id"/>
                 <field name="trigger_type"/>
-                <field name="priority"/>
                 <filter name="active" string="Active" domain="[('active', '=', True)]"/>
                 <filter name="inactive" string="Inactive" domain="[('active', '=', False)]"/>
                 <group expand="0" string="Group By">
-                    <filter name="group_by_warehouse" string="Warehouse" context="{'group_by': 'warehouse_id'}"/>
                     <filter name="group_by_trigger" string="Trigger Type" context="{'group_by': 'trigger_type'}"/>
                 </group>
             </search>

@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-    <!-- ABC Analysis Management Menu -->
+    <!-- ABC Analysis Management Menu (under Storage Management > Reporting) -->
     <menuitem id="menu_wms_abc_analysis_root"
               name="ABC Analysis"
-              parent="stock.menu_stock_inventory_control"
-              sequence="100"/>
+              parent="wms_owner.menu_3pl_storage_reporting"
+              sequence="25"/>
 
     <menuitem id="menu_wms_abc_analysis_list"
               name="ABC Analysis Sessions"

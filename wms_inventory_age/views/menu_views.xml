@@ -1,29 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-    <!-- Inventory Age Analysis Management Menu -->
-    <menuitem id="menu_wms_inventory_age_root"
-              name="Inventory Age Analysis"
-              parent="stock.menu_stock_inventory_control"
-              sequence="110"/>
-
-    <menuitem id="menu_wms_inventory_age_report"
-              name="Inventory Age Report"
-              parent="menu_wms_inventory_age_root"
-              action="action_wms_inventory_age_report"
-              sequence="10"/>
-
-    <menuitem id="menu_wms_inventory_age_alerts"
-              name="Age Alerts"
-              parent="menu_wms_inventory_age_root"
-              action="action_wms_inventory_age_alert_list"
-              sequence="20"/>
-
-    <menuitem id="menu_wms_inventory_age_config"
-              name="Configuration"
-              parent="menu_wms_inventory_age_root"
-              action="action_wms_inventory_age_config_list"
-              sequence="30"/>
-
     <!-- Actions -->
     <record id="action_wms_inventory_age_report" model="ir.actions.act_window">
         <field name="name">Inventory Age Report</field>
@@ -42,7 +18,7 @@
     <record id="action_wms_inventory_age_alert_list" model="ir.actions.act_window">
         <field name="name">Inventory Age Alerts</field>
         <field name="res_model">wms.inventory.age.alert</field>
-        <field name="view_mode">tree,form</field>
+        <field name="view_mode">list,form</field>
         <field name="help" type="html">
             <p class="o_view_nocontent_smiling_face">
                 View inventory age alerts
@@ -55,7 +31,7 @@
     <record id="action_wms_inventory_age_config_list" model="ir.actions.act_window">
         <field name="name">Inventory Age Configuration</field>
         <field name="res_model">wms.inventory.age.config</field>
-        <field name="view_mode">tree,form</field>
+        <field name="view_mode">list,form</field>
         <field name="help" type="html">
             <p class="o_view_nocontent_smiling_face">
                 Configure inventory age settings
@@ -64,4 +40,28 @@
             </p>
         </field>
     </record>
+
+    <!-- Inventory Age Analysis Menu (App-level) -->
+    <menuitem id="menu_wms_inventory_age_root"
+              name="Inventory Age Analysis"
+              parent="wms_owner.menu_3pl_storage_config_main"
+              sequence="20"/>
+
+    <menuitem id="menu_wms_inventory_age_report"
+              name="Inventory Age Report"
+              parent="menu_wms_inventory_age_root"
+              action="action_wms_inventory_age_report"
+              sequence="10"/>
+
+    <menuitem id="menu_wms_inventory_age_alerts"
+              name="Age Alerts"
+              parent="menu_wms_inventory_age_root"
+              action="action_wms_inventory_age_alert_list"
+              sequence="20"/>
+
+    <menuitem id="menu_wms_inventory_age_config"
+              name="Configuration"
+              parent="menu_wms_inventory_age_root"
+              action="action_wms_inventory_age_config_list"
+              sequence="30"/>
 </odoo>

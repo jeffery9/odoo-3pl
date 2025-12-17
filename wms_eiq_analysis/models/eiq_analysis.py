@@ -11,6 +11,7 @@ class WmsEiqAnalysis(models.Model):
     """
     _name = 'wms.eiq.analysis'
     _description = 'WMS EIQ Analysis'
+    _inherit = ['mail.thread', 'mail.activity.mixin']
     _order = 'analysis_date desc'
 
     name = fields.Char('Analysis Name', required=True, copy=False)

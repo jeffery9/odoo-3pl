@@ -1,0 +1,286 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Main 3PL Business Domain Apps -->
+    <menuitem id="wms_owner.menu_3pl_customer_management"
+              name="Customer Management"
+              sequence="10"/>
+
+    <menuitem id="wms_owner.menu_3pl_receiving_management"
+              name="Receiving Management"
+              sequence="11"/>
+
+    <menuitem id="wms_owner.menu_3pl_storage_management"
+              name="Storage Management"
+              sequence="12"/>
+
+    <menuitem id="wms_owner.menu_3pl_picking_packing_management"
+              name="Picking &amp; Packing"
+              sequence="13"/>
+
+    <menuitem id="wms_owner.menu_3pl_value_added_services"
+              name="Value Added Services"
+              sequence="14"/>
+
+    <menuitem id="wms_owner.menu_3pl_shipping_transportation"
+              name="Shipping &amp; Transportation"
+              sequence="15"/>
+
+    <!-- Customer Management Categories -->
+    <menuitem id="wms_owner.menu_3pl_customer_dashboard"
+              name="Dashboard"
+              parent="wms_owner.menu_3pl_customer_management"
+              sequence="5"/>
+
+    <menuitem id="wms_owner.menu_3pl_customer_operations"
+              name="Operations"
+              parent="wms_owner.menu_3pl_customer_management"
+              sequence="10"/>
+
+    <menuitem id="wms_owner.menu_3pl_customer_master_data"
+              name="Master Data"
+              parent="wms_owner.menu_3pl_customer_management"
+              sequence="15"/>
+
+    <menuitem id="wms_owner.menu_3pl_customer_reporting"
+              name="Reporting"
+              parent="wms_owner.menu_3pl_customer_management"
+              sequence="20"/>
+
+    <menuitem id="wms_owner.menu_3pl_customer_config"
+              name="Configuration"
+              parent="wms_owner.menu_3pl_customer_management"
+              sequence="25"/>
+
+    <menuitem id="wms_owner.menu_3pl_customer_settings"
+              name="Settings"
+              parent="wms_owner.menu_3pl_customer_config"
+              sequence="10"/>
+
+    <!-- Receiving Management Categories -->
+    <menuitem id="wms_owner.menu_3pl_receiving_dashboard"
+              name="Dashboard"
+              parent="wms_owner.menu_3pl_receiving_management"
+              sequence="5"/>
+
+    <menuitem id="wms_owner.menu_3pl_receiving_operations"
+              name="Operations"
+              parent="wms_owner.menu_3pl_receiving_management"
+              sequence="10"/>
+
+    <menuitem id="wms_owner.menu_3pl_receiving_config"
+              name="Master Data"
+              parent="wms_owner.menu_3pl_receiving_management"
+              sequence="15"/>
+
+    <menuitem id="wms_owner.menu_3pl_receiving_reporting"
+              name="Reporting"
+              parent="wms_owner.menu_3pl_receiving_management"
+              sequence="20"/>
+
+    <menuitem id="wms_owner.menu_3pl_receiving_config_main"
+              name="Configuration"
+              parent="wms_owner.menu_3pl_receiving_management"
+              sequence="25"/>
+
+    <menuitem id="wms_owner.menu_3pl_receiving_settings"
+              name="Settings"
+              parent="wms_owner.menu_3pl_receiving_config_main"
+              sequence="10"/>
+
+    <!-- Storage Management Categories -->
+    <menuitem id="wms_owner.menu_3pl_storage_dashboard"
+              name="Dashboard"
+              parent="wms_owner.menu_3pl_storage_management"
+              sequence="5"/>
+
+    <menuitem id="wms_owner.menu_3pl_storage_operations"
+              name="Operations"
+              parent="wms_owner.menu_3pl_storage_management"
+              sequence="10"/>
+
+    <menuitem id="wms_owner.menu_3pl_storage_config"
+              name="Master Data"
+              parent="wms_owner.menu_3pl_storage_management"
+              sequence="15"/>
+
+    <menuitem id="wms_owner.menu_3pl_storage_reporting"
+              name="Reporting"
+              parent="wms_owner.menu_3pl_storage_management"
+              sequence="20"/>
+
+    <menuitem id="wms_owner.menu_3pl_storage_config_main"
+              name="Configuration"
+              parent="wms_owner.menu_3pl_storage_management"
+              sequence="25"/>
+
+    <menuitem id="wms_owner.menu_3pl_storage_settings"
+              name="Settings"
+              parent="wms_owner.menu_3pl_storage_config_main"
+              sequence="10"/>
+
+    <!-- Picking & Packing Management Categories -->
+    <menuitem id="wms_owner.menu_3pl_picking_dashboard"
+              name="Dashboard"
+              parent="wms_owner.menu_3pl_picking_packing_management"
+              sequence="5"/>
+
+    <menuitem id="wms_owner.menu_3pl_picking_operations"
+              name="Operations"
+              parent="wms_owner.menu_3pl_picking_packing_management"
+              sequence="10"/>
+
+    <menuitem id="wms_owner.menu_3pl_picking_config"
+              name="Master Data"
+              parent="wms_owner.menu_3pl_picking_packing_management"
+              sequence="15"/>
+
+    <menuitem id="wms_owner.menu_3pl_picking_reporting"
+              name="Reporting"
+              parent="wms_owner.menu_3pl_picking_packing_management"
+              sequence="20"/>
+
+    <menuitem id="wms_owner.menu_3pl_picking_config_main"
+              name="Configuration"
+              parent="wms_owner.menu_3pl_picking_packing_management"
+              sequence="25"/>
+
+    <menuitem id="wms_owner.menu_3pl_picking_settings"
+              name="Settings"
+              parent="wms_owner.menu_3pl_picking_config_main"
+              sequence="10"/>
+
+    <!-- Value Added Services Categories -->
+    <menuitem id="wms_owner.menu_3pl_vas_dashboard"
+              name="Dashboard"
+              parent="wms_owner.menu_3pl_value_added_services"
+              sequence="5"/>
+
+    <menuitem id="wms_owner.menu_3pl_vas_operations"
+              name="Operations"
+              parent="wms_owner.menu_3pl_value_added_services"
+              sequence="10"/>
+
+    <menuitem id="wms_owner.menu_3pl_vas_config"
+              name="Master Data"
+              parent="wms_owner.menu_3pl_value_added_services"
+              sequence="15"/>
+
+    <menuitem id="wms_owner.menu_3pl_vas_reporting"
+              name="Reporting"
+              parent="wms_owner.menu_3pl_value_added_services"
+              sequence="20"/>
+
+    <menuitem id="wms_owner.menu_3pl_vas_config_main"
+              name="Configuration"
+              parent="wms_owner.menu_3pl_value_added_services"
+              sequence="25"/>
+
+    <menuitem id="wms_owner.menu_3pl_vas_settings"
+              name="Settings"
+              parent="wms_owner.menu_3pl_vas_config_main"
+              sequence="10"/>
+
+    <!-- Shipping & Transportation Management Categories -->
+    <menuitem id="wms_owner.menu_3pl_shipping_dashboard"
+              name="Dashboard"
+              parent="wms_owner.menu_3pl_shipping_transportation"
+              sequence="5"/>
+
+    <menuitem id="wms_owner.menu_3pl_shipping_operations"
+              name="Operations"
+              parent="wms_owner.menu_3pl_shipping_transportation"
+              sequence="10"/>
+
+    <menuitem id="wms_owner.menu_3pl_shipping_config"
+              name="Master Data"
+              parent="wms_owner.menu_3pl_shipping_transportation"
+              sequence="15"/>
+
+    <menuitem id="wms_owner.menu_3pl_shipping_reporting"
+              name="Reporting"
+              parent="wms_owner.menu_3pl_shipping_transportation"
+              sequence="20"/>
+
+    <menuitem id="wms_owner.menu_3pl_shipping_config_main"
+              name="Configuration"
+              parent="wms_owner.menu_3pl_shipping_transportation"
+              sequence="25"/>
+
+    <menuitem id="wms_owner.menu_3pl_shipping_settings"
+              name="Settings"
+              parent="wms_owner.menu_3pl_shipping_config_main"
+              sequence="10"/>
+
+    <!-- Finance Management App -->
+    <menuitem id="wms_owner.menu_3pl_finance_management"
+              name="Finance Management"
+              sequence="20"/>
+
+    <!-- Finance Management App Categories -->
+    <menuitem id="wms_owner.menu_3pl_finance_dashboard"
+              name="Dashboard"
+              parent="wms_owner.menu_3pl_finance_management"
+              sequence="5"/>
+
+    <menuitem id="wms_owner.menu_3pl_finance_operations"
+              name="Operations"
+              parent="wms_owner.menu_3pl_finance_management"
+              sequence="10"/>
+
+    <menuitem id="wms_owner.menu_3pl_finance_billing"
+              name="Master Data"
+              parent="wms_owner.menu_3pl_finance_management"
+              sequence="15"/>
+
+    <menuitem id="wms_owner.menu_3pl_finance_reporting"
+              name="Reporting"
+              parent="wms_owner.menu_3pl_finance_management"
+              sequence="20"/>
+
+    <menuitem id="wms_owner.menu_3pl_finance_config"
+              name="Configuration"
+              parent="wms_owner.menu_3pl_finance_management"
+              sequence="25"/>
+
+    <menuitem id="wms_owner.menu_3pl_finance_settings"
+              name="Settings"
+              parent="wms_owner.menu_3pl_finance_config"
+              sequence="10"/>
+
+    <!-- Integrations App -->
+    <menuitem id="wms_owner.menu_3pl_integrations"
+              name="Integrations"
+              sequence="30"/>
+
+    <!-- Integrations App Categories -->
+    <menuitem id="wms_owner.menu_3pl_integrations_dashboard"
+              name="Dashboard"
+              parent="wms_owner.menu_3pl_integrations"
+              sequence="5"/>
+
+    <menuitem id="wms_owner.menu_3pl_integrations_operations"
+              name="Operations"
+              parent="wms_owner.menu_3pl_integrations"
+              sequence="10"/>
+
+    <menuitem id="wms_owner.menu_3pl_integrations_e_commerce"
+              name="Master Data"
+              parent="wms_owner.menu_3pl_integrations"
+              sequence="15"/>
+
+    <menuitem id="wms_owner.menu_3pl_integrations_systems"
+              name="Reporting"
+              parent="wms_owner.menu_3pl_integrations"
+              sequence="20"/>
+
+    <menuitem id="wms_owner.menu_3pl_integrations_config"
+              name="Configuration"
+              parent="wms_owner.menu_3pl_integrations"
+              sequence="25"/>
+
+    <menuitem id="wms_owner.menu_3pl_integrations_courier"
+              name="Settings"
+              parent="wms_owner.menu_3pl_integrations_config"
+              sequence="10"/>
+
+</odoo>

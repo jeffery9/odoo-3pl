@@ -240,7 +240,7 @@ class StockPicking(models.Model):
             'type': 'ir.actions.act_window',
             'name': 'RMAs',
             'res_model': 'wms.return.authorization',
-            'view_mode': 'tree,form',
+            'view_mode': 'list,form',
             'domain': [('origin', '=', self.name)],
             'context': {'default_origin': self.name}
         }

@@ -459,8 +459,8 @@
     <!-- Menu Items -->
     <menuitem id="menu_wms_wcs_root"
               name="WCS Integration"
-              parent="stock.menu_stock_warehouse_mgmt"
-              sequence="107"/>
+              parent="wms_owner.menu_3pl_integrations_systems"
+              sequence="5"/>
 
     <menuitem id="menu_wms_wcs_systems"
               name="WCS Systems"

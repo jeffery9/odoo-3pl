@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-    <!-- Labor Management Menu -->
+    <!-- Labor Management Menu (App-level) -->
     <menuitem id="menu_wms_labor_management_root"
               name="Labor Management"
-              parent="hr.menu_hr_root"
+              parent="wms_owner.menu_3pl_storage_operations"
               sequence="120"/>
 
     <menuitem id="menu_wms_labor_tasks"

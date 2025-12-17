@@ -390,8 +390,8 @@
     <!-- Menu Items -->
     <menuitem id="menu_wms_courier_root"
               name="Courier Integration"
-              parent="stock.menu_stock_warehouse_mgmt"
-              sequence="106"/>
+              parent="wms_owner.menu_3pl_integrations_courier"
+              sequence="10"/>
 
     <menuitem id="menu_wms_courier_companies"
               name="Courier Companies"

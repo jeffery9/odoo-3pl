@@ -1,31 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-    <!-- Crossdock Operations Menu -->
+    <!-- Crossdock Operations Menu (under Storage Management > Operations) -->
     <menuitem id="menu_wms_crossdock_root"
               name="Crossdock"
-              sequence="50"
-              web_icon="wms_crossdock,static/description/icon.png"/>
-
-    <menuitem id="menu_wms_crossdock_operations"
-              name="Operations"
-              parent="menu_wms_crossdock_root"
-              sequence="10"/>
+              parent="wms_owner.menu_3pl_storage_operations"
+              sequence="20"/>
 
     <menuitem id="menu_wms_crossdock_operation_list"
               name="Crossdock Operations"
-              parent="menu_wms_crossdock_operations"
-              action="action_wms_crossdock_operation_list"
-              sequence="10"/>
-
-    <menuitem id="menu_wms_crossdock_matches"
-              name="Matches"
               parent="menu_wms_crossdock_root"
-              sequence="20"/>
+              action="wms_crossdock.action_wms_crossdock_operation_list"
+              sequence="10"/>
 
     <menuitem id="menu_wms_crossdock_match_list"
               name="Crossdock Matches"
-              parent="menu_wms_crossdock_matches"
-              action="action_wms_crossdock_match_list"
-              sequence="10"/>
+              parent="menu_wms_crossdock_root"
+              action="wms_crossdock.action_wms_crossdock_match_list"
+              sequence="20"/>
 
 </odoo>

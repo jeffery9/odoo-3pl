@@ -3,10 +3,10 @@
     <!-- Extend Stock Quant Views for Inventory Age -->
 
     <!-- Add age fields to Stock Quant tree view -->
-    <record id="view_stock_quant_list_age" model="ir.ui.view">
+    <record id="view_stock_quant_tree_age" model="ir.ui.view">
         <field name="name">stock.quant.tree.age</field>
         <field name="model">stock.quant</field>
-        <field name="inherit_id" ref="stock.view_stock_quant_list"/>
+        <field name="inherit_id" ref="stock.view_stock_quant_tree"/>
         <field name="arch" type="xml">
             <field name="quantity" position="after">
                 <field name="age_days" optional="show"/>
@@ -22,16 +22,7 @@
         <field name="model">stock.quant</field>
         <field name="inherit_id" ref="stock.view_stock_quant_form"/>
         <field name="arch" type="xml">
-            <div name="button_box" position="inside">
-                <button name="action_view_inventory_age_report" type="object" class="oe_stat_button" icon="fa-calendar" invisible="quantity == 0">
-                    <div class="o_form_field o_stat_info">
-                        <span class="o_stat_text">Age: </span>
-                        <field name="age_days" widget="statinfo"/>
-                        <span class="o_stat_text"> days</span>
-                    </div>
-                </button>
-            </div>
-            <group name="main_info" position="after">
+            <group position="after">
                 <group string="Age Information">
                     <field name="age_days"/>
                     <field name="aging_period"/>
@@ -45,9 +36,12 @@
     <record id="view_stock_quant_search_age" model="ir.ui.view">
         <field name="name">stock.quant.search.age</field>
         <field name="model">stock.quant</field>
-        <field name="inherit_id" ref="stock.view_stock_quant_search"/>
+        <field name="inherit_id" ref="stock.quant_search_view"/>
         <field name="arch" type="xml">
-            <filter name="group_by_location" position="before">
+            <xpath expr="//group[@expand='0']//filter[@name='productgroup']" position="after">
+                <filter name="group_by_age_period" string="Aging Period" context="{'group_by': 'aging_period'}"/>
+            </xpath>
+            <xpath expr="//filter[@name='my_count']" position="after">
                 <filter name="aged_inventory" string="Aged Inventory" domain="[('is_aged_inventory', '=', True)]"/>
                 <filter name="current_inventory" string="Current Inventory" domain="[('aging_period', '=', 'current')]"/>
                 <filter name="aged_30_60" string="30-60 Days" domain="[('aging_period', '=', '30_60')]"/>
@@ -55,10 +49,7 @@
                 <filter name="aged_90_180" string="90-180 Days" domain="[('aging_period', '=', '90_180')]"/>
                 <filter name="aged_180_365" string="180-365 Days" domain="[('aging_period', '=', '180_365')]"/>
                 <filter name="aged_over_365" string="Over 365 Days" domain="[('aging_period', '=', 'over_365')]"/>
-            </filter>
-            <group expand="0" string="Group By">
-                <filter name="group_by_age_period" string="Aging Period" context="{'group_by': 'aging_period'}"/>
-            </group>
+            </xpath>
         </field>
     </record>
 </odoo>

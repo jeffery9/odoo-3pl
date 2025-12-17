@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-    <!-- Finance Integration Menu -->
+    <!-- Finance Integration Menu (under Integrations > Systems) -->
     <menuitem id="menu_wms_finance_integration_root"
               name="Finance Integration"
-              parent="account.menu_finance"
-              sequence="140"/>
+              parent="wms_owner.menu_3pl_integrations_systems"
+              sequence="15"/>
 
     <menuitem id="menu_wms_financial_transactions"
               name="Financial Transactions"

@@ -143,11 +143,6 @@
                         </page>
                     </notebook>
                 </sheet>
-                <div class="oe_chatter">
-                    <field name="message_follower_ids"/>
-                    <field name="activity_ids"/>
-                    <field name="message_ids"/>
-                </div>
             </form>
         </field>
     </record>
@@ -157,7 +152,7 @@
         <field name="name">wms.performance.report.list</field>
         <field name="model">wms.performance.report</field>
         <field name="arch" type="xml">
-            <list string="Performance Reports" decoration-info="state=='draft'" decoration-success="state=='generated'" decoration-muted="state=='validated'" decoration-warning="state=='published'">
+            <list string="Performance Reports" decoration-info="status=='draft'" decoration-success="status=='generated'" decoration-muted="status=='validated'" decoration-warning="status=='published'">
                 <field name="name"/>
                 <field name="report_date"/>
                 <field name="period_start"/>
@@ -181,7 +176,7 @@
                             string="Generate Report"
                             type="object"
                             class="oe_highlight"
-                            states="draft"
+                            invisible="status != 'draft'"
                             help="Generate performance report based on configured parameters"/>
                     <field name="status" widget="statusbar" statusbar_visible="draft,generated,validated,published"/>
                 </header>
@@ -248,11 +243,7 @@
                         </page>
                     </notebook>
                 </sheet>
-                <div class="oe_chatter">
-                    <field name="message_follower_ids"/>
-                    <field name="activity_ids"/>
-                    <field name="message_ids"/>
-                </div>
+                <chatter/>
             </form>
         </field>
     </record>
@@ -353,7 +344,7 @@
     <!-- Menu Items -->
     <menuitem id="menu_wms_performance_root"
               name="Performance Management"
-              parent="stock.menu_stock_warehouse_mgmt"
+              parent="wms_owner.menu_3pl_storage_config_main"
               sequence="104"/>
 
     <menuitem id="menu_wms_performance_indicators"

@@ -7,12 +7,12 @@ class StockPicking(models.Model):
     quality_control_ids = fields.One2many('wms.quality.control', 'picking_id', 'Quality Controls')
     quality_control_count = fields.Integer('QC Count', compute='_compute_quality_control_count')
     # Traceability fields
-    lot_ids = fields.Many2many('stock.lot', compute='_compute_lot_ids', string='Lots/Serials',
+    lot_ids = fields.Many2many('stock.lot', compute='_compute_picking_lot_ids', string='Lots/Serials',
                                help="All lots/serial numbers associated with this picking")
     tracked_products_count = fields.Integer('Tracked Products', compute='_compute_tracked_products_count',
                                             help="Number of products that require tracking in this picking")
     tracking_compliance = fields.Float('Tracking Compliance %', compute='_compute_tracking_compliance',
-                                       help="Percentage of tracking-compliant lines in this picking")
+                                       help="Percentage of tracking-compliant lines in this picking", store=True)
 
     @api.depends('quality_control_ids')
     def _compute_quality_control_count(self):
@@ -20,7 +20,7 @@ class StockPicking(models.Model):
             picking.quality_control_count = len(picking.quality_control_ids)
 
     @api.depends('move_line_ids', 'move_line_ids.lot_id')
-    def _compute_lot_ids(self):
+    def _compute_picking_lot_ids(self):
         for picking in self:
             all_lots = self.env['stock.lot']
             for line in picking.move_line_ids:
@@ -49,7 +49,7 @@ class StockPicking(models.Model):
                     if line.product_id.tracking != 'none':
                         total_tracked_lines += 1
                         if (line.product_id.tracking == 'serial' and line.lot_id) or \
-                           (line.product_id.tracking == 'lot' and (line.lot_id or line.lot_ids)):
+                           (line.product_id.tracking == 'lot' and line.lot_id):
                             compliant_lines += 1
 
                 if total_tracked_lines > 0:
@@ -92,7 +92,7 @@ class StockPicking(models.Model):
             'type': 'ir.actions.act_window',
             'name': 'Quality Controls',
             'res_model': 'wms.quality.control',
-            'view_mode': 'tree,form',
+            'view_mode': 'list,form',
             'domain': [('picking_id', '=', self.id)],
             'context': {'default_picking_id': self.id}
         }
@@ -104,7 +104,7 @@ class StockPicking(models.Model):
             'type': 'ir.actions.act_window',
             'name': 'Lots/Serials',
             'res_model': 'stock.lot',
-            'view_mode': 'tree,form',
+            'view_mode': 'list,form',
             'domain': [('id', 'in', self.lot_ids.ids)],
             'context': {'default_company_id': self.company_id.id}
         }
@@ -150,7 +150,7 @@ class StockPicking(models.Model):
             'type': 'ir.actions.act_window',
             'name': 'Lot Traceability Report',
             'res_model': 'stock.traceability.report',  # Using native Odoo report
-            'view_mode': 'tree,form',
+            'view_mode': 'list,form',
             'target': 'current',
             'context': {
                 'active_model': 'stock.lot',

@@ -119,12 +119,12 @@ class WmsQualityControl(models.Model):
             else:
                 record.traced_moves_count = 0
 
-    @api.depends('picking_id', 'picking_id.move_line_ids.qty_done')
+    @api.depends('picking_id', 'picking_id.move_line_ids.quantity')
     def _compute_traced_quantities(self):
         """Compute total traced quantities for this QC"""
         for record in self:
             if record.picking_id:
-                record.traced_quantities = sum(record.picking_id.move_line_ids.mapped('qty_done'))
+                record.traced_quantities = sum(record.picking_id.move_line_ids.mapped('quantity'))
             else:
                 record.traced_quantities = 0.0
 
@@ -135,7 +135,7 @@ class WmsQualityControl(models.Model):
             'type': 'ir.actions.act_window',
             'name': 'Lots/Serials under QC',
             'res_model': 'stock.lot',
-            'view_mode': 'tree,form',
+            'view_mode': 'list,form',
             'domain': [('id', 'in', self.lot_ids.ids)],
             'context': {'default_company_id': self.company_id.id if hasattr(self, 'company_id') else False}
         }
@@ -147,7 +147,7 @@ class WmsQualityControl(models.Model):
             'type': 'ir.actions.act_window',
             'name': 'Products under QC',
             'res_model': 'product.product',
-            'view_mode': 'tree,form',
+            'view_mode': 'list,form',
             'domain': [('id', 'in', self.product_ids.ids)],
         }
 
@@ -159,7 +159,7 @@ class WmsQualityControl(models.Model):
                 'type': 'ir.actions.act_window',
                 'name': 'Related Stock Moves',
                 'res_model': 'stock.move',
-                'view_mode': 'tree,form',
+                'view_mode': 'list,form',
                 'domain': [('picking_id', '=', self.picking_id.id)],
             }
         else:
@@ -174,7 +174,7 @@ class WmsQualityControl(models.Model):
                 'type': 'ir.actions.act_window',
                 'name': 'Related Stock Moves',
                 'res_model': 'stock.move',
-                'view_mode': 'tree,form',
+                'view_mode': 'list,form',
                 'domain': domain,
             }
 

@@ -362,6 +362,7 @@ class WmsPerformanceReport(models.Model):
 class WmsAlert(models.Model):
     _name = 'wms.alert'
     _description = 'WMS Alert'
+    _inherit = ['mail.thread', 'mail.activity.mixin']
     _order = 'create_date desc'
 
     name = fields.Char('Alert Name', required=True)

@@ -84,6 +84,7 @@ class WmsEnergyReading(models.Model):
 class WmsEnergyReport(models.Model):
     _name = 'wms.energy.report'
     _description = 'WMS Energy Report'
+    _inherit = ['mail.thread', 'mail.activity.mixin']
     _order = 'report_date desc'
 
     name = fields.Char('Report Name', required=True)
@@ -289,15 +290,14 @@ class WmsEnergyDashboard(models.Model):
         self.env.cr.execute("""
             CREATE OR REPLACE VIEW wms_energy_dashboard AS (
                 SELECT
-                    min(er.id) as id,
-                    er.owner_id,
+                    1 as id,  -- Use a constant id since this is a summary view
+                    NULL as owner_id,
                     'Monthly' as period,
                     sum(er.energy_consumed) as total_energy,
                     sum(er.cost) as total_cost,
                     sum(er.carbon_emissions) as total_emissions,
                     avg(e.efficiency_rating) as avg_efficiency
                 FROM wms_energy_reading er
-                JOIN wms_energy_equipment e ON e.id = er.equipment_id
-                GROUP BY er.owner_id, 'Monthly'
+                LEFT JOIN wms_energy_equipment e ON e.id = er.equipment_id
             )
         """)

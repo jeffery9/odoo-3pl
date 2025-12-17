@@ -24,18 +24,18 @@
         </field>
     </record>
 
-    <!-- Quality Checklist Tree View -->
+    <!-- Quality Checklist List View -->
     <record id="view_wms_quality_checklist_list" model="ir.ui.view">
-        <field name="name">wms.quality.checklist.tree</field>
+        <field name="name">wms.quality.checklist.list</field>
         <field name="model">wms.quality.checklist</field>
         <field name="arch" type="xml">
-            <tree string="Quality Checklist Items">
+            <list string="Quality Checklist Items">
                 <field name="item_id"/>
                 <field name="result"/>
                 <field name="criticality"/>
                 <field name="qc_session_id"/>
                 <field name="owner_id"/>
-            </tree>
+            </list>
         </field>
     </record>
 
@@ -70,11 +70,11 @@
                         </page>
                         <page string="Photos">
                             <field name="photo_ids">
-                                <tree>
+                                <list>
                                     <field name="name"/>
                                     <field name="photo"/>
                                     <field name="notes"/>
-                                </tree>
+                                </list>
                             </field>
                         </page>
                     </notebook>
@@ -88,12 +88,12 @@
         </field>
     </record>
 
-    <!-- Quality Issue Tree View -->
+    <!-- Quality Issue List View -->
     <record id="view_wms_quality_issue_list" model="ir.ui.view">
-        <field name="name">wms.quality.issue.tree</field>
+        <field name="name">wms.quality.issue.list</field>
         <field name="model">wms.quality.issue</field>
         <field name="arch" type="xml">
-            <tree string="Quality Issues">
+            <list string="Quality Issues">
                 <field name="name"/>
                 <field name="category"/>
                 <field name="severity"/>
@@ -101,7 +101,7 @@
                 <field name="qc_session_id"/>
                 <field name="owner_id"/>
                 <field name="resolution_date"/>
-            </tree>
+            </list>
         </field>
     </record>
 
@@ -139,19 +139,19 @@
         </field>
     </record>
 
-    <!-- Quality Corrective Action Tree View -->
+    <!-- Quality Corrective Action List View -->
     <record id="view_wms_quality_corrective_action_list" model="ir.ui.view">
-        <field name="name">wms.quality.corrective.action.tree</field>
+        <field name="name">wms.quality.corrective.action.list</field>
         <field name="model">wms.quality.corrective_action</field>
         <field name="arch" type="xml">
-            <tree string="Corrective Actions">
+            <list string="Corrective Actions">
                 <field name="name"/>
                 <field name="issue_id"/>
                 <field name="assigned_to"/>
                 <field name="status"/>
                 <field name="due_date"/>
                 <field name="owner_id"/>
-            </tree>
+            </list>
         </field>
     </record>
 
@@ -181,17 +181,17 @@
         </field>
     </record>
 
-    <!-- Quality Photo Tree View -->
+    <!-- Quality Photo List View -->
     <record id="view_wms_quality_photo_list" model="ir.ui.view">
-        <field name="name">wms.quality.photo.tree</field>
+        <field name="name">wms.quality.photo.list</field>
         <field name="model">wms.quality_photo</field>
         <field name="arch" type="xml">
-            <tree string="Quality Photos">
+            <list string="Quality Photos">
                 <field name="name"/>
                 <field name="qc_session_id"/>
                 <field name="issue_id"/>
                 <field name="owner_id"/>
-            </tree>
+            </list>
         </field>
     </record>
 </odoo>

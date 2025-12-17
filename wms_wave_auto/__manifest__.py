@@ -17,6 +17,7 @@
         'base',
         'stock',
         'wms_owner',
+        'wms_wave',            # Core wave functionality - base model
         'wms_location_usage',  # For location optimization in wave planning
         'wms_eiq_analysis',    # For EIQ analysis to optimize wave generation
     ],

@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-    <!-- Energy Management Menu -->
+    <!-- Energy Management Menu (App-level) -->
     <menuitem id="menu_wms_energy_management_root"
               name="Energy Management"
-              parent="stock.menu_stock_warehouse_mgmt"
-              sequence="120"/>
+              parent="wms_owner.menu_3pl_storage_config_main"
+              sequence="30"/>
 
     <menuitem id="menu_wms_energy_equipment"
               name="Energy Equipment"

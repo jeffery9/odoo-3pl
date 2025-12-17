@@ -4,7 +4,7 @@
     <record id="action_wms_document_list" model="ir.actions.act_window">
         <field name="name">Documents</field>
         <field name="res_model">wms.document</field>
-        <field name="view_mode">tree,form</field>
+        <field name="view_mode">list,form</field>
         <field name="help" type="html">
             <p class="o_view_nocontent_smiling_face">
                 Upload and manage documents
@@ -17,7 +17,7 @@
     <record id="action_wms_document_category_list" model="ir.actions.act_window">
         <field name="name">Document Categories</field>
         <field name="res_model">wms.document.category</field>
-        <field name="view_mode">tree,form</field>
+        <field name="view_mode">list,form</field>
         <field name="help" type="html">
             <p class="o_view_nocontent_smiling_face">
                 Manage document categories
@@ -30,7 +30,7 @@
     <record id="action_wms_document_tag_list" model="ir.actions.act_window">
         <field name="name">Document Tags</field>
         <field name="res_model">wms.document.tag</field>
-        <field name="view_mode">tree,form</field>
+        <field name="view_mode">list,form</field>
         <field name="help" type="html">
             <p class="o_view_nocontent_smiling_face">
                 Manage document tags
@@ -43,7 +43,7 @@
     <record id="action_wms_document_template_list" model="ir.actions.act_window">
         <field name="name">Document Templates</field>
         <field name="res_model">wms.document.template</field>
-        <field name="view_mode">tree,form</field>
+        <field name="view_mode">list,form</field>
         <field name="help" type="html">
             <p class="o_view_nocontent_smiling_face">
                 Manage document templates
@@ -56,7 +56,7 @@
     <record id="action_wms_document_workflow_list" model="ir.actions.act_window">
         <field name="name">Document Workflows</field>
         <field name="res_model">wms.document.workflow</field>
-        <field name="view_mode">tree,form</field>
+        <field name="view_mode">list,form</field>
         <field name="help" type="html">
             <p class="o_view_nocontent_smiling_face">
                 Manage document workflows
@@ -69,7 +69,7 @@
     <record id="action_wms_document_archive_list" model="ir.actions.act_window">
         <field name="name">Document Archives</field>
         <field name="res_model">wms.document.archive</field>
-        <field name="view_mode">tree,form</field>
+        <field name="view_mode">list,form</field>
         <field name="help" type="html">
             <p class="o_view_nocontent_smiling_face">
                 Manage document archives
@@ -79,11 +79,11 @@
         </field>
     </record>
 
-    <!-- Document Management Menu -->
+    <!-- Document Management Menu (App-level) -->
     <menuitem id="menu_wms_document_management_root"
               name="Document Management"
-              parent="stock.menu_stock_warehouse_mgmt"
-              sequence="130"/>
+              parent="wms_owner.menu_3pl_storage_config_main"
+              sequence="10"/>
 
     <menuitem id="menu_wms_documents"
               name="Documents"

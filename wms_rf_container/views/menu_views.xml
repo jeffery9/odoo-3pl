@@ -1,28 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-    <!-- Container Management Menu -->
-    <menuitem id="menu_wms_container_root"
-              name="Container Management"
-              sequence="60"
-              web_icon="wms_rf_container,static/description/icon.png"/>
-
-    <menuitem id="menu_wms_container_main"
-              name="Containers"
-              parent="menu_wms_container_root"
-              sequence="10"/>
-
-    <menuitem id="menu_wms_container_list"
-              name="All Containers"
-              parent="menu_wms_container_main"
-              action="action_wms_container_list"
-              sequence="10"/>
-
-    <menuitem id="menu_wms_container_content"
-              name="Container Contents"
-              parent="menu_wms_container_root"
-              action="action_wms_container_content_list"
-              sequence="20"/>
-
     <!-- Actions -->
     <record id="action_wms_container_list" model="ir.actions.act_window">
         <field name="name">Containers</field>
@@ -49,4 +26,27 @@
             </p>
         </field>
     </record>
+
+    <!-- Container Management Menu (under Receiving Management > Operations) -->
+    <menuitem id="menu_wms_container_root"
+              name="Container Management"
+              parent="wms_owner.menu_3pl_receiving_operations"
+              sequence="30"/>
+
+    <menuitem id="menu_wms_container_main"
+              name="Containers"
+              parent="menu_wms_container_root"
+              sequence="10"/>
+
+    <menuitem id="menu_wms_container_list"
+              name="All Containers"
+              parent="menu_wms_container_main"
+              action="action_wms_container_list"
+              sequence="10"/>
+
+    <menuitem id="menu_wms_container_content"
+              name="Container Contents"
+              parent="menu_wms_container_root"
+              action="action_wms_container_content_list"
+              sequence="20"/>
 </odoo>

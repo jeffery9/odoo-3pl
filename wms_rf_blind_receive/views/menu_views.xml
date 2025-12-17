@@ -1,17 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-    <!-- Blind Receive Management Menu -->
-    <menuitem id="menu_wms_blind_receive_root"
-              name="Blind Receive"
-              parent="stock.menu_stock_warehouse_mgmt"
-              sequence="50"/>
-
-    <menuitem id="menu_wms_blind_receive_list"
-              name="Blind Receive Sessions"
-              parent="menu_wms_blind_receive_root"
-              action="action_wms_blind_receive_list"
-              sequence="10"/>
-
     <!-- Actions -->
     <record id="action_wms_blind_receive_list" model="ir.actions.act_window">
         <field name="name">Blind Receive Sessions</field>
@@ -25,4 +13,16 @@
             </p>
         </field>
     </record>
+
+    <!-- Blind Receive Management Menu (under Receiving Management > Operations) -->
+    <menuitem id="menu_wms_blind_receive_root"
+              name="Blind Receive"
+              parent="wms_owner.menu_3pl_receiving_operations"
+              sequence="25"/>
+
+    <menuitem id="menu_wms_blind_receive_list"
+              name="Blind Receive Sessions"
+              parent="menu_wms_blind_receive_root"
+              action="wms_rf_blind_receive.action_wms_blind_receive_list"
+              sequence="10"/>
 </odoo>

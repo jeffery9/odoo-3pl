@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-    <!-- Billing Record Tree View -->
+    <!-- Billing Record List View -->
     <record id="view_wms_billing_record_list" model="ir.ui.view">
-        <field name="name">wms.billing.record.tree</field>
+        <field name="name">wms.billing.record.list</field>
         <field name="model">wms.billing.record</field>
         <field name="arch" type="xml">
-            <tree>
+            <list>
                 <field name="name"/>
                 <field name="owner_id"/>
                 <field name="operation_type"/>
@@ -14,7 +14,7 @@
                 <field name="unit_price"/>
                 <field name="amount"/>
                 <field name="state"/>
-            </tree>
+            </list>
         </field>
     </record>
 

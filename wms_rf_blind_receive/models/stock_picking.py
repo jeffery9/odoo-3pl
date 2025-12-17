@@ -31,7 +31,7 @@ class StockPicking(models.Model):
             'type': 'ir.actions.act_window',
             'name': 'Blind Receive Sessions',
             'res_model': 'wms.blind.receive',
-            'view_mode': 'tree,form',
+            'view_mode': 'list,form',
             'domain': [('picking_id', '=', self.id)],
             'context': {'default_picking_id': self.id}
         }

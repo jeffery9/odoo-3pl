@@ -26,24 +26,24 @@
             <notebook position="inside">
                 <page string="Batch Receives" invisible="batch_receive_count == 0">
                     <field name="batch_receive_picking_ids" nolabel="1" readonly="1">
-                        <tree>
+                        <list>
                             <field name="batch_receive_id"/>
                             <field name="status"/>
                             <field name="priority"/>
                             <field name="receive_date"/>
                             <field name="completion_date"/>
-                        </tree>
+                        </list>
                     </field>
                 </page>
             </notebook>
         </field>
     </record>
 
-    <!-- Add batch receive fields to Stock Picking tree view -->
+    <!-- Add batch receive fields to Stock Picking list view -->
     <record id="view_stock_picking_list_batch_receive" model="ir.ui.view">
-        <field name="name">stock.picking.tree.batch.receive</field>
+        <field name="name">stock.picking.list.batch.receive</field>
         <field name="model">stock.picking</field>
-        <field name="inherit_id" ref="stock.view_picking_list"/>
+        <field name="inherit_id" ref="stock.vpicktree"/>
         <field name="arch" type="xml">
             <field name="origin" position="after">
                 <field name="batch_receive_count" optional="show"/>
@@ -60,7 +60,7 @@
             <field name="origin" position="after">
                 <field name="batch_receive_picking_ids"/>
             </field>
-            <filter name="my_activities" position="before">
+            <filter name="my_transfers" position="after">
                 <filter name="with_batch_receive" string="With Batch Receive" domain="[('batch_receive_picking_ids', '!=', [])]"/>
             </filter>
             <group expand="0" string="Group By">

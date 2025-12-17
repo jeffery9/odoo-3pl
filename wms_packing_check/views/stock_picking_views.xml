@@ -30,7 +30,7 @@
     <record id="view_stock_picking_list_packing_check" model="ir.ui.view">
         <field name="name">stock.picking.list.packing.check</field>
         <field name="model">stock.picking</field>
-        <field name="inherit_id" ref="stock.view_picking_list"/>
+        <field name="inherit_id" ref="stock.vpicktree"/>
         <field name="arch" type="xml">
             <field name="origin" position="after">
                 <field name="packing_check_count" optional="show"/>
@@ -47,7 +47,7 @@
             <field name="origin" position="after">
                 <field name="packing_check_ids"/>
             </field>
-            <filter name="my_activities" position="before">
+            <filter name="my_transfers" position="after">
                 <filter name="with_packing_check" string="With Packing Check" domain="[('packing_check_ids', '!=', [])]"/>
             </filter>
             <group expand="0" string="Group By">

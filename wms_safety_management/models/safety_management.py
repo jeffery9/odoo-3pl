@@ -6,7 +6,7 @@ class WmsSafetyIncident(models.Model):
     _name = 'wms.safety.incident'
     _description = 'WMS Safety Incident'
     _inherit = ['mail.thread', 'mail.activity.mixin']
-    _order = 'date desc'
+    _order = 'incident_date desc'
 
     def toggle_active(self):
         """Toggle active status"""

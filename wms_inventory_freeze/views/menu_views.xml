@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-    <!-- Inventory Freeze Management Menu -->
+    <!-- Inventory Freeze Management Menu (under Storage Management > Operations) -->
     <menuitem id="menu_wms_inventory_freeze_root"
               name="Inventory Freeze"
-              parent="stock.menu_stock_inventory_control"
-              sequence="60"/>
+              parent="wms_owner.menu_3pl_storage_operations"
+              sequence="25"/>
 
     <menuitem id="menu_wms_inventory_freeze_list"
               name="Inventory Freeze Records"

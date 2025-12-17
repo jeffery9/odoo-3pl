@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
 
-    <!-- TMS Route Tree View -->
+    <!-- TMS Route List View -->
     <record id="view_tms_route_tree" model="ir.ui.view">
-        <field name="name">tms.route.tree</field>
+        <field name="name">tms.route.list</field>
         <field name="model">tms.route</field>
         <field name="arch" type="xml">
-            <tree string="TMS Routes" decoration-danger="state == 'cancelled'" decoration-success="state == 'delivered'" decoration-info="state == 'in_transit'">
+            <list string="TMS Routes" decoration-danger="state == 'cancelled'" decoration-success="state == 'delivered'" decoration-info="state == 'in_transit'">
                 <field name="name"/>
                 <field name="area_id"/>
                 <field name="picking_batch_id"/>
@@ -17,7 +17,7 @@
                 <field name="total_customers"/>
                 <field name="total_deliveries"/>
                 <field name="state"/>
-            </tree>
+            </list>
         </field>
     </record>
 
@@ -49,12 +49,8 @@
                 </header>
                 <sheet>
                     <div class="oe_button_box" name="button_box">
-                        <button name="%(action_view_route_stops)d" type="action" class="oe_stat_button" icon="fa-map-marker">
-                            <field name="total_customers" string="Stops" widget="statinfo"/>
-                        </button>
-                        <button name="%(action_view_route_deliveries)d" type="action" class="oe_stat_button" icon="fa-truck">
-                            <field name="total_deliveries" string="Deliveries" widget="statinfo"/>
-                        </button>
+                        <field name="total_customers" widget="statinfo" string="Stops" icon="fa-map-marker"/>
+                        <field name="total_deliveries" widget="statinfo" string="Deliveries" icon="fa-truck"/>
                     </div>
                     <div class="oe_title">
                         <label for="name" class="oe_edit_only"/>
@@ -90,7 +86,7 @@
                                 <button name="action_optimize_route" type="object" string="Optimize Route" class="btn-secondary" help="Optimize the sequence of stops based on distance and time windows"/>
                             </header>
                             <field name="stop_ids" context="{'default_route_id': id}">
-                                <tree editable="bottom" decoration-info="state == 'in_transit'" decoration-success="state == 'delivered'" decoration-danger="state == 'failed'">
+                                <list editable="bottom" decoration-info="state == 'in_transit'" decoration-success="state == 'delivered'" decoration-danger="state == 'failed'">
                                     <field name="sequence" widget="handle"/>
                                     <field name="adjusted_sequence" invisible="not is_adjusted"/>
                                     <field name="partner_id"/>
@@ -109,7 +105,7 @@
                                     <button name="action_arrive_stop" type="object" string="Arrive" invisible="state != 'pending'" icon="fa-sign-in"/>
                                     <button name="action_complete_stop" type="object" string="Deliver" invisible="state != 'arrived'" icon="fa-check"/>
                                     <button name="action_fail_stop" type="object" string="Fail" invisible="state not in ('pending', 'arrived')" icon="fa-times"/>
-                                </tree>
+                                </list>
                             </field>
                         </page>
                     </notebook>

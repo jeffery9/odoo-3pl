@@ -17,15 +17,13 @@ class StockPicking(models.Model):
         for picking in self:
             picking.batch_receive_count = len(picking.batch_receive_picking_ids)
 
-    @api.depends('move_line_ids', 'move_line_ids.lot_id', 'move_line_ids.lot_ids')
+    @api.depends('move_line_ids', 'move_line_ids.lot_id')
     def _compute_lot_ids(self):
         for picking in self:
             all_lots = self.env['stock.lot']
             for line in picking.move_line_ids:
                 if line.lot_id:
                     all_lots |= line.lot_id
-                if line.lot_ids:
-                    all_lots |= line.lot_ids
             picking.lot_ids = all_lots
 
     def _compute_tracking_errors(self):
@@ -38,7 +36,7 @@ class StockPicking(models.Model):
                     # Check if required tracking information is missing
                     if product.tracking == 'serial' and not move_line.lot_id:
                         error_count += 1
-                    elif product.tracking == 'lot' and not move_line.lot_id and not move_line.lot_ids:
+                    elif product.tracking == 'lot' and not move_line.lot_id:
                         error_count += 1
             picking.tracking_error_count = error_count
 
@@ -88,7 +86,7 @@ class StockPicking(models.Model):
             'type': 'ir.actions.act_window',
             'name': 'Batch Receives',
             'res_model': 'wms.batch.receive.picking',
-            'view_mode': 'tree,form',
+            'view_mode': 'list,form',
             'domain': [('picking_id', '=', self.id)],
             'context': {'default_picking_id': self.id}
         }
@@ -100,7 +98,7 @@ class StockPicking(models.Model):
             'type': 'ir.actions.act_window',
             'name': 'Lots/Serials',
             'res_model': 'stock.lot',
-            'view_mode': 'tree,form',
+            'view_mode': 'list,form',
             'domain': [('id', 'in', self.lot_ids.ids)],
             'context': {'default_company_id': self.company_id.id}
         }
