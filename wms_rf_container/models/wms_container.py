@@ -35,7 +35,7 @@ class WmsContainer(models.Model):
     parent_container_id = fields.Many2one('wms.container', 'Parent Container')
     child_containers = fields.One2many('wms.container', 'parent_container_id', 'Child Containers')
 
-    @api.model
+    @api.model_create_multi
     def create(self, vals):
         if not vals.get('name'):
             vals['name'] = self.env['ir.sequence'].next_by_code('wms.container') or '/'
@@ -105,7 +105,7 @@ class WmsContainerContent(models.Model):
     expiry_date = fields.Date('Expiry Date')
     owner_id = fields.Many2one('wms.owner', 'Owner', related='container_id.owner_id', store=True)
 
-    @api.model
+    @api.model_create_multi
     def create(self, vals):
         if 'uom_id' not in vals and 'product_id' in vals:
             vals['uom_id'] = self.env['product.product'].browse(vals['product_id']).uom_id.id

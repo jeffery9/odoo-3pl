@@ -233,7 +233,7 @@ class WmsSafetyInspection(models.Model):
 
     notes = fields.Text('Notes')
 
-    @api.model
+    @api.model_create_multi
     def create(self, vals):
         if vals.get('inspection_code', _('New')) == _('New'):
             vals['inspection_code'] = self.env['ir.sequence'].next_by_code('wms.safety.inspection') or _('New')

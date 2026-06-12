@@ -71,7 +71,7 @@ class WmsLaborTask(models.Model):
     efficiency = fields.Float('Efficiency %', compute='_compute_efficiency', store=True)
     notes = fields.Text('Notes')
 
-    @api.model
+    @api.model_create_multi
     def create(self, vals):
         if vals.get('task_code', _('New')) == _('New'):
             vals['task_code'] = self.env['ir.sequence'].next_by_code('wms.labor.task') or _('New')
@@ -206,7 +206,7 @@ class WmsLaborPerformance(models.Model):
     efficiency_rate = fields.Float('Efficiency Rate %', help='Average efficiency rate for the day')
     productivity_score = fields.Float('Productivity Score', help='Overall productivity score')
 
-    @api.model
+    @api.model_create_multi
     def create(self, vals):
         # Calculate productivity score based on efficiency rate and tasks completed
         if 'efficiency_rate' in vals and 'tasks_completed' in vals:

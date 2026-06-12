@@ -301,7 +301,7 @@ class WmsPerformanceReport(models.Model):
     # Distribution
     recipients = fields.Many2many('res.users', 'wms_performance_report_user_rel', 'report_id', 'user_id', 'Recipients')
 
-    @api.model
+    @api.model_create_multi
     def create(self, vals):
         if vals.get('report_code', _('New')) == _('New'):
             vals['report_code'] = self.env['ir.sequence'].next_by_code('wms.performance.report') or _('New')

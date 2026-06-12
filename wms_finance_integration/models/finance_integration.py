@@ -158,7 +158,7 @@ class WmsFinancialTransaction(models.Model):
     move_id = fields.Many2one('account.move', 'Account Move')
     is_posted = fields.Boolean('Posted', default=False)
 
-    @api.model
+    @api.model_create_multi
     def create(self, vals):
         if vals.get('name', _('New')) == _('New'):
             vals['name'] = self.env['ir.sequence'].next_by_code('wms.financial.transaction') or _('New')
@@ -250,7 +250,7 @@ class WmsCostAllocation(models.Model):
     move_id = fields.Many2one('account.move', 'Account Move')
     notes = fields.Text('Notes')
 
-    @api.model
+    @api.model_create_multi
     def create(self, vals):
         if vals.get('allocation_code', _('New')) == _('New'):
             vals['allocation_code'] = self.env['ir.sequence'].next_by_code('wms.cost.allocation') or _('New')
@@ -301,7 +301,7 @@ class WmsFinancialReport(models.Model):
     report_content = fields.Html('Report Content')
     notes = fields.Text('Notes')
 
-    @api.model
+    @api.model_create_multi
     def create(self, vals):
         if vals.get('report_code', _('New')) == _('New'):
             vals['report_code'] = self.env['ir.sequence'].next_by_code('wms.financial.report') or _('New')

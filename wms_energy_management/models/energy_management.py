@@ -109,7 +109,7 @@ class WmsEnergyReport(models.Model):
     # Related readings
     reading_ids = fields.One2many('wms.energy.reading', 'id', string='Readings', compute='_compute_readings')
 
-    @api.model
+    @api.model_create_multi
     def create(self, vals):
         if vals.get('report_code', _('New')) == _('New'):
             vals['report_code'] = self.env['ir.sequence'].next_by_code('wms.energy.report') or _('New')

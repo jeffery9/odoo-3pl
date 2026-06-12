@@ -278,7 +278,7 @@ class WmsRfidTransaction(models.Model):
 
     notes = fields.Text('Notes')
 
-    @api.model
+    @api.model_create_multi
     def create(self, vals):
         if vals.get('name', _('New')) == _('New'):
             vals['name'] = self.env['ir.sequence'].next_by_code('wms.rfid.transaction') or _('New')
@@ -344,7 +344,7 @@ class WmsRfidInventory(models.Model):
     owner_id = fields.Many2one('wms.owner', 'Owner')
     notes = fields.Text('Notes')
 
-    @api.model
+    @api.model_create_multi
     def create(self, vals):
         if vals.get('name', _('New')) == _('New'):
             vals['name'] = self.env['ir.sequence'].next_by_code('wms.rfid.inventory') or _('New')

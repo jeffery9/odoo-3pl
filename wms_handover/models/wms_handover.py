@@ -40,7 +40,7 @@ class WmsHandover(models.Model):
     container_ids = fields.Many2many('wms.container', 'wms_handover_container_rel',
                                      'handover_id', 'container_id', 'Containers')
 
-    @api.model
+    @api.model_create_multi
     def create(self, vals):
         if not vals.get('name'):
             vals['name'] = self.env['ir.sequence'].next_by_code('wms.handover') or '/'

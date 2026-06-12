@@ -28,6 +28,7 @@ class WmsOwner(models.Model):
     _sql_constraints = [
         ('owner_code_unique', 'UNIQUE(owner_code)', 'Owner code must be unique!')
     ]
+    @api.model_create_multi
     def create(self, vals):
         if not vals.get('owner_code'):
             vals['owner_code'] = self.env['ir.sequence'].next_by_code('wms.owner.code') or '/'

@@ -69,7 +69,7 @@ class RouteArea(models.Model):
         ('name_uniq', 'unique(name)', 'Area name must be unique!'),
     ]
 
-    @api.model
+    @api.model_create_multi
     def create(self, vals):
         # Generate code from name if not provided
         if 'code' not in vals or not vals['code']:

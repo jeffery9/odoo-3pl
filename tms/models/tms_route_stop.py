@@ -334,7 +334,7 @@ class TmsRouteStop(models.Model):
                             }
                         }
 
-    @api.model
+    @api.model_create_multi
     def create(self, vals):
         """Override create to check capacity constraints after creation"""
         result = super(TmsRouteStop, self).create(vals)

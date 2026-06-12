@@ -27,7 +27,7 @@ class WmsCrossdockOperation(models.Model):
     matched_by = fields.Many2one('res.users', 'Matched By', default=lambda self: self.env.user)
     matched_date = fields.Datetime('Matched Date', default=fields.Datetime.now)
 
-    @api.model
+    @api.model_create_multi
     def create(self, vals):
         if not vals.get('name'):
             vals['name'] = self.env['ir.sequence'].next_by_code('wms.crossdock.operation') or '/'

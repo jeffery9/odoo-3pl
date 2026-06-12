@@ -48,7 +48,7 @@ class WmsInventoryFreeze(models.Model):
             else:
                 record.expiry_date = False
 
-    @api.model
+    @api.model_create_multi
     def create(self, vals):
         if not vals.get('name'):
             vals['name'] = self.env['ir.sequence'].next_by_code('wms.inventory.freeze') or '/'

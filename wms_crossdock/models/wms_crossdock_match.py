@@ -27,7 +27,7 @@ class WmsCrossdockMatch(models.Model):
     notes = fields.Text('Notes')
     operation_ids = fields.One2many('wms.crossdock.operation', 'crossdock_match_id', 'Operations')
 
-    @api.model
+    @api.model_create_multi
     def create(self, vals):
         if not vals.get('name'):
             vals['name'] = self.env['ir.sequence'].next_by_code('wms.crossdock.match') or '/'

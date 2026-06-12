@@ -107,7 +107,7 @@ class WmsDocument(models.Model):
     last_updated = fields.Datetime('Last Updated', default=fields.Datetime.now)
     download_count = fields.Integer('Download Count', default=0, readonly=True)
 
-    @api.model
+    @api.model_create_multi
     def create(self, vals):
         if vals.get('document_code', _('New')) == _('New'):
             vals['document_code'] = self.env['ir.sequence'].next_by_code('wms.document') or _('New')

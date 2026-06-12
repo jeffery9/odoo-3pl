@@ -138,7 +138,7 @@ class WmsValueAddedOperation(models.Model):
 
     notes = fields.Text('Notes')
 
-    @api.model
+    @api.model_create_multi
     def create(self, vals):
         if vals.get('name', _('New')) == _('New'):
             vals['name'] = self.env['ir.sequence'].next_by_code('wms.value.added.operation') or _('New')

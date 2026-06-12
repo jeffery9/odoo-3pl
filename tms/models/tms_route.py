@@ -106,7 +106,7 @@ class TmsRoute(models.Model):
         string='Related Sales Orders'
     )
 
-    @api.model
+    @api.model_create_multi
     def create(self, vals):
         if vals.get('name', _('New')) == _('New'):
             vals['name'] = self.env['ir.sequence'].next_by_code('tms.route') or _('New')

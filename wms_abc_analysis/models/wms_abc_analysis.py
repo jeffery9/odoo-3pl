@@ -31,7 +31,7 @@ class WmsAbcAnalysis(models.Model):
     abc_rules = fields.One2many('wms.abc.rule', 'analysis_id', 'ABC Rules')
     analysis_lines = fields.One2many('wms.abc.analysis.line', 'analysis_id', 'Analysis Lines')
 
-    @api.model
+    @api.model_create_multi
     def create(self, vals):
         if not vals.get('name'):
             vals['name'] = self.env['ir.sequence'].next_by_code('wms.abc.analysis') or '/'

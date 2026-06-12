@@ -22,7 +22,7 @@ class WmsBlindReceive(models.Model):
     start_date = fields.Datetime('Start Date')
     completion_date = fields.Datetime('Completion Date')
 
-    @api.model
+    @api.model_create_multi
     def create(self, vals):
         if not vals.get('name'):
             vals['name'] = self.env['ir.sequence'].next_by_code('wms.blind.receive') or '/'

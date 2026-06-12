@@ -155,7 +155,7 @@ class WmsPerformanceReport(models.Model):
             if report.period_start and report.period_end and report.period_start > report.period_end:
                 raise ValidationError(_('Period start date cannot be later than end date.'))
 
-    @api.model
+    @api.model_create_multi
     def create(self, vals):
         if vals.get('report_code', _('New')) == _('New'):
             vals['report_code'] = self.env['ir.sequence'].next_by_code('wms.performance.report') or _('New')
@@ -537,7 +537,7 @@ class WmsOperatorPerformance(models.Model):
 
     notes = fields.Text('Notes')
 
-    @api.model
+    @api.model_create_multi
     def create(self, vals):
         # Calculate derived metrics
         if 'time_spent_hours' in vals and 'standard_time_hours' in vals:
