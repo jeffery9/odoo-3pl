@@ -25,13 +25,13 @@ class TestWmsCourier(TransactionCase):
         # Create a test warehouse
         self.warehouse = self.Warehouse.create({
             'name': 'Test Warehouse',
-            'code': 'TST'
+            'owner_code': 'TST'
         })
 
         # Create a test owner
         self.owner = self.Owner.create({
             'name': 'Test Owner',
-            'code': 'TO',
+            'owner_code': 'TO',
             'email': 'test@example.com'
         })
 
@@ -43,8 +43,7 @@ class TestWmsCourier(TransactionCase):
         # Create test products
         self.product1 = self.Product.create({
             'name': 'Test Product 1',
-            'type': 'product',
-            'default_code': 'TEST001',
+                        'default_code': 'TEST001',
             'list_price': 10.0,
             'standard_price': 5.0,
             'weight': 1.0,
@@ -56,8 +55,7 @@ class TestWmsCourier(TransactionCase):
 
         self.product2 = self.Product.create({
             'name': 'Test Product 2',
-            'type': 'product',
-            'default_code': 'TEST002',
+                        'default_code': 'TEST002',
             'list_price': 20.0,
             'standard_price': 10.0,
             'weight': 2.0,
@@ -70,7 +68,7 @@ class TestWmsCourier(TransactionCase):
         # Create test courier company
         self.courier_company = self.WmsCourierCompany.create({
             'name': 'Test Courier Company',
-            'code': 'TCC001',
+            'owner_code': 'TCC001',
             'contact_email': 'contact@courier.com',
             'contact_phone': '+1234567890',
             'website': 'https://courier.example.com',
@@ -83,7 +81,7 @@ class TestWmsCourier(TransactionCase):
         # Create test courier service
         self.courier_service = self.WmsCourierService.create({
             'name': 'Test Express Service',
-            'code': 'TES001',
+            'owner_code': 'TES001',
             'courier_company_id': self.courier_company.id,
             'service_type': 'express',
             'base_cost': 5.0,
@@ -94,12 +92,11 @@ class TestWmsCourier(TransactionCase):
             'requires_label_print': True,
             'requires_pickup': False,
         })
-
     def test_courier_company_creation(self):
         """Test creation of courier company records"""
         company = self.WmsCourierCompany.create({
             'name': 'Another Courier Company',
-            'code': 'ACC002',
+            'owner_code': 'ACC002',
             'contact_email': 'contact@anothercourier.com',
             'contact_phone': '+0987654321',
             'website': 'https://anothercourier.example.com',
@@ -110,16 +107,15 @@ class TestWmsCourier(TransactionCase):
         })
 
         self.assertEqual(company.name, 'Another Courier Company')
-        self.assertEqual(company.code, 'ACC002')
+        self.assertEqual(company.owner_code, 'ACC002')
         self.assertEqual(company.contact_email, 'contact@anothercourier.com')
         self.assertTrue(company.supports_insurance)
         self.assertTrue(company.active)
-
     def test_courier_service_creation(self):
         """Test creation of courier service records"""
         service = self.WmsCourierService.create({
             'name': 'Test Standard Service',
-            'code': 'TSS002',
+            'owner_code': 'TSS002',
             'courier_company_id': self.courier_company.id,
             'service_type': 'standard',
             'base_cost': 3.0,
@@ -128,24 +124,22 @@ class TestWmsCourier(TransactionCase):
         })
 
         self.assertEqual(service.name, 'Test Standard Service')
-        self.assertEqual(service.code, 'TSS002')
+        self.assertEqual(service.owner_code, 'TSS002')
         self.assertEqual(service.courier_company_id.id, self.courier_company.id)
         self.assertEqual(service.service_type, 'standard')
         self.assertEqual(service.base_cost, 3.0)
         self.assertTrue(service.active)
-
     def test_courier_service_constraints(self):
         """Test courier service constraints"""
         # Test that service_type is required
         with self.assertRaises(ValidationError):
             self.WmsCourierService.create({
                 'name': 'Invalid Service',
-                'code': 'IS003',
+                'owner_code': 'IS003',
                 'courier_company_id': self.courier_company.id,
                 'service_type': None,  # This should cause validation error
                 'base_cost': 5.0,
             })
-
     def test_shipment_order_creation(self):
         """Test creation of shipment order records"""
         shipment = self.WmsShipmentOrder.create({
@@ -202,7 +196,6 @@ class TestWmsCourier(TransactionCase):
         shipment.action_deliver_shipment()
         self.assertEqual(shipment.state, 'delivered')
         self.assertIsNotNone(shipment.date_delivered)
-
     def test_shipment_order_cost_calculation(self):
         """Test shipment order cost calculation"""
         shipment = self.WmsShipmentOrder.create({
@@ -220,7 +213,6 @@ class TestWmsCourier(TransactionCase):
         # Total cost should be 5.0 + 6.0 + 5.0 + 2.0 = 18.0
         expected_total = 5.0 + 6.0 + 5.0 + 2.0
         self.assertEqual(shipment.total_cost, expected_total)
-
     def test_shipment_product_line_creation(self):
         """Test creation of shipment product line records"""
         shipment = self.WmsShipmentOrder.create({
@@ -293,7 +285,6 @@ class TestWmsCourier(TransactionCase):
         # Total value should be (5 * 10) + (3 * 20) = 110
         expected_total = 50.0 + 60.0
         self.assertEqual(shipment.total_value, expected_total)
-
     def test_shipment_tracking(self):
         """Test shipment tracking functionality"""
         shipment = self.WmsShipmentOrder.create({
@@ -313,7 +304,6 @@ class TestWmsCourier(TransactionCase):
         self.assertIsInstance(action, dict)
         self.assertEqual(action['type'], 'ir.actions.act_url')
         self.assertIn('TCC123456789', action['url'])
-
     def test_onchange_courier_company(self):
         """Test onchange method for courier company"""
         shipment = self.WmsShipmentOrder.new({
@@ -325,7 +315,6 @@ class TestWmsCourier(TransactionCase):
         if result:
             self.assertIn('domain', result)
             self.assertIn('courier_service_id', result['domain'])
-
     def test_shipment_order_cancellation(self):
         """Test cancellation of shipment orders"""
         shipment = self.WmsShipmentOrder.create({
@@ -344,7 +333,6 @@ class TestWmsCourier(TransactionCase):
         # since there's no dedicated cancel action
         shipment.write({'state': 'cancelled'})
         self.assertEqual(shipment.state, 'cancelled')
-
     def test_shipment_order_insurance_features(self):
         """Test insurance and special service features"""
         shipment = self.WmsShipmentOrder.create({
@@ -365,7 +353,6 @@ class TestWmsCourier(TransactionCase):
         self.assertTrue(shipment.requires_signature)
         self.assertTrue(shipment.is_cod)
         self.assertEqual(shipment.cod_amount, 200.0)
-
     def test_courier_company_services_relationship(self):
         """Test the relationship between courier companies and services"""
         # Verify that the service is linked to the company
@@ -375,7 +362,7 @@ class TestWmsCourier(TransactionCase):
         # Create another service for the same company
         new_service = self.WmsCourierService.create({
             'name': 'Test Standard Service',
-            'code': 'TSS002',
+            'owner_code': 'TSS002',
             'courier_company_id': self.courier_company.id,
             'service_type': 'standard',
             'base_cost': 3.0,

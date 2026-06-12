@@ -34,7 +34,6 @@ class TmsRouteStopAdjustWizard(models.TransientModel):
         if self.env.context.get('active_id') and self.env.context.get('active_model') == 'tms.route.stop':
             res['stop_id'] = self.env.context.get('active_id')
         return res
-
     def action_adjust_stop(self):
         self.ensure_one()
         if self.stop_id:

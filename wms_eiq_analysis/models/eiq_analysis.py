@@ -80,7 +80,6 @@ class WmsEiqAnalysis(models.Model):
         for analysis in self:
             if analysis.period_start and analysis.period_end and analysis.period_start > analysis.period_end:
                 raise ValidationError(_('Analysis period start date cannot be later than end date.'))
-
     def action_generate_analysis(self):
         """Generate EIQ analysis"""
         for analysis in self:
@@ -114,7 +113,6 @@ class WmsEiqAnalysis(models.Model):
                 'recommendations': analysis._generate_recommendations(stats),
                 'state': 'generated'
             })
-
     def _calculate_eiq_stats(self):
         """Calculate EIQ statistics"""
         self.ensure_one()
@@ -238,7 +236,6 @@ class WmsEiqAnalysis(models.Model):
             'avg_orders_per_item': avg_orders_per_item,
             'detailed_stats': detailed_stats
         }
-
     def _get_operations_for_analysis(self):
         """根据分析类型获取相关的操作数据"""
         domain = [
@@ -277,7 +274,6 @@ class WmsEiqAnalysis(models.Model):
         # 去除重复ID并获取记录
         unique_ops = list(set(operations))
         return self.env['stock.picking'].browse(unique_ops)
-
     def _calculate_distribution(self, values):
         """计算数值分布"""
         if not values:
@@ -290,7 +286,6 @@ class WmsEiqAnalysis(models.Model):
             'total': sum(values),
             'count': len(values)
         }
-
     def _analyze_items_per_order(self, orders):
         """分析每订单品项数"""
         if not orders:
@@ -306,7 +301,6 @@ class WmsEiqAnalysis(models.Model):
             'high_complexity_orders': len([c for c in item_counts if c > 10]),  # 超过10个品项的订单
             'distribution': self._get_frequency_distribution(item_counts)
         }
-
     def _analyze_orders_per_item(self, items):
         """分析每品项订单数"""
         if not items:
@@ -321,7 +315,6 @@ class WmsEiqAnalysis(models.Model):
             'high_frequency_items': len([c for c in order_counts if c > 10]),  # 10个订单以上的品项
             'distribution': self._get_frequency_distribution(order_counts)
         }
-
     def _get_frequency_distribution(self, values):
         """获取频次分布"""
         from collections import Counter
@@ -374,7 +367,6 @@ class WmsEiqAnalysis(models.Model):
             })
 
         return abc_analysis
-
     def _format_analysis_results(self, stats):
         """Format analysis results to HTML"""
         html = """
@@ -455,7 +447,6 @@ class WmsEiqAnalysis(models.Model):
         )
 
         return html
-
     def _generate_recommendations(self, stats):
         """Generate optimization recommendations"""
         recommendations = []
@@ -522,7 +513,6 @@ class WmsEiqAnalysisReport(models.TransientModel):
         ('weighted', 'Weighted Statistics'),
         ('advanced', 'Advanced Analysis'),
     ], string='Calculation Method', default='simple')
-
     def action_generate_report(self):
         """Generate EIQ analysis report"""
         # Create analysis record

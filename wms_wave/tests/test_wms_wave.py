@@ -10,7 +10,7 @@ class TestWmsWave(TransactionCase):
         # Create test data
         self.test_owner = self.env['wms.owner'].create({
             'name': 'Test Owner',
-            'code': 'TEST',
+            'owner_code': 'TEST',
             'is_warehouse_owner': True,
         })
 
@@ -32,12 +32,11 @@ class TestWmsWave(TransactionCase):
             'default_location_src_id': self.test_location.id,
             'default_location_dest_id': self.test_location.id,
         })
-
     def test_create_wave_rule(self):
         """Test creating a WMS wave rule"""
         wave_rule = self.env['wms.wave.rule'].create({
             'name': 'Test Wave Rule',
-            'code': 'TWR001',
+            'owner_code': 'TWR001',
             'picking_type_id': self.test_picking_type.id,
             'owner_id': self.test_owner.id,
             'priority_threshold': 1,
@@ -47,11 +46,10 @@ class TestWmsWave(TransactionCase):
         })
 
         self.assertEqual(wave_rule.name, 'Test Wave Rule')
-        self.assertEqual(wave_rule.code, 'TWR001')
+        self.assertEqual(wave_rule.owner_code, 'TWR001')
         self.assertEqual(wave_rule.max_pickings_per_wave, 20)
         self.assertTrue(wave_rule.auto_create)
         self.assertEqual(wave_rule.schedule_cron, '0 8 * * 1')
-
     def test_create_wave_picking_batch(self):
         """Test creating a wave picking batch with extended fields"""
         wave_batch = self.env['stock.picking.batch'].create({
@@ -70,7 +68,6 @@ class TestWmsWave(TransactionCase):
         self.assertEqual(wave_batch.assigned_user_id.id, self.test_user.id)
         self.assertEqual(wave_batch.status_progress, 0.0)
         self.assertTrue(wave_batch.is_automatic)
-
     def test_wave_rule_picking_type(self):
         """Test that wave rules work with picking types"""
         wave_rule = self.env['wms.wave.rule'].create({
@@ -82,7 +79,6 @@ class TestWmsWave(TransactionCase):
 
         self.assertEqual(wave_rule.picking_type_id.id, self.test_picking_type.id)
         self.assertEqual(wave_rule.owner_id.id, self.test_owner.id)
-
     def test_wave_progress_calculation(self):
         """Test wave progress calculation"""
         wave_batch = self.env['stock.picking.batch'].create({
@@ -96,7 +92,6 @@ class TestWmsWave(TransactionCase):
 
         # Simulate adding pickings and changing their states to affect progress
         # (This would normally be handled by computed fields in the actual model)
-
     def test_wave_priority_handling(self):
         """Test that wave priorities are properly handled"""
         wave_batch = self.env['stock.picking.batch'].create({
@@ -116,12 +111,11 @@ class TestWmsWave(TransactionCase):
 
         self.assertEqual(wave_batch_low.wave_priority, 'low')
         self.assertNotEqual(wave_batch.wave_priority, wave_batch_low.wave_priority)
-
     def test_wave_ownership_isolation(self):
         """Test that waves are properly isolated by owner"""
         owner2 = self.env['wms.owner'].create({
             'name': 'Second Owner',
-            'code': 'SO',
+            'owner_code': 'SO',
             'is_warehouse_owner': True,
         })
 

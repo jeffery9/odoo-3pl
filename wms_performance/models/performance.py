@@ -160,7 +160,6 @@ class WmsPerformanceReport(models.Model):
         if vals.get('report_code', _('New')) == _('New'):
             vals['report_code'] = self.env['ir.sequence'].next_by_code('wms.performance.report') or _('New')
         return super().create(vals)
-
     def action_generate_report(self):
         """Generate performance report"""
         for report in self:
@@ -196,7 +195,6 @@ class WmsPerformanceReport(models.Model):
                 'indicators_below_target': performance_data.get('indicators_below_target', 0),
                 'status': 'generated'
             })
-
     def _calculate_performance_metrics(self):
         """Calculate all performance metrics"""
         metrics = {
@@ -219,7 +217,6 @@ class WmsPerformanceReport(models.Model):
             'indicators_above_target': len([s for s in valid_scores if s >= 80]),  # Assuming 80% is target
             'indicators_below_target': len([s for s in valid_scores if s < 80]),
         }
-
     def _calculate_throughput_metrics(self):
         """Calculate throughput-related metrics"""
         # Count operations in the period
@@ -246,7 +243,6 @@ class WmsPerformanceReport(models.Model):
             'score': score,
             'trend': 'up' if total_operations > target_throughput * 0.9 else 'down'
         }
-
     def _calculate_efficiency_metrics(self):
         """Calculate efficiency-related metrics"""
         # Example: Calculate pick/pack efficiency
@@ -282,7 +278,6 @@ class WmsPerformanceReport(models.Model):
             'score': score,
             'trend': 'up' if avg_processing_time < target_time else 'down'
         }
-
     def _calculate_quality_metrics(self):
         """Calculate quality-related metrics"""
         # Example: Calculate accuracy based on adjustments and errors
@@ -309,7 +304,6 @@ class WmsPerformanceReport(models.Model):
             'score': quality_rate,
             'trend': 'up' if quality_rate > 95 else 'stable'
         }
-
     def _get_total_operations(self):
         """Get total operations for quality calculation"""
         operations = self.env['stock.picking'].search([
@@ -320,7 +314,6 @@ class WmsPerformanceReport(models.Model):
             ('picking_type_id.warehouse_id', '=', self.warehouse_id.id),
         ])
         return len(operations)
-
     def _calculate_cost_metrics(self):
         """Calculate cost-related metrics"""
         # Example: Calculate cost per operation
@@ -339,7 +332,6 @@ class WmsPerformanceReport(models.Model):
             'score': score,
             'trend': 'up' if actual_cost_per_op < target_cost_per_op else 'down'
         }
-
     def _calculate_safety_metrics(self):
         """Calculate safety-related metrics"""
         # This would connect to safety management module
@@ -361,7 +353,6 @@ class WmsPerformanceReport(models.Model):
             'score': score,
             'trend': 'up' if total_incidents < target_incidents else 'down'
         }
-
     def _calculate_service_metrics(self):
         """Calculate service-related metrics"""
         operations = self.env['stock.picking'].search([
@@ -391,7 +382,6 @@ class WmsPerformanceReport(models.Model):
             'score': score,
             'trend': 'up' if service_rate > 90 else 'stable'
         }
-
     def _generate_executive_summary(self, performance_data):
         """Generate executive summary in HTML"""
         html = f"""
@@ -418,7 +408,6 @@ class WmsPerformanceReport(models.Model):
         </div>
         """
         return html
-
     def _generate_detailed_analysis(self, performance_data):
         """Generate detailed analysis in HTML"""
         metrics = performance_data['metrics']
@@ -438,7 +427,6 @@ class WmsPerformanceReport(models.Model):
 
         html += "</div>"
         return html
-
     def _generate_recommendations(self, performance_data):
         """Generate improvement recommendations"""
         recommendations = []
@@ -468,7 +456,6 @@ class WmsPerformanceReport(models.Model):
         html += "</ul></div>"
 
         return html
-
     def _generate_trends(self):
         """Generate performance trends"""
         # Get previous periods to calculate trends
@@ -485,7 +472,6 @@ class WmsPerformanceReport(models.Model):
         </div>
         """
         return html
-
     def _generate_alerts(self):
         """Generate performance alerts"""
         performance_data = self._calculate_performance_metrics()
@@ -574,7 +560,6 @@ class WmsOperatorPerformance(models.Model):
                 vals['accuracy_rate'] = 100 if errors == 0 else 0
 
         return super().create(vals)
-
     def calculate_performance_score(self):
         """Calculate overall performance score"""
         for record in self:
@@ -604,7 +589,6 @@ class WmsPerformanceWizard(models.TransientModel):
         ('annual', 'Annual'),
         ('custom', 'Custom'),
     ], string='Report Type', required=True, default='monthly')
-
     def action_generate_report(self):
         """Generate performance report"""
         # Create the report

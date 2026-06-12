@@ -29,7 +29,6 @@ class WmsStorageArea(models.Model):
     used_capacity = fields.Float('Used Capacity (CBM)', compute='_compute_used_capacity')
     utilization_rate = fields.Float('Utilization Rate (%)', compute='_compute_utilization_rate')
     active = fields.Boolean('Active', default=True)
-
     def _compute_used_capacity(self):
         for area in self:
             area.used_capacity = 0.0  # This would be computed based on actual inventory

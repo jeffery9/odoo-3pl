@@ -40,7 +40,6 @@ class StockTraceabilityReportLine(models.TransientModel):
         store=False
     )
     lot_product_qty = fields.Float('Lot Quantity', related='lot_id.product_qty', readonly=True)
-
     def _compute_lot_expiry_date(self):
         """Safely compute lot expiry date, handling cases where expiry_date field doesn't exist"""
         for line in self:

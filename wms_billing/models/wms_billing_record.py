@@ -62,7 +62,6 @@ class WmsBillingRecord(models.Model):
 
     def action_confirm(self):
         self.write({'state': 'confirmed'})
-
     def action_create_invoice(self):
         """Create an invoice for the billing records"""
         for record in self:
@@ -94,9 +93,7 @@ class WmsBillingRecord(models.Model):
 
     def action_mark_paid(self):
         self.write({'state': 'paid'})
-
     def action_cancel(self):
         self.write({'state': 'cancelled'})
-
     def action_reset_to_draft(self):
         self.write({'state': 'draft'})

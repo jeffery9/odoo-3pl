@@ -12,7 +12,6 @@ class StockPicking(models.Model):
     def _compute_container_count(self):
         for picking in self:
             picking.container_count = len(picking.container_ids)
-
     def action_scan_container(self):
         """RF scan container action for picking"""
         self.ensure_one()

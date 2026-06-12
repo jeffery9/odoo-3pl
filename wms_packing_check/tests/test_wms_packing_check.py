@@ -10,7 +10,7 @@ class TestWmsPackingCheck(TransactionCase):
         # Create test data
         self.test_owner = self.env['wms.owner'].create({
             'name': 'Test Packing Check Owner',
-            'code': 'TPCO',
+            'owner_code': 'TPCO',
             'is_warehouse_owner': True,
         })
 
@@ -29,8 +29,7 @@ class TestWmsPackingCheck(TransactionCase):
 
         self.test_product = self.env['product.product'].create({
             'name': 'Test Product for Packing Check',
-            'type': 'product',
-            'categ_id': self.env.ref('product.product_category_all').id,
+                        'categ_id': self.env.ref('product.product_category_all').id,
         })
 
         self.test_uom = self.env.ref('uom.product_uom_unit')
@@ -54,7 +53,6 @@ class TestWmsPackingCheck(TransactionCase):
             'location_id': self.test_location.id,
             'location_dest_id': self.test_location.id,
         })
-
     def test_create_packing_check(self):
         """Test creating a packing check record"""
         packing_check = self.env['wms.packing.check'].create({
@@ -68,7 +66,6 @@ class TestWmsPackingCheck(TransactionCase):
         self.assertEqual(packing_check.owner_id.id, self.test_owner.id)
         self.assertEqual(packing_check.picking_id.id, self.test_picking.id)
         self.assertEqual(packing_check.status, 'draft')
-
     def test_packing_check_required_items(self):
         """Test adding required items to packing check"""
         packing_check = self.env['wms.packing.check'].create({
@@ -88,7 +85,6 @@ class TestWmsPackingCheck(TransactionCase):
         self.assertEqual(len(packing_check.required_checks), 1)
         self.assertEqual(packing_check.required_checks[0].product_id.id, self.test_product.id)
         self.assertEqual(packing_check.required_checks[0].expected_quantity, 50.0)
-
     def test_packing_check_performed_items(self):
         """Test adding performed items to packing check"""
         packing_check = self.env['wms.packing.check'].create({
@@ -110,7 +106,6 @@ class TestWmsPackingCheck(TransactionCase):
         self.assertEqual(packing_check.performed_checks[0].product_id.id, self.test_product.id)
         self.assertEqual(packing_check.performed_checks[0].checked_quantity, 45.0)
         self.assertEqual(packing_check.performed_checks[0].result, 'pass')
-
     def test_packing_check_status_flow(self):
         """Test the status flow of packing check records"""
         packing_check = self.env['wms.packing.check'].create({
@@ -138,7 +133,6 @@ class TestWmsPackingCheck(TransactionCase):
         # Complete the packing check (should pass since all items pass)
         packing_check.action_complete_check()
         self.assertEqual(packing_check.status, 'passed')
-
     def test_packing_check_with_failed_items(self):
         """Test packing check with failed items"""
         packing_check = self.env['wms.packing.check'].create({
@@ -174,7 +168,6 @@ class TestWmsPackingCheck(TransactionCase):
         # Since we have 50% failure rate, it should fail based on the 95% threshold
         self.assertEqual(packing_check.status, 'failed')
         self.assertEqual(packing_check.pass_rate, 50.0)
-
     def test_packing_check_totals_computation(self):
         """Test that totals are computed correctly"""
         packing_check = self.env['wms.packing.check'].create({
@@ -242,7 +235,6 @@ class TestWmsPackingCheck(TransactionCase):
         # Manually reject the packing check
         packing_check2.action_reject_check()
         self.assertEqual(packing_check2.status, 'failed')
-
     def test_packing_check_wizard(self):
         """Test creating performed checks using wizard"""
         packing_check = self.env['wms.packing.check'].create({
@@ -266,7 +258,6 @@ class TestWmsPackingCheck(TransactionCase):
         self.assertEqual(len(packing_check.performed_checks), 1)
         self.assertEqual(packing_check.performed_checks[0].checked_quantity, 25.0)
         self.assertEqual(packing_check.performed_checks[0].result, 'pass')
-
     def test_start_packing_check_wizard(self):
         """Test creating packing check using start wizard"""
         wizard = self.env['wms.start.packing.check.wizard'].create({
@@ -284,12 +275,11 @@ class TestWmsPackingCheck(TransactionCase):
         # Get the created packing check
         packing_check = self.env['wms.packing.check'].browse(result['res_id'])
         self.assertEqual(packing_check.status, 'in_progress')
-
     def test_packing_check_ownership_isolation(self):
         """Test that packing check records are properly isolated by owner"""
         owner2 = self.env['wms.owner'].create({
             'name': 'Second Packing Check Owner',
-            'code': 'SPCO',
+            'owner_code': 'SPCO',
             'is_warehouse_owner': True,
         })
 

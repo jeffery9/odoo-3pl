@@ -24,8 +24,6 @@ class WmsPutawayRule(models.Model):
         'stock.storage.category', 'Storage Category', check_company=True,
         help="Native Odoo 18 storage category for enhanced putaway logic"
     )
-
-    @api.model
     def _get_putaway_strategy(self, product, quantity, location, package=None, from_move_id=None, lot=None):
         """Enhanced to include native Odoo storage categories with 3PL-specific logic and lot tracking"""
 
@@ -91,7 +89,6 @@ class WmsPutawayRule(models.Model):
                         return rule.location_out_id
 
         return False
-
     def _check_lot_compatibility(self, lot, location):
         """Check if a specific lot is compatible with this location considering 3PL requirements"""
         # Check if lot belongs to the same owner as the location (if owner is specified)
@@ -105,7 +102,6 @@ class WmsPutawayRule(models.Model):
 
         # Check if location can accommodate this specific lot
         return True
-
     def _is_storage_category_compatible(self, location, product, quantity, package, storage_category):
         """Check if location with storage category can accept the product/package"""
         # Check max weight if applicable
@@ -159,7 +155,6 @@ class WmsPutawayRule(models.Model):
                 return False
 
         return True
-
     def _location_has_capacity(self, location, product, quantity, max_capacity):
         """Check if location has capacity based on custom max_capacity field"""
         if max_capacity and max_capacity > 0:

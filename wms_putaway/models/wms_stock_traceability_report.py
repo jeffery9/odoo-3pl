@@ -17,7 +17,6 @@ class WmsStockTraceabilityReport(models.TransientModel):
         ('B', 'B'),
         ('C', 'C')
     ], 'ABC Category')
-
     def get_lines(self, line_id=False, **kw):
         """Override native method to include 3PL-specific data"""
         # Call the parent method to get the standard Odoo traceability data
@@ -46,7 +45,6 @@ class WmsStockTraceabilityReport(models.TransientModel):
             lines = filtered_lines
 
         return lines
-
     def _make_dict_move(self, level, parent_id, move_line, unfoldable=False):
         """Override to include 3PL-specific data in the traceability report"""
         # Call the parent method to get the standard data
@@ -60,7 +58,6 @@ class WmsStockTraceabilityReport(models.TransientModel):
             data['abc_category'] = move_line.abc_category or ''
 
         return result
-
     def _final_vals_to_lines(self, final_vals, level):
         """Override to include 3PL-specific columns in the final output"""
         # Call the parent method to get the standard data
@@ -85,8 +82,6 @@ class WmsStockTraceabilityReport(models.TransientModel):
                     line['columns'].append(line.get('abc_category', ''))
 
         return lines
-
-    @api.model
     def _lines(self, line_id=False, model_id=False, model=False, level=0, move_lines=None, **kw):
         """Override to include 3PL-specific filtering"""
         # Call the parent method to get the standard lines

@@ -69,7 +69,6 @@ class WmsContainer(models.Model):
             'target': 'new',
             'context': {'default_container_id': self.id}
         }
-
     def action_scan_container(self):
         """RF scan container action"""
         self.ensure_one()
@@ -81,7 +80,6 @@ class WmsContainer(models.Model):
             'target': 'new',
             'context': {'default_container_barcode': self.barcode}
         }
-
     def action_pack_contents(self):
         """Pack items into container"""
         self.ensure_one()
@@ -120,7 +118,6 @@ class WmsContainerLocationWizard(models.TransientModel):
 
     container_id = fields.Many2one('wms.container', 'Container', readonly=True)
     location_id = fields.Many2one('stock.location', 'New Location', required=True)
-
     def action_assign_location(self):
         self.ensure_one()
         self.container_id.location_id = self.location_id
@@ -158,7 +155,6 @@ class WmsContainerPackWizard(models.TransientModel):
     lot_id = fields.Many2one('stock.lot', 'Lot/Serial')
     quantity = fields.Float('Quantity', required=True, default=1.0)
     picking_id = fields.Many2one('stock.picking', 'Source Picking')
-
     def action_pack_product(self):
         self.ensure_one()
         self.env['wms.container.content'].create({

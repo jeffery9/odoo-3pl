@@ -24,13 +24,13 @@ class TestWmsLocationUsage(TransactionCase):
         # Create a test warehouse
         self.warehouse = self.Warehouse.create({
             'name': 'Test Warehouse',
-            'code': 'TST'
+            'owner_code': 'TST'
         })
 
         # Create a test owner
         self.owner = self.Owner.create({
             'name': 'Test Owner',
-            'code': 'TO',
+            'owner_code': 'TO',
             'email': 'test@example.com'
         })
 
@@ -42,8 +42,7 @@ class TestWmsLocationUsage(TransactionCase):
         # Create test products
         self.product1 = self.Product.create({
             'name': 'Test Product 1',
-            'type': 'product',
-            'default_code': 'TEST001',
+                        'default_code': 'TEST001',
             'weight': 1.0,
             'volume': 0.01,
             'length': 10,
@@ -53,8 +52,7 @@ class TestWmsLocationUsage(TransactionCase):
 
         self.product2 = self.Product.create({
             'name': 'Test Product 2',
-            'type': 'product',
-            'default_code': 'TEST002',
+                        'default_code': 'TEST002',
             'weight': 2.0,
             'volume': 0.02,
             'length': 15,
@@ -87,7 +85,6 @@ class TestWmsLocationUsage(TransactionCase):
             'state': 'done',
             'date': datetime.now() - timedelta(days=1)
         })
-
     def test_location_usage_creation(self):
         """Test creation of location usage records"""
         location_usage = self.WmsLocationUsage.create({
@@ -104,7 +101,6 @@ class TestWmsLocationUsage(TransactionCase):
         self.assertEqual(location_usage.warehouse_id.id, self.warehouse.id)
         self.assertEqual(location_usage.analysis_type, 'all')
         self.assertEqual(location_usage.state, 'draft')
-
     def test_location_usage_period_constraint(self):
         """Test location usage period validation"""
         # Test that start date cannot be after end date
@@ -117,7 +113,6 @@ class TestWmsLocationUsage(TransactionCase):
                 'warehouse_id': self.warehouse.id,
                 'analysis_type': 'all',
             })
-
     def test_location_usage_methods_execution(self):
         """Test location usage methods execution"""
         location_usage = self.WmsLocationUsage.create({
@@ -147,7 +142,6 @@ class TestWmsLocationUsage(TransactionCase):
         # Test usage trend calculation
         usage_trend = location_usage._calculate_usage_trend()
         self.assertIsInstance(usage_trend, list)
-
     def test_location_usage_generation(self):
         """Test location usage generation"""
         location_usage = self.WmsLocationUsage.create({
@@ -172,7 +166,6 @@ class TestWmsLocationUsage(TransactionCase):
 
         # Check that stats have been calculated
         self.assertIsNotNone(location_usage.recommendations)
-
     def test_location_usage_report_wizard(self):
         """Test location usage report wizard"""
         wizard = self.WmsLocationUsageReport.create({
@@ -188,7 +181,6 @@ class TestWmsLocationUsage(TransactionCase):
         self.assertEqual(wizard.owner_id.id, self.owner.id)
         self.assertEqual(wizard.warehouse_id.id, self.warehouse.id)
         self.assertEqual(wizard.analysis_type, 'all')
-
     def test_location_utilization_creation(self):
         """Test creation of location utilization records"""
         location_usage = self.WmsLocationUsage.create({
@@ -213,7 +205,6 @@ class TestWmsLocationUsage(TransactionCase):
         self.assertEqual(utilization.location_id.id, self.location1.id)
         self.assertTrue(utilization.is_occupied)
         self.assertEqual(utilization.usage_rate, 50.0)
-
     def test_efficiency_category_computation(self):
         """Test efficiency category computation"""
         location_usage = self.WmsLocationUsage.create({
@@ -256,7 +247,6 @@ class TestWmsLocationUsage(TransactionCase):
             'usage_rate': 0.0,
         })
         self.assertEqual(utilization_unused.efficiency_category, 'unused')
-
     def test_recommendations_generation(self):
         """Test recommendations generation"""
         location_usage = self.WmsLocationUsage.create({

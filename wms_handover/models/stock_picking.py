@@ -11,7 +11,6 @@ class StockPicking(models.Model):
     def _compute_handover_count(self):
         for picking in self:
             picking.handover_count = len(picking.handover_ids)
-
     def action_create_handover(self):
         """Create a handover session for this picking"""
         self.ensure_one()
@@ -23,7 +22,6 @@ class StockPicking(models.Model):
             'target': 'new',
             'context': {'default_picking_id': self.id}
         }
-
     def action_view_handovers(self):
         """View handovers for this picking"""
         self.ensure_one()

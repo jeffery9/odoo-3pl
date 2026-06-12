@@ -10,20 +10,20 @@ class TestWmsFinanceIntegration(TransactionCase):
         # Create test data
         self.test_owner = self.env['wms.owner'].create({
             'name': 'Test Finance Integration Owner',
-            'code': 'TFIO',
+            'owner_code': 'TFIO',
             'is_warehouse_owner': True,
         })
 
         self.test_cost_center = self.env['wms.cost.center'].create({
             'name': 'Test Cost Center',
-            'code': 'TCC',
+            'owner_code': 'TCC',
             'owner_id': self.test_owner.id,
             'is_active': True,
         })
 
         self.test_service_type = self.env['wms.service.type'].create({
             'name': 'Test Storage Service',
-            'code': 'TSS',
+            'owner_code': 'TSS',
             'category': 'storage',
             'default_rate': 5.0,
             'rate_unit': 'day',
@@ -46,38 +46,35 @@ class TestWmsFinanceIntegration(TransactionCase):
             'location_id': self.env.ref('stock.stock_location_stock').id,
             'location_dest_id': self.env.ref('stock.stock_location_customers').id,
         })
-
     def test_create_cost_center(self):
         """Test creating cost centers"""
         cost_center = self.env['wms.cost.center'].create({
             'name': 'Test Cost Center',
-            'code': 'TCC2',
+            'owner_code': 'TCC2',
             'owner_id': self.test_owner.id,
             'is_active': True,
         })
 
         self.assertEqual(cost_center.name, 'Test Cost Center')
-        self.assertEqual(cost_center.code, 'TCC2')
+        self.assertEqual(cost_center.owner_code, 'TCC2')
         self.assertEqual(cost_center.owner_id.id, self.test_owner.id)
         self.assertTrue(cost_center.is_active)
-
     def test_create_service_type(self):
         """Test creating service types"""
         service_type = self.env['wms.service.type'].create({
             'name': 'Test Handling Service',
-            'code': 'THS',
+            'owner_code': 'THS',
             'category': 'handling',
             'default_rate': 10.0,
             'rate_unit': 'item',
         })
 
         self.assertEqual(service_type.name, 'Test Handling Service')
-        self.assertEqual(service_type.code, 'THS')
+        self.assertEqual(service_type.owner_code, 'THS')
         self.assertEqual(service_type.category, 'handling')
         self.assertEqual(service_type.default_rate, 10.0)
         self.assertEqual(service_type.rate_unit, 'item')
         self.assertTrue(service_type.is_active)
-
     def test_create_service_pricing(self):
         """Test creating service pricing"""
         service_pricing = self.env['wms.service.pricing'].create({
@@ -93,7 +90,6 @@ class TestWmsFinanceIntegration(TransactionCase):
         self.assertEqual(service_pricing.rate, 7.5)
         self.assertEqual(service_pricing.effective_date, fields.Date.today())
         self.assertTrue(service_pricing.is_active)
-
     def test_create_financial_transaction(self):
         """Test creating financial transactions"""
         transaction = self.env['wms.financial.transaction'].create({
@@ -134,7 +130,6 @@ class TestWmsFinanceIntegration(TransactionCase):
         transaction.action_post()
         self.assertEqual(transaction.status, 'posted')
         self.assertTrue(transaction.is_posted)
-
     def test_financial_transaction_with_tax(self):
         """Test financial transaction with tax amount"""
         transaction = self.env['wms.financial.transaction'].create({
@@ -154,7 +149,7 @@ class TestWmsFinanceIntegration(TransactionCase):
         """Test creating cost allocations"""
         target_cost_center = self.env['wms.cost.center'].create({
             'name': 'Target Cost Center',
-            'code': 'TCC3',
+            'owner_code': 'TCC3',
             'owner_id': self.test_owner.id,
         })
 
@@ -174,12 +169,11 @@ class TestWmsFinanceIntegration(TransactionCase):
         self.assertEqual(cost_allocation.percentage, 50.0)
         self.assertEqual(cost_allocation.amount, 1000.0)
         self.assertEqual(cost_allocation.status, 'draft')
-
     def test_cost_allocation_status_flow(self):
         """Test cost allocation status flow"""
         target_cost_center = self.env['wms.cost.center'].create({
             'name': 'Target Cost Center 2',
-            'code': 'TCC4',
+            'owner_code': 'TCC4',
             'owner_id': self.test_owner.id,
         })
 
@@ -201,7 +195,6 @@ class TestWmsFinanceIntegration(TransactionCase):
         # Post the allocation
         cost_allocation.action_post()
         self.assertEqual(cost_allocation.status, 'posted')
-
     def test_create_financial_report(self):
         """Test creating financial reports"""
         financial_report = self.env['wms.financial.report'].create({
@@ -215,7 +208,6 @@ class TestWmsFinanceIntegration(TransactionCase):
         self.assertEqual(financial_report.name, 'Test Financial Report')
         self.assertEqual(financial_report.owner_id.id, self.test_owner.id)
         self.assertEqual(financial_report.status, 'draft')
-
     def test_financial_report_status_flow(self):
         """Test financial report status flow"""
         financial_report = self.env['wms.financial.report'].create({
@@ -234,7 +226,6 @@ class TestWmsFinanceIntegration(TransactionCase):
         # Validate the report
         financial_report.action_validate_report()
         self.assertEqual(financial_report.status, 'validated')
-
     def test_create_invoice_integration(self):
         """Test creating invoice integration records"""
         invoice = self.env['wms.invoice.integration'].create({
@@ -270,7 +261,6 @@ class TestWmsFinanceIntegration(TransactionCase):
         # Mark as paid
         invoice.action_mark_paid()
         self.assertEqual(invoice.status, 'paid')
-
     def test_financial_transaction_computed_fields(self):
         """Test computed fields in financial transactions"""
         transaction = self.env['wms.financial.transaction'].create({
@@ -312,7 +302,7 @@ class TestWmsFinanceIntegration(TransactionCase):
                 'owner_id': self.test_owner.id,
                 'service_type_id': self.env['wms.service.type'].create({
                     'name': 'Test Handling Service',
-                    'code': 'THS2',
+                    'owner_code': 'THS2',
                     'category': 'handling',
                     'default_rate': 8.0,
                     'rate_unit': 'item',
@@ -355,7 +345,6 @@ class TestWmsFinanceIntegration(TransactionCase):
                 'effective_date': date.today().replace(year=date.today().year + 1),  # Future date
                 'expiry_date': date.today(),  # Past relative to effective
             })
-
     def test_financial_transaction_with_related_model(self):
         """Test financial transaction linked to related model"""
         transaction = self.env['wms.financial.transaction'].create({

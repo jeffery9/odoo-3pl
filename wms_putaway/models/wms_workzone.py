@@ -25,7 +25,6 @@ class WmsWorkzone(models.Model):
     current_utilization = fields.Float('Current Utilization (CBM)')
     utilization_rate = fields.Float('Utilization Rate (%)', compute='_compute_utilization_rate')
     active = fields.Boolean('Active', default=True)
-
     def _compute_utilization_rate(self):
         for zone in self:
             if zone.capacity > 0:

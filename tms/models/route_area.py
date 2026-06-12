@@ -75,7 +75,6 @@ class RouteArea(models.Model):
         if 'code' not in vals or not vals['code']:
             vals['code'] = self._generate_code_from_name(vals.get('name', ''))
         return super().create(vals)
-
     def _generate_code_from_name(self, name):
         """Generate code from area name"""
         if name:

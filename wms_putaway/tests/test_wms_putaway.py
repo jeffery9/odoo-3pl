@@ -10,13 +10,12 @@ class TestWmsPutaway(TransactionCase):
         # Create test data
         self.test_product = self.env['product.product'].create({
             'name': 'Test Product',
-            'type': 'product',
-            'categ_id': self.env.ref('product.product_category_all').id,
+                        'categ_id': self.env.ref('product.product_category_all').id,
         })
 
         self.test_owner = self.env['wms.owner'].create({
             'name': 'Test Owner',
-            'code': 'TEST',
+            'owner_code': 'TEST',
             'is_warehouse_owner': True,
         })
 
@@ -24,7 +23,6 @@ class TestWmsPutaway(TransactionCase):
             'name': 'Test Location',
             'usage': 'internal',
         })
-
     def test_create_wms_putaway_rule(self):
         """Test creating a WMS putaway rule with extended fields"""
         putaway_rule = self.env['stock.putaway.rule'].create({
@@ -41,42 +39,39 @@ class TestWmsPutaway(TransactionCase):
         self.assertEqual(putaway_rule.abc_classification, 'A')
         self.assertEqual(putaway_rule.priority, 'high')
         self.assertTrue(putaway_rule.is_active)
-
     def test_wms_storage_area(self):
         """Test creating and using WMS storage areas"""
         storage_area = self.env['wms.storage.area'].create({
             'name': 'Test Storage Area',
-            'code': 'TSA001',
+            'owner_code': 'TSA001',
             'location_id': self.test_location.id,
             'area_type': 'pallet',
             'max_capacity': 100.0,
         })
 
         self.assertEqual(storage_area.name, 'Test Storage Area')
-        self.assertEqual(storage_area.code, 'TSA001')
+        self.assertEqual(storage_area.owner_code, 'TSA001')
         self.assertEqual(storage_area.area_type, 'pallet')
         self.assertEqual(storage_area.max_capacity, 100.0)
-
     def test_wms_cargo_type(self):
         """Test creating and using WMS cargo types"""
         cargo_type = self.env['wms.cargo.type'].create({
             'name': 'Fragile Cargo',
-            'code': 'FR',
+            'owner_code': 'FR',
             'is_hazardous': False,
             'requires_special_handling': True,
             'special_handling_notes': 'Handle with care',
         })
 
         self.assertEqual(cargo_type.name, 'Fragile Cargo')
-        self.assertEqual(cargo_type.code, 'FR')
+        self.assertEqual(cargo_type.owner_code, 'FR')
         self.assertTrue(cargo_type.requires_special_handling)
         self.assertEqual(cargo_type.special_handling_notes, 'Handle with care')
-
     def test_wms_workzone(self):
         """Test creating and using WMS workzones"""
         workzone = self.env['wms.workzone'].create({
             'name': 'Receiving Workzone',
-            'code': 'RW',
+            'owner_code': 'RW',
             'location_id': self.test_location.id,
             'zone_type': 'receiving',
             'max_workers': 5,
@@ -87,7 +82,6 @@ class TestWmsPutaway(TransactionCase):
         self.assertEqual(workzone.zone_type, 'receiving')
         self.assertEqual(workzone.max_workers, 5)
         self.assertTrue(workzone.is_active)
-
     def test_putaway_rule_abc_classification(self):
         """Test that putaway rules properly handle ABC classification"""
         putaway_rule = self.env['stock.putaway.rule'].create({
@@ -108,7 +102,7 @@ class TestWmsPutaway(TransactionCase):
         """Test that putaway rules are properly isolated by owner"""
         owner2 = self.env['wms.owner'].create({
             'name': 'Second Owner',
-            'code': 'SO',
+            'owner_code': 'SO',
             'is_warehouse_owner': True,
         })
 

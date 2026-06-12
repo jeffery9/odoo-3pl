@@ -20,14 +20,13 @@ class TestOversizedPickingSplit(TransactionCase):
         # Create a test partner
         self.partner = self.env['res.partner'].create({
             'name': 'Test Customer',
-            'route_area_id': self.env['route.area'].create({'name': 'Test Area', 'code': 'TA'}).id,
+            'route_area_id': self.env['route.area'].create({'name': 'Test Area', 'owner_code': 'TA'}).id,
         })
 
         # Create a product
         self.product = self.env['product.product'].create({
             'name': 'Test Product',
-            'type': 'product',
-            'weight': 50.0,  # 50 kg per unit
+                        'weight': 50.0,  # 50 kg per unit
             'volume': 25.0,  # 25 m³ per unit
         })
 
@@ -109,7 +108,6 @@ class TestOversizedPickingSplit(TransactionCase):
                                "Each split picking should be close to vehicle weight limit")
             self.assertLessEqual(picking_volume, self.vehicle.max_volume * 1.1,
                                "Each split picking should be close to vehicle volume limit")
-
     def test_action_check_for_oversized_pickings(self):
         """Test the action_check_for_oversized_pickings method"""
         # Create a stock picking that exceeds the vehicle capacity
@@ -159,7 +157,6 @@ class TestOversizedPickingSplit(TransactionCase):
 
         # Check that the picking is identified as oversized
         self.assertTrue(len(oversized_pickings) > 0, "Should identify oversized pickings")
-
     def test_action_handle_oversized_pickings_in_route(self):
         """Test the action_handle_oversized_pickings_in_route method"""
         # Create a stock picking that exceeds the vehicle capacity
@@ -213,7 +210,6 @@ class TestOversizedPickingSplit(TransactionCase):
 
         # The original picking should be cancelled, and new pickings created
         self.assertEqual(picking.state, 'cancel', "Original oversized picking should be cancelled")
-
     def test_picking_within_capacity(self):
         """Test that pickings within capacity are not split"""
         # Create a stock picking that is within vehicle capacity

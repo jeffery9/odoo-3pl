@@ -59,7 +59,6 @@ class WmsWechatApp(models.Model):
     ], string='Connection Status', default='disconnected', readonly=True)
 
     notes = fields.Text('Notes')
-
     def get_access_token(self):
         """Get access token from WeChat API"""
         for app in self:
@@ -94,7 +93,6 @@ class WmsWechatApp(models.Model):
                         'notes': f'Error getting access token: {str(e)}'
                     })
                     return None
-
     def action_test_connection(self):
         """Test connection to WeChat API"""
         for app in self:
@@ -106,7 +104,6 @@ class WmsWechatApp(models.Model):
                 })
             else:
                 app.write({'connection_status': 'error'})
-
     def process_webhook_data(self, message_data):
         """Process incoming webhook data from WeChat"""
         self.ensure_one()
@@ -184,7 +181,6 @@ class WmsWechatUser(models.Model):
     _sql_constraints = [
         ('openid_unique', 'unique(openid)', 'OpenID must be unique!'),
     ]
-
     def sync_user_info(self, user_data):
         """Sync user information from WeChat"""
         for user in self:
@@ -203,7 +199,6 @@ class WmsWechatUser(models.Model):
                 update_vals['unsubscribe_time'] = fields.Datetime.now()
 
             user.write(update_vals)
-
     def action_login(self):
         """Handle user login through WeChat"""
         for user in self:
@@ -269,7 +264,6 @@ class WmsWechatMessage(models.Model):
     error_message = fields.Text('Error Message')
 
     notes = fields.Text('Notes')
-
     def send_message(self, openid, content, message_type='text'):
         """Send message to WeChat user"""
         for app in self.app_id:
@@ -311,15 +305,12 @@ class WmsWechatMessage(models.Model):
                     'error_message': str(e)
                 })
                 return False
-
     def mark_as_read(self):
         """Mark message as read"""
         self.write({'is_read': True})
-
     def mark_as_processed(self):
         """Mark message as processed"""
         self.write({'is_processed': True})
-
     def process_incoming_message(self, message_data):
         """Process an incoming message from WeChat"""
         for message in self:
@@ -340,7 +331,6 @@ class WmsWechatMessage(models.Model):
             incoming_message._route_message()
 
             return incoming_message
-
     def _route_message(self):
         """Route the incoming message to the appropriate handler based on content and message type"""
         for message in self:
@@ -372,7 +362,6 @@ class WmsWechatMessage(models.Model):
 
             # Mark as processed
             message.mark_as_processed()
-
     def _handle_location_message(self):
         """Handle location messages (when user shares their location)"""
         response_content = "Thank you for sharing your location. Our system can use location data for navigation and task assignment."
@@ -388,7 +377,6 @@ class WmsWechatMessage(models.Model):
             'direction': 'out',
         })
         response_message.send_message(self.sender_openid, response_content)
-
     def _handle_image_message(self):
         """Handle image messages (for example, for quality checks or reporting)"""
         response_content = "Image received. In a full implementation, this could be used for quality inspection or damage reporting."
@@ -404,7 +392,6 @@ class WmsWechatMessage(models.Model):
             'direction': 'out',
         })
         response_message.send_message(self.sender_openid, response_content)
-
     def _handle_event_message(self):
         """Handle event messages (such as subscribe/unsubscribe)"""
         # Process based on event type
@@ -416,7 +403,6 @@ class WmsWechatMessage(models.Model):
         else:
             # Default event handling
             self._handle_unrecognized_request()
-
     def _handle_subscribe_event(self):
         """Handle user subscription event"""
         # Find or create the user
@@ -443,7 +429,6 @@ class WmsWechatMessage(models.Model):
             'direction': 'out',
         })
         response_message.send_message(self.sender_openid, response_content)
-
     def _handle_unsubscribe_event(self):
         """Handle user unsubscription event"""
         # Update user subscription status
@@ -455,7 +440,6 @@ class WmsWechatMessage(models.Model):
             })
 
         _logger.info(f"User unsubscribed: {self.sender_openid}")
-
     def _handle_inventory_request(self):
         """Handle inventory-related requests"""
         # Find the associated WeChat user
@@ -490,7 +474,6 @@ class WmsWechatMessage(models.Model):
                 'direction': 'out',
             })
             response_message.send_message(self.sender_openid, f'Inventory check initiated: {inventory_check.name}. Please scan items to verify quantities.')
-
     def _handle_location_request(self):
         """Handle location-related requests"""
         response_content = "Please specify which location you're looking for. Example: 'location A01' or 'find location for product ABC123'"
@@ -506,7 +489,6 @@ class WmsWechatMessage(models.Model):
             'direction': 'out',
         })
         response_message.send_message(self.sender_openid, response_content)
-
     def _handle_picking_request(self):
         """Handle picking-related requests"""
         response_content = "Picking information: You can view your assigned picking tasks in the app. Would you like me to list them?"
@@ -522,7 +504,6 @@ class WmsWechatMessage(models.Model):
             'direction': 'out',
         })
         response_message.send_message(self.sender_openid, response_content)
-
     def _handle_help_request(self):
         """Handle help requests"""
         help_text = """
@@ -544,7 +525,6 @@ class WmsWechatMessage(models.Model):
             'direction': 'out',
         })
         response_message.send_message(self.sender_openid, help_text)
-
     def _handle_unrecognized_request(self):
         """Handle unrecognized requests"""
         default_response = "I didn't understand that command. Type 'help' for available commands."
@@ -613,7 +593,6 @@ class WmsWechatInventoryCheck(models.Model):
         if vals.get('name', _('New')) == _('New'):
             vals['name'] = self.env['ir.sequence'].next_by_code('wms.wechat.inventory.check') or _('New')
         return super().create(vals)
-
     def action_start_check(self):
         """Start the inventory check"""
         for check in self:
@@ -621,7 +600,6 @@ class WmsWechatInventoryCheck(models.Model):
                 'state': 'in_progress',
                 'date_started': fields.Datetime.now(),
             })
-
     def action_complete_check(self, results_data=None):
         """Complete the inventory check"""
         for check in self:
@@ -639,7 +617,6 @@ class WmsWechatInventoryCheck(models.Model):
                 'state': 'completed',
                 'date_completed': fields.Datetime.now(),
             })
-
     def action_cancel_check(self):
         """Cancel the inventory check"""
         for check in self:
@@ -697,7 +674,6 @@ class WmsWechatPickingNotification(models.Model):
     # Results
     response_data = fields.Text('Response Data')
     error_message = fields.Text('Error Message')
-
     def send_notification(self):
         """Send notification to WeChat user"""
         for notification in self:
@@ -723,7 +699,6 @@ class WmsWechatPickingNotification(models.Model):
                     'status': 'failed',
                     'error_message': message.error_message,
                 })
-
     def mark_as_read(self):
         """Mark notification as read"""
         for notification in self:

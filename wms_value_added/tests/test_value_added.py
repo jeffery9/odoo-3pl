@@ -26,13 +26,13 @@ class TestWmsValueAdded(TransactionCase):
         # Create a test warehouse
         self.warehouse = self.Warehouse.create({
             'name': 'Test Warehouse',
-            'code': 'TST'
+            'owner_code': 'TST'
         })
 
         # Create a test owner
         self.owner = self.Owner.create({
             'name': 'Test Owner',
-            'code': 'TO',
+            'owner_code': 'TO',
             'email': 'test@example.com'
         })
 
@@ -50,8 +50,7 @@ class TestWmsValueAdded(TransactionCase):
         # Create test products
         self.product1 = self.Product.create({
             'name': 'Test Product 1',
-            'type': 'product',
-            'default_code': 'TEST001',
+                        'default_code': 'TEST001',
             'weight': 1.0,
             'volume': 0.01,
             'length': 10,
@@ -61,8 +60,7 @@ class TestWmsValueAdded(TransactionCase):
 
         self.product2 = self.Product.create({
             'name': 'Test Product 2',
-            'type': 'product',
-            'default_code': 'TEST002',
+                        'default_code': 'TEST002',
             'weight': 2.0,
             'volume': 0.02,
             'length': 15,
@@ -72,8 +70,7 @@ class TestWmsValueAdded(TransactionCase):
 
         self.material_product = self.Product.create({
             'name': 'Test Material Product',
-            'type': 'product',
-            'default_code': 'MAT001',
+                        'default_code': 'MAT001',
             'weight': 0.1,
             'volume': 0.001,
             'length': 5,
@@ -84,7 +81,7 @@ class TestWmsValueAdded(TransactionCase):
         # Create test service
         self.service = self.WmsValueAddedService.create({
             'name': 'Test Assembly Service',
-            'code': 'TAS001',
+            'owner_code': 'TAS001',
             'service_type': 'assembly',
             'service_category': 'product',
             'standard_time': 30.0,
@@ -93,12 +90,11 @@ class TestWmsValueAdded(TransactionCase):
             'has_quality_check': True,
             'requires_approval': True
         })
-
     def test_value_added_service_creation(self):
         """Test creation of value added service records"""
         service = self.WmsValueAddedService.create({
             'name': 'Test Packaging Service',
-            'code': 'TPS001',
+            'owner_code': 'TPS001',
             'service_type': 'packaging',
             'service_category': 'product',
             'standard_time': 15.0,
@@ -107,12 +103,11 @@ class TestWmsValueAdded(TransactionCase):
         })
 
         self.assertEqual(service.name, 'Test Packaging Service')
-        self.assertEqual(service.code, 'TPS001')
+        self.assertEqual(service.owner_code, 'TPS001')
         self.assertEqual(service.service_type, 'packaging')
         self.assertEqual(service.service_category, 'product')
         self.assertEqual(service.standard_time, 15.0)
         self.assertTrue(service.active)
-
     def test_value_added_operation_creation(self):
         """Test creation of value added operation records"""
         operation = self.WmsValueAddedOperation.create({
@@ -128,7 +123,6 @@ class TestWmsValueAdded(TransactionCase):
         self.assertEqual(operation.warehouse_id.id, self.warehouse.id)
         self.assertEqual(operation.priority, '1')
         self.assertEqual(operation.state, 'draft')
-
     def test_value_added_operation_state_transitions(self):
         """Test value added operation state transitions"""
         operation = self.WmsValueAddedOperation.create({
@@ -170,7 +164,6 @@ class TestWmsValueAdded(TransactionCase):
         # If we update to completed
         operation.action_complete_operation()  # This should set the state to quality check since has_quality_check is True
         self.assertEqual(operation.state, 'quality_check')
-
     def test_value_added_product_line_creation(self):
         """Test creation of value added product line records"""
         operation = self.WmsValueAddedOperation.create({
@@ -240,7 +233,6 @@ class TestWmsValueAdded(TransactionCase):
         # Change state to draft
         operation.write({'state': 'draft'})
         self.assertEqual(operation.progress, 0.0)
-
     def test_value_added_operation_duration_calculation(self):
         """Test duration calculation for value added operations"""
         start_time = datetime.now() - timedelta(minutes=30)
@@ -259,7 +251,6 @@ class TestWmsValueAdded(TransactionCase):
 
         # Duration should be approximately 30 minutes
         self.assertAlmostEqual(operation.duration_minutes, 30.0, places=0)
-
     def test_value_added_operation_cost_calculation(self):
         """Test cost calculation for value added operations"""
         operation = self.WmsValueAddedOperation.create({
@@ -284,7 +275,6 @@ class TestWmsValueAdded(TransactionCase):
         # Note: actual cost calculation is complex and depends on labor rates
         # For this test we just verify that the cost field exists and is accessible
         self.assertIsNotNone(operation.cost)
-
     def test_value_added_operation_revenue_calculation(self):
         """Test revenue calculation for value added operations"""
         operation = self.WmsValueAddedOperation.create({
@@ -308,7 +298,6 @@ class TestWmsValueAdded(TransactionCase):
         # Revenue should be calculated based on service price and quantity
         expected_revenue = self.service.price_per_unit * product_line.quantity
         self.assertEqual(operation.revenue, expected_revenue)
-
     def test_value_added_operation_margin_calculation(self):
         """Test margin calculation for value added operations"""
         operation = self.WmsValueAddedOperation.create({
@@ -333,7 +322,6 @@ class TestWmsValueAdded(TransactionCase):
         expected_revenue = self.service.price_per_unit * product_line.quantity
         expected_margin = expected_revenue - operation.cost
         self.assertEqual(operation.margin, expected_margin)
-
     def test_value_added_report_wizard(self):
         """Test value added service report wizard"""
         wizard = self.WmsValueAddedReport.create({
@@ -355,7 +343,6 @@ class TestWmsValueAdded(TransactionCase):
         self.assertIsInstance(action, dict)
         self.assertEqual(action['type'], 'ir.actions.act_window')
         self.assertEqual(action['res_model'], 'wms.value.added.operation')
-
     def test_value_added_operation_cancel(self):
         """Test cancellation of value added operations"""
         operation = self.WmsValueAddedOperation.create({
@@ -374,7 +361,6 @@ class TestWmsValueAdded(TransactionCase):
         operation.action_cancel_operation()
         # Operation should be cancelled if it was in draft, scheduled, or in_progress
         self.assertEqual(operation.state, 'cancelled')
-
     def test_value_added_product_line_onchange(self):
         """Test onchange methods for value added product lines"""
         operation = self.WmsValueAddedOperation.create({
@@ -398,7 +384,6 @@ class TestWmsValueAdded(TransactionCase):
 
         # The unit cost should be automatically set from the product
         self.assertEqual(product_line.unit_cost, self.product1.standard_price)
-
     def test_value_added_material_onchange(self):
         """Test onchange methods for value added materials"""
         operation = self.WmsValueAddedOperation.create({

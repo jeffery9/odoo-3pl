@@ -51,21 +51,18 @@ class WmsHandover(models.Model):
         for record in self:
             record.total_items = len(record.handover_items)
             record.total_value = sum(item.quantity * item.unit_value for item in record.handover_items)
-
     def action_start_handover(self):
         """Start the handover process"""
         self.write({
             'status': 'in_progress',
             'handover_date': fields.Datetime.now()
         })
-
     def action_complete_handover(self):
         """Complete the handover process"""
         self.write({
             'status': 'completed',
             'completion_date': fields.Datetime.now()
         })
-
     def action_sign_off(self):
         """Sign off on the handover"""
         self.write({
@@ -73,11 +70,9 @@ class WmsHandover(models.Model):
             'signed_off_date': fields.Datetime.now(),
             'signature_date': fields.Datetime.now()
         })
-
     def action_archive_handover(self):
         """Archive the handover record"""
         self.write({'status': 'archived'})
-
     def action_generate_report(self):
         """Generate handover report"""
         self.ensure_one()
@@ -140,7 +135,6 @@ class WmsHandoverWizard(models.TransientModel):
         ('crossdock', 'Crossdock Handover'),
     ], 'Handover Type', required=True, default='outbound')
     notes = fields.Text('Notes')
-
     def action_create_handover(self):
         """Create handover record"""
         self.ensure_one()
@@ -185,7 +179,6 @@ class WmsHandoverSignOffWizard(models.TransientModel):
     signature_from = fields.Binary('From Signature', required=True)
     signature_to = fields.Binary('To Signature', required=True)
     notes = fields.Text('Notes')
-
     def action_sign_off(self):
         """Sign off the handover"""
         self.ensure_one()

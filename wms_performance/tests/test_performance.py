@@ -25,13 +25,13 @@ class TestWmsPerformance(TransactionCase):
         # Create a test warehouse
         self.warehouse = self.Warehouse.create({
             'name': 'Test Warehouse',
-            'code': 'TST'
+            'owner_code': 'TST'
         })
 
         # Create a test owner
         self.owner = self.Owner.create({
             'name': 'Test Owner',
-            'code': 'TO',
+            'owner_code': 'TO',
             'email': 'test@example.com'
         })
 
@@ -49,8 +49,7 @@ class TestWmsPerformance(TransactionCase):
         # Create test products
         self.product1 = self.Product.create({
             'name': 'Test Product 1',
-            'type': 'product',
-            'default_code': 'TEST001',
+                        'default_code': 'TEST001',
             'weight': 1.0,
             'volume': 0.01,
             'length': 10,
@@ -60,8 +59,7 @@ class TestWmsPerformance(TransactionCase):
 
         self.product2 = self.Product.create({
             'name': 'Test Product 2',
-            'type': 'product',
-            'default_code': 'TEST002',
+                        'default_code': 'TEST002',
             'weight': 2.0,
             'volume': 0.02,
             'length': 15,
@@ -93,12 +91,11 @@ class TestWmsPerformance(TransactionCase):
             'date': datetime.now() - timedelta(days=1),
             'date_done': datetime.now() - timedelta(days=1, hours=2)
         })
-
     def test_performance_indicator_creation(self):
         """Test creation of performance indicator records"""
         indicator = self.WmsPerformanceIndicator.create({
             'name': 'Test Performance Indicator',
-            'code': 'TPI001',
+            'owner_code': 'TPI001',
             'category': 'throughput',
             'calculation_method': 'count',
             'target_value': 100.0,
@@ -106,18 +103,17 @@ class TestWmsPerformance(TransactionCase):
         })
 
         self.assertEqual(indicator.name, 'Test Performance Indicator')
-        self.assertEqual(indicator.code, 'TPI001')
+        self.assertEqual(indicator.owner_code, 'TPI001')
         self.assertEqual(indicator.category, 'throughput')
         self.assertEqual(indicator.target_value, 100.0)
         self.assertTrue(indicator.active)
-
     def test_performance_indicator_constraints(self):
         """Test performance indicator constraints"""
         # Test negative target value constraint
         with self.assertRaises(ValidationError):
             self.WmsPerformanceIndicator.create({
                 'name': 'Test Negative Target',
-                'code': 'TNT001',
+                'owner_code': 'TNT001',
                 'category': 'efficiency',
                 'calculation_method': 'average',
                 'target_value': -10.0,
@@ -128,13 +124,12 @@ class TestWmsPerformance(TransactionCase):
         with self.assertRaises(ValidationError):
             self.WmsPerformanceIndicator.create({
                 'name': 'Test Negative Benchmark',
-                'code': 'TNB001',
+                'owner_code': 'TNB001',
                 'category': 'quality',
                 'calculation_method': 'percentage',
                 'target_value': 100.0,
                 'benchmark_value': -5.0,
             })
-
     def test_performance_report_creation(self):
         """Test creation of performance report records"""
         report = self.WmsPerformanceReport.create({
@@ -151,7 +146,6 @@ class TestWmsPerformance(TransactionCase):
         self.assertEqual(report.warehouse_id.id, self.warehouse.id)
         self.assertEqual(report.report_type, 'weekly')
         self.assertEqual(report.status, 'draft')
-
     def test_performance_report_period_constraint(self):
         """Test performance report period validation"""
         # Test that start date cannot be after end date
@@ -164,7 +158,6 @@ class TestWmsPerformance(TransactionCase):
                 'warehouse_id': self.warehouse.id,
                 'report_type': 'weekly',
             })
-
     def test_performance_report_methods_execution(self):
         """Test performance report methods execution"""
         report = self.WmsPerformanceReport.create({
@@ -208,7 +201,6 @@ class TestWmsPerformance(TransactionCase):
 
         alerts = report._generate_alerts()
         self.assertIn('<div>', alerts)
-
     def test_performance_report_generation(self):
         """Test performance report generation"""
         report = self.WmsPerformanceReport.create({
@@ -233,7 +225,6 @@ class TestWmsPerformance(TransactionCase):
         # Check that metrics have been calculated
         self.assertIsNotNone(report.performance_data)
         self.assertIsNotNone(report.executive_summary)
-
     def test_operator_performance_creation(self):
         """Test creation of operator performance records"""
         operator_perf = self.WmsOperatorPerformance.create({
@@ -254,7 +245,6 @@ class TestWmsPerformance(TransactionCase):
         # Check that efficiency rate was calculated automatically
         expected_efficiency = (7.5 / 8.0 * 100) if 8.0 > 0 else 0
         self.assertAlmostEqual(operator_perf.efficiency_rate, expected_efficiency, places=1)
-
     def test_operator_performance_score_calculation(self):
         """Test operator performance score calculation"""
         operator_perf = self.WmsOperatorPerformance.create({
@@ -278,7 +268,6 @@ class TestWmsPerformance(TransactionCase):
         # Check that scores were updated
         self.assertGreaterEqual(operator_perf.overall_score, 0)
         self.assertLessEqual(operator_perf.overall_score, 100)
-
     def test_performance_wizard(self):
         """Test performance report wizard"""
         wizard = self.WmsPerformanceWizard.create({
@@ -300,7 +289,6 @@ class TestWmsPerformance(TransactionCase):
         self.assertIsInstance(action, dict)
         self.assertEqual(action['type'], 'ir.actions.act_window')
         self.assertEqual(action['res_model'], 'wms.performance.report')
-
     def test_cost_metrics_calculation(self):
         """Test cost metrics calculation"""
         report = self.WmsPerformanceReport.create({
@@ -316,7 +304,6 @@ class TestWmsPerformance(TransactionCase):
         self.assertIsInstance(cost_metrics, dict)
         self.assertIn('score', cost_metrics)
         self.assertIn('cost_per_operation', cost_metrics)
-
     def test_service_metrics_calculation(self):
         """Test service metrics calculation"""
         report = self.WmsPerformanceReport.create({

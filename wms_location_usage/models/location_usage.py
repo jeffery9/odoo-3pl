@@ -73,7 +73,6 @@ class WmsLocationUsage(models.Model):
         for analysis in self:
             if analysis.period_start and analysis.period_end and analysis.period_start > analysis.period_end:
                 raise ValidationError(_('Analysis period start date cannot be later than end date.'))
-
     def action_generate_analysis(self):
         """Generate location usage analysis"""
         for analysis in self:
@@ -101,7 +100,6 @@ class WmsLocationUsage(models.Model):
                 'usage_trend': json.dumps(stats.get('usage_trend', {})),
                 'state': 'generated'
             })
-
     def _calculate_location_usage_stats(self):
         """Calculate location usage statistics"""
         self.ensure_one()
@@ -208,7 +206,6 @@ class WmsLocationUsage(models.Model):
             'stats_by_category': stats_by_category,
             'usage_trend': usage_trend
         }
-
     def _calculate_turnover_rate(self):
         """Calculate inventory turnover rate (simplified version)"""
         # Calculate the frequency of inbound and outbound operations during the specified period
@@ -270,7 +267,6 @@ class WmsLocationUsage(models.Model):
             data['usage_rate'] = (data['occupied'] / data['total'] * 100) if data['total'] > 0 else 0.0
 
         return stats
-
     def _calculate_stats_by_category(self, locations):
         """Statistics by location category"""
         stats = {}
@@ -296,7 +292,6 @@ class WmsLocationUsage(models.Model):
             data['usage_rate'] = (data['occupied'] / data['total'] * 100) if data['total'] > 0 else 0.0
 
         return stats
-
     def _calculate_usage_trend(self):
         """Calculate usage trend"""
         # Simplified implementation: analyze location usage trend by month
@@ -320,7 +315,6 @@ class WmsLocationUsage(models.Model):
             current_date += timedelta(days=7)  # Weekly statistics, can be adjusted as needed
 
         return trends
-
     def _generate_recommendations(self, stats):
         """Generate optimization recommendations"""
         recommendations = []
@@ -451,7 +445,6 @@ class WmsLocationUsageReport(models.TransientModel):
         ('by_zone', 'By Zone Statistics'),
         ('by_category', 'By Category Statistics'),
     ], string='Analysis Type', required=True, default='all')
-
     def action_generate_report(self):
         """Generate location usage report"""
         # Create analysis record

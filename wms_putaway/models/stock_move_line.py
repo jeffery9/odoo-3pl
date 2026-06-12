@@ -45,7 +45,6 @@ class StockMoveLine(models.Model):
     lot_product_qty = fields.Float('Lot Quantity', related='lot_id.product_qty', readonly=True)
     lot_ref = fields.Char('Lot Internal Reference', related='lot_id.ref', readonly=True)
     lot_note = fields.Html('Lot Description', related='lot_id.note', readonly=True)
-
     def _compute_lot_expiry_date(self):
         """Safely compute lot expiry date, handling cases where expiry_date field doesn't exist"""
         for line in self:
@@ -91,7 +90,6 @@ class StockMoveLine(models.Model):
                     line.lot_id.location_id = line.location_dest_id
 
         return result
-
     def _create_and_assign_production_lot(self):
         """Override to handle 3PL-specific lot creation"""
         # Call the original method to create the lot

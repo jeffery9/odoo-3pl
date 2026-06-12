@@ -10,8 +10,6 @@ class ProcurementGroup(models.Model):
         string='3PL Owner',
         help='Owner for this procurement group in multi-owner scenarios'
     )
-
-    @api.model
     def _get_rule(self, product_id, location_id, values):
         """Enhanced rule selection with 3PL-specific filtering"""
         # First try to get the original rule
@@ -40,8 +38,6 @@ class ProcurementGroup(models.Model):
             ], order='route_sequence, sequence', limit=1)
 
         return rule
-
-    @api.model
     def _get_rule_domain(self, locations, values):
         """Enhanced rule domain with 3PL-specific filters"""
         domain = super()._get_rule_domain(locations, values)

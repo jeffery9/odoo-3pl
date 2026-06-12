@@ -44,7 +44,6 @@ class WmsTrackingErrorWizard(models.TransientModel):
             'target': 'new',
             'context': {'default_picking_ids': [(6, 0, self.picking_id.ids)], 'default_owner_id': self.picking_id.owner_id.id if hasattr(self.picking_id, 'owner_id') and self.picking_id.owner_id else False}
         }
-
     def action_fix_issues(self):
         """Redirect to picking form to fix tracking issues"""
         self.ensure_one()
@@ -56,7 +55,6 @@ class WmsTrackingErrorWizard(models.TransientModel):
             'view_type': 'form',
             'target': 'current',
         }
-
     def action_cancel_operation(self):
         """Cancel the operation"""
         self.ensure_one()

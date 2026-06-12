@@ -26,7 +26,7 @@ class TestWmsWcs(TransactionCase):
         # Create a test warehouse
         self.warehouse = self.Warehouse.create({
             'name': 'Test Warehouse',
-            'code': 'TST'
+            'owner_code': 'TST'
         })
 
         # Create test locations
@@ -45,7 +45,7 @@ class TestWmsWcs(TransactionCase):
         # Create a test owner
         self.owner = self.Owner.create({
             'name': 'Test Owner',
-            'code': 'TO',
+            'owner_code': 'TO',
             'email': 'test@example.com'
         })
 
@@ -57,8 +57,7 @@ class TestWmsWcs(TransactionCase):
         # Create test products
         self.product1 = self.Product.create({
             'name': 'Test Product 1',
-            'type': 'product',
-            'default_code': 'TEST001',
+                        'default_code': 'TEST001',
             'list_price': 10.0,
             'standard_price': 5.0,
             'weight': 1.0,
@@ -79,7 +78,7 @@ class TestWmsWcs(TransactionCase):
         # Create test WCS system
         self.wcs_system = self.WmsWcsSystem.create({
             'name': 'Test WCS System',
-            'code': 'TWCS001',
+            'owner_code': 'TWCS001',
             'system_type': 'automated_storage',
             'host': '192.168.1.100',
             'port': 8080,
@@ -90,7 +89,7 @@ class TestWmsWcs(TransactionCase):
         # Create test WCS device
         self.wcs_device = self.WmsWcsDevice.create({
             'name': 'Test Storage Device',
-            'code': 'TSD001',
+            'owner_code': 'TSD001',
             'wcs_system_id': self.wcs_system.id,
             'device_type': 'storage',
             'location_id': self.location_src.id,
@@ -98,12 +97,11 @@ class TestWmsWcs(TransactionCase):
             'max_capacity': 1000.0,
             'current_load': 500.0,
         })
-
     def test_wcs_system_creation(self):
         """Test creation of WCS system records"""
         system = self.WmsWcsSystem.create({
             'name': 'Another WCS System',
-            'code': 'AWCS002',
+            'owner_code': 'AWCS002',
             'system_type': 'conveyor',
             'host': '192.168.1.102',
             'port': 9090,
@@ -112,18 +110,17 @@ class TestWmsWcs(TransactionCase):
         })
 
         self.assertEqual(system.name, 'Another WCS System')
-        self.assertEqual(system.code, 'AWCS002')
+        self.assertEqual(system.owner_code, 'AWCS002')
         self.assertEqual(system.system_type, 'conveyor')
         self.assertEqual(system.host, '192.168.1.102')
         self.assertEqual(system.port, 9090)
         self.assertEqual(system.protocol, 'https')
         self.assertTrue(system.active)
-
     def test_wcs_device_creation(self):
         """Test creation of WCS device records"""
         device = self.WmsWcsDevice.create({
             'name': 'Test Conveyor Device',
-            'code': 'TCD002',
+            'owner_code': 'TCD002',
             'wcs_system_id': self.wcs_system.id,
             'device_type': 'conveyor',
             'location_id': self.location_dst.id,
@@ -133,7 +130,7 @@ class TestWmsWcs(TransactionCase):
         })
 
         self.assertEqual(device.name, 'Test Conveyor Device')
-        self.assertEqual(device.code, 'TCD002')
+        self.assertEqual(device.owner_code, 'TCD002')
         self.assertEqual(device.wcs_system_id.id, self.wcs_system.id)
         self.assertEqual(device.device_type, 'conveyor')
         self.assertEqual(device.ip_address, '192.168.1.103')
@@ -146,7 +143,7 @@ class TestWmsWcs(TransactionCase):
         # Test with max capacity and current load
         device1 = self.WmsWcsDevice.create({
             'name': 'Efficiency Test Device 1',
-            'code': 'ETD003',
+            'owner_code': 'ETD003',
             'wcs_system_id': self.wcs_system.id,
             'device_type': 'robot',
             'max_capacity': 200.0,
@@ -158,7 +155,7 @@ class TestWmsWcs(TransactionCase):
         # Test with zero values
         device2 = self.WmsWcsDevice.create({
             'name': 'Efficiency Test Device 2',
-            'code': 'ETD004',
+            'owner_code': 'ETD004',
             'wcs_system_id': self.wcs_system.id,
             'device_type': 'agv',
             'max_capacity': 100.0,
@@ -175,7 +172,6 @@ class TestWmsWcs(TransactionCase):
 
         # Efficiency rate should be capped at 100%
         self.assertLessEqual(self.wcs_device.efficiency_rate, 100.0)
-
     def test_wcs_task_creation(self):
         """Test creation of WCS task records"""
         task = self.WmsWcsTask.create({
@@ -196,7 +192,6 @@ class TestWmsWcs(TransactionCase):
         self.assertEqual(task.state, 'draft')
         self.assertEqual(task.quantity, 10.0)
         self.assertEqual(task.device_id.id, self.wcs_device.id)
-
     def test_wcs_task_state_transitions(self):
         """Test WCS task state transitions"""
         task = self.WmsWcsTask.create({
@@ -234,7 +229,6 @@ class TestWmsWcs(TransactionCase):
         self.assertIsNotNone(task.date_completed)
         self.assertIsNotNone(task.end_time)
         self.assertGreaterEqual(task.duration_seconds, 0.0)
-
     def test_wcs_task_cancellation(self):
         """Test cancellation of WCS tasks"""
         task = self.WmsWcsTask.create({
@@ -254,7 +248,6 @@ class TestWmsWcs(TransactionCase):
         # Cancel the task
         task.action_cancel_task()
         self.assertEqual(task.state, 'cancelled')
-
     def test_wcs_task_retry(self):
         """Test retry functionality for failed WCS tasks"""
         task = self.WmsWcsTask.create({
@@ -280,7 +273,6 @@ class TestWmsWcs(TransactionCase):
         self.assertEqual(task.state, 'confirmed')
         self.assertEqual(task.retry_count, 3)  # Incremented by 1
         self.assertIsNone(task.error_message)
-
     def test_wcs_system_connection_test(self):
         """Test WCS system connection test functionality"""
         # Test initial state
@@ -294,7 +286,6 @@ class TestWmsWcs(TransactionCase):
         self.assertEqual(self.wcs_system.connection_status, 'connected')
         self.assertTrue(self.wcs_system.is_connected)
         self.assertIsNotNone(self.wcs_system.last_sync)
-
     def test_wcs_system_device_sync(self):
         """Test WCS system device synchronization"""
         # This method just logs the sync action, so we'll verify it doesn't raise an error
@@ -302,7 +293,6 @@ class TestWmsWcs(TransactionCase):
         result = self.wcs_system.action_sync_devices()
         # The method returns None, which is falsy, so we just make sure it doesn't throw an exception
         self.assertIsNone(result)
-
     def test_wcs_device_status_refresh(self):
         """Test refreshing WCS device status"""
         # Check initial state
@@ -316,7 +306,6 @@ class TestWmsWcs(TransactionCase):
         self.assertIsNotNone(self.wcs_device.last_heartbeat)
         self.assertNotEqual(self.wcs_device.last_heartbeat, initial_heartbeat)
         self.assertEqual(self.wcs_device.device_status, 'idle')
-
     def test_wcs_device_send_command(self):
         """Test sending command to WCS device"""
         command_data = {'command': 'move', 'target': 'A1', 'quantity': 10}
@@ -325,7 +314,6 @@ class TestWmsWcs(TransactionCase):
         self.wcs_device.action_send_command(command_data)
 
         # Test that the method runs without errors (no specific assertion needed since it just logs)
-
     def test_wcs_system_devices_relationship(self):
         """Test the relationship between WCS systems and devices"""
         # Verify that the device is linked to the system
@@ -335,7 +323,7 @@ class TestWmsWcs(TransactionCase):
         # Create another device for the same system
         new_device = self.WmsWcsDevice.create({
             'name': 'Test AGV Device',
-            'code': 'TAGV002',
+            'owner_code': 'TAGV002',
             'wcs_system_id': self.wcs_system.id,
             'device_type': 'agv',
             'location_id': self.location_dst.id,
@@ -348,7 +336,6 @@ class TestWmsWcs(TransactionCase):
         device_ids = [d.id for d in self.wcs_system.device_ids]
         self.assertIn(self.wcs_device.id, device_ids)
         self.assertIn(new_device.id, device_ids)
-
     def test_wcs_integration_log_creation(self):
         """Test creation of WCS integration log records"""
         log = self.WmsWcsIntegrationLog.create({
@@ -366,7 +353,6 @@ class TestWmsWcs(TransactionCase):
         self.assertEqual(log.status, 'success')
         self.assertEqual(log.message, 'Successfully connected to WCS system')
         self.assertEqual(log.duration, 0.5)
-
     def test_wcs_task_duration_calculation(self):
         """Test duration calculation for WCS tasks"""
         start_time = datetime.now() - timedelta(minutes=5)
@@ -382,7 +368,6 @@ class TestWmsWcs(TransactionCase):
         # Duration should be approximately 300 seconds (5 minutes)
         expected_duration = 300.0  # 5 minutes in seconds
         self.assertAlmostEqual(task.duration_seconds, expected_duration, places=0)
-
     def test_wcs_task_with_source_document(self):
         """Test WCS task with source document reference"""
         # Create a stock picking to use as source document

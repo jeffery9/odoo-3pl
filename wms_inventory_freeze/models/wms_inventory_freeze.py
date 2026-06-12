@@ -53,7 +53,6 @@ class WmsInventoryFreeze(models.Model):
         if not vals.get('name'):
             vals['name'] = self.env['ir.sequence'].next_by_code('wms.inventory.freeze') or '/'
         return super().create(vals)
-
     def action_unfreeze(self):
         """Unfreeze the inventory"""
         self.write({
@@ -61,7 +60,6 @@ class WmsInventoryFreeze(models.Model):
             'unfreeze_date': fields.Datetime.now(),
             'unfrozen_by': self.env.user.id
         })
-
     def action_release(self):
         """Release the inventory (unfreeze permanently)"""
         self.write({
@@ -69,7 +67,6 @@ class WmsInventoryFreeze(models.Model):
             'unfreeze_date': fields.Datetime.now(),
             'unfrozen_by': self.env.user.id
         })
-
     def action_freeze_report(self):
         """Generate freeze report"""
         self.ensure_one()
@@ -106,7 +103,6 @@ class WmsInventoryFreezeWizard(models.TransientModel):
     ], 'Reason', required=True)
     notes = fields.Text('Notes')
     owner_id = fields.Many2one('wms.owner', 'Owner', required=True)
-
     def action_create_freeze(self):
         """Create inventory freeze record"""
         self.ensure_one()
@@ -139,7 +135,6 @@ class WmsUnfreezeWizard(models.TransientModel):
     freeze_id = fields.Many2one('wms.inventory.freeze', 'Freeze Record', required=True)
     release = fields.Boolean('Release Permanently', help='Check to release permanently, uncheck to unfreeze temporarily')
     notes = fields.Text('Notes')
-
     def action_unfreeze(self):
         """Unfreeze or release the inventory"""
         self.ensure_one()

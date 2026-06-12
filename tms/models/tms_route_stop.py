@@ -197,12 +197,10 @@ class TmsRouteStop(models.Model):
         for stop in self:
             stop.state = 'arrived'
             stop.actual_arrival = fields.Datetime.now()
-
     def action_start_delivery(self):
         for stop in self:
             stop.state = 'in_progress'
             stop.actual_departure = fields.Datetime.now()
-
     def action_complete_stop(self):
         for stop in self:
             stop.state = 'delivered'
@@ -211,7 +209,6 @@ class TmsRouteStop(models.Model):
             for picking in stop.picking_ids:
                 if picking.state == 'assigned':
                     picking._action_done()
-
     def action_fail_stop(self):
         for stop in self:
             stop.state = 'failed'
@@ -221,7 +218,6 @@ class TmsRouteStop(models.Model):
         for stop in self:
             if stop.time_window_start and stop.time_window_end and stop.time_window_start > stop.time_window_end:
                 raise ValidationError(_("Time window start must be before end time."))
-
     def update_coordinates(self):
         """Update coordinates from partner's address"""
         for stop in self:
@@ -296,7 +292,6 @@ class TmsRouteStop(models.Model):
                     'sticky': False,
                 }
             }
-
     def action_split_stop(self):
         """Split this stop if it exceeds capacity constraints"""
         # This would be a more advanced feature to split a stop if it exceeds capacity
@@ -347,7 +342,6 @@ class TmsRouteStop(models.Model):
         if result.route_id and result.route_id.vehicle_id:
             result.route_id.action_check_capacity_constraints()
         return result
-
     def action_open_adjust_wizard(self):
         """Open the adjust wizard"""
         return {
@@ -362,7 +356,6 @@ class TmsRouteStop(models.Model):
                 'default_adjustment_reason': self.adjustment_reason or 'other',
             }
         }
-
     def action_adjust_stop(self):
         """Adjust stop based on real-world conditions"""
         # This method will be called from the UI, parameters will be passed through context
@@ -394,7 +387,6 @@ class TmsRouteStop(models.Model):
                 'sticky': False,
             }
         }
-
     def action_reset_adjustment(self):
         """Reset stop adjustment to original values"""
         for stop in self:
@@ -414,7 +406,6 @@ class TmsRouteStop(models.Model):
                 'sticky': False,
             }
         }
-
     def action_apply_adjustments(self):
         """Apply adjusted values to the actual stop fields"""
         for stop in self:
@@ -436,7 +427,6 @@ class TmsRouteStop(models.Model):
                 'sticky': False,
             }
         }
-
     def _calculate_travel_time(self, distance_km, avg_speed_kmh=40):
         """
         Calculate travel time based on distance and average speed
@@ -447,14 +437,14 @@ class TmsRouteStop(models.Model):
         hours = distance_km / avg_speed_kmh
         minutes = hours * 60
         return fields.timedelta(minutes=minutes)
-
     def _get_distance_to_next_stop(self, current_stop, next_stop):
         """
         Calculate distance between two stops
         """
         if not current_stop.latitude or not current_stop.longitude or \
            not next_stop.latitude or not next_stop.longitude:
-            # If coordinates are missing, return a default distance
+            # If coordinates are missing, return a
+            # Default distance
             return 5.0  # 5 km default distance
 
         from math import radians, cos, sin, asin, sqrt

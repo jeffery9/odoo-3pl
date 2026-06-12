@@ -96,7 +96,6 @@ class WmsPackingRule(models.Model):
                 raise ValidationError(_('最大箱体积不能为负数。'))
             if rule.max_items_per_box < 0:
                 raise ValidationError(_('每箱Maximum Items不能为负数。'))
-
     def suggest_packing(self, picking):
         """
         为拣货单建议装箱方案
@@ -114,7 +113,6 @@ class WmsPackingRule(models.Model):
             return self._calculate_dynamic_packing(items)
         else:
             return self._calculate_optimized_packing(items)
-
     def _get_picking_items(self, picking):
         """
         获取拣货单中的商品信息
@@ -140,7 +138,6 @@ class WmsPackingRule(models.Model):
                     }
                 })
         return items
-
     def _calculate_fixed_packing(self, items):
         """
         固定装箱计算
@@ -159,7 +156,6 @@ class WmsPackingRule(models.Model):
                 })
                 remaining_qty -= box_qty
         return packing_plan
-
     def _calculate_dynamic_packing(self, items):
         """
         动态装箱计算
@@ -222,7 +218,6 @@ class WmsPackingRule(models.Model):
             boxes.append(current_box)
 
         return boxes
-
     def _can_item_fit_in_box(self, box, item, item_qty):
         """
         检查商品是否能放入箱子
@@ -260,7 +255,6 @@ class WmsPackingRule(models.Model):
                 return False
 
         return True
-
     def _select_box_type(self, item):
         """
         选择适合的箱型
@@ -278,7 +272,6 @@ class WmsPackingRule(models.Model):
                                      max(b.max_volume - item['dimensions']['volume'], 0))
                 return box
         return None
-
     def _calculate_optimized_packing(self, items):
         """
         优化装箱计算（使用指定的装箱算法）
@@ -331,7 +324,6 @@ class WmsPackingRule(models.Model):
                 boxes.append(new_box)
 
         return boxes
-
     def _first_fit_decreasing_packing(self, items):
         """
         首次适应递减装箱算法

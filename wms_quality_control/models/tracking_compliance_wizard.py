@@ -44,7 +44,6 @@ class WmsTrackingComplianceWizard(models.TransientModel):
                 'tracking_warning_ignored': True
             }
         }
-
     def action_fix_issues(self):
         """Redirect to picking to fix tracking issues"""
         self.ensure_one()
@@ -55,7 +54,6 @@ class WmsTrackingComplianceWizard(models.TransientModel):
             'view_mode': 'form',
             'target': 'current',
         }
-
     def action_review_lines(self):
         """Show non-compliant lines for review"""
         self.ensure_one()

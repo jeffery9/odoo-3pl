@@ -34,7 +34,6 @@ class StockMove(models.Model):
     # Additional lot integration fields
     lot_ids = fields.Many2many('stock.lot', string='Lot/Serial Numbers',
                                compute='_compute_lot_ids', help='All lot/serial numbers associated with this move')
-
     def _compute_lot_ids(self):
         """Compute lot_ids for this move based on move lines"""
         for move in self:

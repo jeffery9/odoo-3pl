@@ -17,7 +17,6 @@ class WmsDocumentCategory(models.Model):
     description = fields.Text('Description')
     is_active = fields.Boolean('Active', default=True)
     document_count = fields.Integer('Document Count', compute='_compute_document_count')
-
     def _compute_document_count(self):
         for category in self:
             documents = self.env['wms.document'].search([('category_id', '=', category.id)])
@@ -158,7 +157,6 @@ class WmsDocument(models.Model):
                 document.status = 'approved'
                 document.approved_by = self.env.user
                 document.approved_date = fields.Datetime.now()
-
     def action_reject(self):
         """Reject the document"""
         for document in self:
@@ -230,7 +228,6 @@ class WmsDocumentTemplate(models.Model):
     ], string='Auto-fill From')
 
     is_active = fields.Boolean('Active', default=True)
-
     def create_document_from_template(self, related_record=None):
         """Create a document using this template"""
         if not related_record:
@@ -294,7 +291,6 @@ class WmsDocumentArchive(models.Model):
     ], string='Reason', required=True)
     notes = fields.Text('Notes')
     archived_by = fields.Many2one('res.users', 'Archived By', default=lambda self: self.env.user)
-
     def restore_documents(self):
         """Restore documents from archive"""
         for archive in self:

@@ -88,7 +88,6 @@ class WmsReturnAuthorization(models.Model):
     def _compute_product_qty(self):
         for rma in self:
             rma.product_qty = sum(line.quantity for line in rma.return_line_ids)
-
     def action_confirm(self):
         """Confirm the RMA"""
         for rma in self:
@@ -106,7 +105,6 @@ class WmsReturnAuthorization(models.Model):
             if rma.state in ['in_transit', 'confirmed']:
                 rma.state = 'received'
                 rma.received_date = fields.Datetime.now()
-
     def action_approve(self):
         """Approve the return"""
         for rma in self:
@@ -126,7 +124,6 @@ class WmsReturnAuthorization(models.Model):
                 rma.state = 'completed'
                 if rma.refund_amount > 0:
                     rma.refund_date = fields.Datetime.now()
-
     def action_cancel(self):
         """Cancel the RMA"""
         for rma in self:
@@ -215,7 +212,6 @@ class StockPicking(models.Model):
     def _compute_rma_count(self):
         for picking in self:
             picking.rma_count = len(picking.rma_ids)
-
     def action_create_rma(self):
         """Create a new RMA for this picking"""
         self.ensure_one()
@@ -232,7 +228,6 @@ class StockPicking(models.Model):
                 'default_warehouse_id': self.picking_type_id.warehouse_id.id,
             }
         }
-
     def action_view_rmas(self):
         """View RMAs for this picking"""
         self.ensure_one()

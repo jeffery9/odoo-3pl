@@ -10,7 +10,7 @@ class TestWmsBatchReceive(TransactionCase):
         # Create test data
         self.test_owner = self.env['wms.owner'].create({
             'name': 'Test Batch Receive Owner',
-            'code': 'TBRO',
+            'owner_code': 'TBRO',
             'is_warehouse_owner': True,
         })
 
@@ -29,8 +29,7 @@ class TestWmsBatchReceive(TransactionCase):
 
         self.test_product = self.env['product.product'].create({
             'name': 'Test Product for Batch Receive',
-            'type': 'product',
-            'categ_id': self.env.ref('product.product_category_all').id,
+                        'categ_id': self.env.ref('product.product_category_all').id,
         })
 
         self.test_uom = self.env.ref('uom.product_uom_unit')
@@ -71,7 +70,6 @@ class TestWmsBatchReceive(TransactionCase):
             'location_id': self.test_location.id,
             'location_dest_id': self.test_location.id,
         })
-
     def test_create_batch_receive(self):
         """Test creating a batch receive record"""
         batch_receive = self.env['wms.batch.receive'].create({
@@ -83,7 +81,6 @@ class TestWmsBatchReceive(TransactionCase):
         self.assertEqual(batch_receive.name, 'Test Batch Receive')
         self.assertEqual(batch_receive.owner_id.id, self.test_owner.id)
         self.assertEqual(batch_receive.status, 'draft')
-
     def test_add_picking_to_batch_receive(self):
         """Test adding a picking to batch receive"""
         batch_receive = self.env['wms.batch.receive'].create({
@@ -101,7 +98,6 @@ class TestWmsBatchReceive(TransactionCase):
         self.assertEqual(len(batch_receive.batch_picking_ids), 1)
         self.assertEqual(batch_receive.batch_picking_ids[0].picking_id.id, self.test_picking1.id)
         self.assertEqual(batch_receive.batch_picking_ids[0].priority, 'normal')
-
     def test_batch_receive_status_flow(self):
         """Test the status flow of batch receive records"""
         batch_receive = self.env['wms.batch.receive'].create({
@@ -127,7 +123,6 @@ class TestWmsBatchReceive(TransactionCase):
         batch_receive.action_complete_batch_receive()
         # Should be 'partial' since we didn't complete all pickings
         self.assertEqual(batch_receive.status, 'partial')
-
     def test_batch_picking_status_flow(self):
         """Test the status flow of individual batch pickings"""
         batch_receive = self.env['wms.batch.receive'].create({
@@ -151,7 +146,6 @@ class TestWmsBatchReceive(TransactionCase):
         # Complete receiving the picking
         batch_picking.action_complete_receiving()
         self.assertEqual(batch_picking.status, 'completed')
-
     def test_batch_receive_totals_computation(self):
         """Test that batch receive totals are computed correctly"""
         batch_receive = self.env['wms.batch.receive'].create({
@@ -190,7 +184,6 @@ class TestWmsBatchReceive(TransactionCase):
         # Now one out of two is completed (50%)
         self.assertEqual(batch_receive.completed_pickings, 1)
         self.assertEqual(batch_receive.progress_percentage, 50.0)
-
     def test_batch_receive_wizard(self):
         """Test creating batch receive using wizard"""
         wizard = self.env['wms.batch.receive.wizard'].create({
@@ -209,7 +202,6 @@ class TestWmsBatchReceive(TransactionCase):
         batch_receive = self.env['wms.batch.receive'].browse(result['res_id'])
         self.assertEqual(batch_receive.status, 'in_progress')
         self.assertEqual(len(batch_receive.batch_picking_ids), 2)
-
     def test_batch_receive_add_picking_wizard(self):
         """Test adding pickings to existing batch receive using wizard"""
         batch_receive = self.env['wms.batch.receive'].create({
@@ -231,7 +223,6 @@ class TestWmsBatchReceive(TransactionCase):
         self.assertEqual(len(batch_receive.batch_picking_ids), 1)
         self.assertEqual(batch_receive.batch_picking_ids[0].picking_id.id, self.test_picking2.id)
         self.assertEqual(batch_receive.batch_picking_ids[0].priority, 'urgent')
-
     def test_batch_picking_computed_fields(self):
         """Test computed fields for expected and received quantities"""
         batch_receive = self.env['wms.batch.receive'].create({
@@ -267,12 +258,11 @@ class TestWmsBatchReceive(TransactionCase):
             })
 
             self.assertEqual(batch_picking.priority, priority)
-
     def test_batch_receive_ownership_isolation(self):
         """Test that batch receive records are properly isolated by owner"""
         owner2 = self.env['wms.owner'].create({
             'name': 'Second Batch Receive Owner',
-            'code': 'SBRO',
+            'owner_code': 'SBRO',
             'is_warehouse_owner': True,
         })
 

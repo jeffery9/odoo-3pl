@@ -10,7 +10,7 @@ class TestWmsLaborManagement(TransactionCase):
         # Create test data
         self.test_owner = self.env['wms.owner'].create({
             'name': 'Test Labor Management Owner',
-            'code': 'TLMO',
+            'owner_code': 'TLMO',
             'is_warehouse_owner': True,
         })
 
@@ -25,7 +25,7 @@ class TestWmsLaborManagement(TransactionCase):
 
         self.test_activity = self.env['wms.labor.activity'].create({
             'name': 'Test Picking Activity',
-            'code': 'TPA',
+            'owner_code': 'TPA',
             'activity_type': 'picking',
             'standard_time': 30.0,  # 30 minutes
         })
@@ -45,8 +45,7 @@ class TestWmsLaborManagement(TransactionCase):
 
         self.test_product = self.env['product.product'].create({
             'name': 'Test Product for Labor',
-            'type': 'product',
-            'categ_id': self.env.ref('product.product_category_all').id,
+                        'categ_id': self.env.ref('product.product_category_all').id,
         })
 
         # Create a test picking
@@ -57,7 +56,6 @@ class TestWmsLaborManagement(TransactionCase):
             'location_dest_id': self.test_location.id,
             'owner_id': self.test_owner.id,
         })
-
     def test_create_labor_task(self):
         """Test creating a labor task"""
         labor_task = self.env['wms.labor.task'].create({
@@ -74,7 +72,6 @@ class TestWmsLaborManagement(TransactionCase):
         self.assertEqual(labor_task.activity_id.id, self.test_activity.id)
         self.assertEqual(labor_task.assigned_to.id, self.test_employee.id)
         self.assertEqual(labor_task.status, 'draft')
-
     def test_labor_task_status_flow(self):
         """Test the status flow of labor tasks"""
         labor_task = self.env['wms.labor.task'].create({
@@ -102,7 +99,6 @@ class TestWmsLaborManagement(TransactionCase):
         labor_task.action_reset_to_assigned()
         self.assertEqual(labor_task.status, 'assigned')
         self.assertIsNone(labor_task.actual_start_date)
-
     def test_labor_task_duration_computation(self):
         """Test duration computation for labor tasks"""
         from datetime import datetime, timedelta
@@ -142,22 +138,20 @@ class TestWmsLaborManagement(TransactionCase):
         # Efficiency = (standard / actual) * 100 = (0.5 / 1) * 100 = 50%
         self.assertEqual(labor_task.standard_duration, 0.5)  # 30 minutes = 0.5 hours
         self.assertEqual(labor_task.efficiency, 50.0)
-
     def test_labor_activity_creation(self):
         """Test creating labor activities"""
         labor_activity = self.env['wms.labor.activity'].create({
             'name': 'Test Labor Activity',
-            'code': 'TLA',
+            'owner_code': 'TLA',
             'description': 'Test labor activity description',
             'activity_type': 'receiving',
             'standard_time': 45.0,  # 45 minutes
         })
 
         self.assertEqual(labor_activity.name, 'Test Labor Activity')
-        self.assertEqual(labor_activity.code, 'TLA')
+        self.assertEqual(labor_activity.owner_code, 'TLA')
         self.assertEqual(labor_activity.activity_type, 'receiving')
         self.assertEqual(labor_activity.standard_time, 45.0)
-
     def test_labor_schedule_creation(self):
         """Test creating labor schedules"""
         from datetime import datetime, timedelta
@@ -177,7 +171,6 @@ class TestWmsLaborManagement(TransactionCase):
         self.assertEqual(labor_schedule.employee_id.id, self.test_employee.id)
         self.assertEqual(labor_schedule.schedule_type, 'regular')
         self.assertTrue(labor_schedule.is_active)
-
     def test_employee_skill_creation(self):
         """Test creating employee skills"""
         employee_skill = self.env['wms.employee.skill'].create({
@@ -190,7 +183,6 @@ class TestWmsLaborManagement(TransactionCase):
         self.assertEqual(employee_skill.employee_id.id, self.test_employee.id)
         self.assertEqual(employee_skill.skill_id.id, self.test_activity.id)
         self.assertEqual(employee_skill.proficiency_level, 'advanced')
-
     def test_labor_performance_creation(self):
         """Test creating labor performance records"""
         labor_performance = self.env['wms.labor.performance'].create({
@@ -208,7 +200,6 @@ class TestWmsLaborManagement(TransactionCase):
         self.assertEqual(labor_performance.efficiency_rate, 110.0)
         # Productivity score = (efficiency * tasks) / 100 = (110 * 5) / 100 = 5.5
         self.assertEqual(labor_performance.productivity_score, 5.5)
-
     def test_labor_cost_creation(self):
         """Test creating labor cost records"""
         labor_cost = self.env['wms.labor.cost'].create({
@@ -252,7 +243,6 @@ class TestWmsLaborManagement(TransactionCase):
 
         self.assertEqual(labor_task.picking_id.id, self.test_picking.id)
         self.assertEqual(labor_task.owner_id.id, self.test_owner.id)
-
     def test_labor_task_priority_levels(self):
         """Test different priority levels for labor tasks"""
         priorities = [('0', 'Low'), ('1', 'Normal'), ('2', 'High'), ('3', 'Urgent')]
@@ -268,7 +258,6 @@ class TestWmsLaborManagement(TransactionCase):
             })
 
             self.assertEqual(labor_task.priority, priority_value)
-
     def test_labor_schedule_overlapping_constraint(self):
         """Test that overlapping schedules are prevented"""
         from datetime import datetime, timedelta

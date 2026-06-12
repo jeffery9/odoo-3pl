@@ -22,7 +22,6 @@ class WeChatController(http.Controller):
         elif request.httprequest.method == 'POST':
             # Process incoming message from WeChat
             return self._handle_incoming_message()
-
     def _verify_wechat_server(self, signature, timestamp, nonce, echostr, **kwargs):
         """
         Verify the WeChat server during initial setup
@@ -51,7 +50,6 @@ class WeChatController(http.Controller):
         else:
             _logger.warning(f"WeChat verification failed. Expected: {hash_signature}, Got: {signature}")
             return Response(response="Verification failed", status=403)
-
     def _handle_incoming_message(self):
         """
         Handle incoming message from WeChat

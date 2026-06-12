@@ -10,7 +10,7 @@ class TestWmsHandover(TransactionCase):
         # Create test data
         self.test_owner = self.env['wms.owner'].create({
             'name': 'Test Handover Owner',
-            'code': 'THO',
+            'owner_code': 'THO',
             'is_warehouse_owner': True,
         })
 
@@ -29,8 +29,7 @@ class TestWmsHandover(TransactionCase):
 
         self.test_product = self.env['product.product'].create({
             'name': 'Test Product for Handover',
-            'type': 'product',
-            'categ_id': self.env.ref('product.product_category_all').id,
+                        'categ_id': self.env.ref('product.product_category_all').id,
             'standard_price': 10.0,
         })
 
@@ -66,7 +65,6 @@ class TestWmsHandover(TransactionCase):
             'location_id': self.test_location.id,
             'location_dest_id': self.test_location.id,
         })
-
     def test_create_handover(self):
         """Test creating a handover record"""
         handover = self.env['wms.handover'].create({
@@ -86,7 +84,6 @@ class TestWmsHandover(TransactionCase):
         self.assertEqual(handover.from_party_id.id, self.test_from_party.id)
         self.assertEqual(handover.to_party_id.id, self.test_to_party.id)
         self.assertEqual(handover.status, 'draft')
-
     def test_handover_items(self):
         """Test adding items to handover"""
         handover = self.env['wms.handover'].create({
@@ -111,7 +108,6 @@ class TestWmsHandover(TransactionCase):
         self.assertEqual(handover.handover_items[0].product_id.id, self.test_product.id)
         self.assertEqual(handover.handover_items[0].quantity, 50.0)
         self.assertEqual(handover.handover_items[0].unit_value, 10.0)
-
     def test_handover_documents(self):
         """Test adding documents to handover"""
         handover = self.env['wms.handover'].create({
@@ -134,7 +130,6 @@ class TestWmsHandover(TransactionCase):
         self.assertEqual(len(handover.documents), 1)
         self.assertEqual(handover.documents[0].name, 'Test Document')
         self.assertEqual(handover.documents[0].document_type, 'invoice')
-
     def test_handover_status_flow(self):
         """Test the status flow of handover records"""
         handover = self.env['wms.handover'].create({
@@ -160,7 +155,6 @@ class TestWmsHandover(TransactionCase):
         # Sign off the handover
         handover.action_sign_off()
         self.assertEqual(handover.status, 'signed_off')
-
     def test_handover_totals_computation(self):
         """Test that totals are computed correctly"""
         handover = self.env['wms.handover'].create({
@@ -212,7 +206,6 @@ class TestWmsHandover(TransactionCase):
                 'to_party_id': self.test_to_party.id,
             })
             self.assertEqual(handover.handover_type, handover_type)
-
     def test_handover_wizard(self):
         """Test creating handover using wizard"""
         wizard = self.env['wms.handover.wizard'].create({
@@ -259,12 +252,11 @@ class TestWmsHandover(TransactionCase):
         self.assertEqual(handover.status, 'signed_off')
         self.assertIsNotNone(handover.signature_from)
         self.assertIsNotNone(handover.signature_to)
-
     def test_handover_ownership_isolation(self):
         """Test that handover records are properly isolated by owner"""
         owner2 = self.env['wms.owner'].create({
             'name': 'Second Handover Owner',
-            'code': 'SHO',
+            'owner_code': 'SHO',
             'is_warehouse_owner': True,
         })
 

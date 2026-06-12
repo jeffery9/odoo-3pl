@@ -19,7 +19,6 @@ class StockQuant(models.Model):
                 ('quantity', '<=', quant.quantity),  # Ensure freeze quantity doesn't exceed available
             ])
             quant.is_frozen = bool(freeze_records)
-
     def _compute_freeze_ids(self):
         """Compute related freeze records"""
         for quant in self:

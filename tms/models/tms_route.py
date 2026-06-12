@@ -150,14 +150,12 @@ class TmsRoute(models.Model):
             route.state = 'in_transit'
             if not route.departure_time:
                 route.picking_batch_id.departure_time = fields.Datetime.now()
-
     def action_complete_route(self):
         for route in self:
             route.state = 'delivered'
             route.picking_batch_id.return_time = fields.Datetime.now()
             # Check if all routes for related sale orders are completed
             route._check_and_update_sale_orders()
-
     def action_optimize_route(self):
         """Optimize the route based on time windows, priority, and geographic proximity"""
         for route in self:
@@ -218,7 +216,6 @@ class TmsRoute(models.Model):
                     'sticky': False,
                 }
             }
-
     def _get_optimal_stop_sequence(self, stops):
         """
         Calculate optimal sequence considering priority, time windows, and geographic proximity.
@@ -272,7 +269,6 @@ class TmsRoute(models.Model):
                 current_lat, current_lng = closest_stop.latitude, closest_stop.longitude
 
         return ordered_stops
-
     def _calculate_distance(self, lat1, lng1, lat2, lng2):
         """
         Calculate the distance between two coordinates using the Haversine formula.
@@ -319,7 +315,6 @@ class TmsRoute(models.Model):
                     _("Vehicle volume exceeded by %.2f m³. Vehicle max: %.2f m³, Route total: %.2f m³") %
                     (excess_volume, route.vehicle_id.max_volume, route.total_volume)
                 )
-
     def _check_and_update_sale_orders(self):
         """Check if all routes for related sale orders are completed and update sale order state"""
         for route in self:
@@ -346,7 +341,6 @@ class TmsRoute(models.Model):
                                 # In a real implementation, you might want to call the proper SO done method
                                 # For now, just log that the SO is ready to be marked as done
                                 _logger.info(f"Sale Order {sale_order.name} has all related routes delivered and pickings completed.")
-
     def action_get_related_sale_orders_status(self):
         """Get the status of related sale orders"""
         self.ensure_one()
@@ -397,7 +391,6 @@ class TmsRoute(models.Model):
                 'sticky': True,
             }
         }
-
     def action_calculate_driver_familiarity(self):
         """Calculate driver familiarity score based on previous routes"""
         self.ensure_one()
@@ -473,7 +466,6 @@ class TmsRoute(models.Model):
                     'sticky': False,
                 }
             }
-
     def action_split_route_for_multiple_drivers(self):
         """
         Split route for multiple drivers when volume is too much for one driver.
@@ -580,7 +572,6 @@ class TmsRoute(models.Model):
                     'sticky': False,
                 }
             }
-
     def _create_sub_route_from_stops(self, stops):
         """Helper method to create a sub-route from a list of stops"""
         # Create new route with the same batch and basic info
@@ -596,7 +587,6 @@ class TmsRoute(models.Model):
             stop.route_id = new_route.id
 
         return new_route
-
     def action_split_route_by_area_capacity(self):
         """
         Split route into multiple routes for the same area when capacity is exceeded.
@@ -709,7 +699,6 @@ class TmsRoute(models.Model):
                     'sticky': False,
                 }
             }
-
     def action_combine_nearby_areas_route(self):
         """
         Combine nearby areas into a single route if they are geographically close
@@ -816,7 +805,6 @@ class TmsRoute(models.Model):
                     'sticky': False,
                 }
             }
-
     def action_smart_split_combine_route(self):
         """
         Smart splitting and combining of routes that considers both capacity constraints and area proximity.
@@ -1003,7 +991,6 @@ class TmsRoute(models.Model):
                     'sticky': False,
                 }
             }
-
     def _check_areas_adjacent(self, area1, area2):
         """
         Check if two areas are adjacent/overlapping based on geographic proximity.
@@ -1019,7 +1006,6 @@ class TmsRoute(models.Model):
         else:
             # Check geographic proximity based on coordinates if available
             return self._check_geographic_proximity(area1, area2)
-
     def _check_geographic_proximity(self, area1, area2, max_distance_km=50.0):
         """
         Check if two areas are geographically close based on their coordinates.
@@ -1042,7 +1028,6 @@ class TmsRoute(models.Model):
                     if distance <= max_distance_km:
                         return True
         return False
-
     def _calculate_haversine_distance(self, lat1, lng1, lat2, lng2):
         """
         Calculate the distance between two coordinates using the Haversine formula.
@@ -1092,7 +1077,6 @@ class TmsRoute(models.Model):
                 total_distance += distance
 
         return total_distance
-
     def action_optimize_route_by_distance(self):
         """
         Optimize route to minimize total distance traveled.
@@ -1143,7 +1127,6 @@ class TmsRoute(models.Model):
                 'sticky': False,
             }
         }
-
     def _optimize_stops_by_distance(self, stops):
         """
         Optimize stop sequence to minimize total travel distance using a nearest neighbor algorithm.
@@ -1189,7 +1172,6 @@ class TmsRoute(models.Model):
                 optimized_sequence.append(remaining_stops.pop(0))
 
         return optimized_sequence
-
     def action_split_combine_for_adjacent_areas(self):
         """
         Enhanced method specifically for splitting when needed but prioritizing
@@ -1358,7 +1340,6 @@ class TmsRoute(models.Model):
                     'sticky': False,
                 }
             }
-
     def action_optimize_all_routes_for_distance(self):
         """
         Optimize all routes in the system for minimal total distance.
@@ -1509,7 +1490,6 @@ class TmsRoute(models.Model):
                     'sticky': False,
                 }
             }
-
     def _create_sub_route_for_stops_stops(self, stop_ids_list):
         """Helper method to create a sub-route for a list of stop IDs"""
         # Create new route with same batch, area, and basic info
@@ -1526,7 +1506,6 @@ class TmsRoute(models.Model):
             stop.route_id = new_route.id
 
         return new_route
-
     def _create_sub_route_for_stops(self, stops):
         """Helper method to create a sub-route for a specific set of stops"""
         # Create new route with same batch, area, and basic info
@@ -1542,7 +1521,6 @@ class TmsRoute(models.Model):
             stop.route_id = new_route.id
 
         return new_route
-
     def action_reorder_stops_dynamically(self):
         """
         Reorder stops dynamically based on actual conditions like traffic,
@@ -1569,7 +1547,6 @@ class TmsRoute(models.Model):
                 'sticky': False,
             }
         }
-
     def action_calculate_stop_timing(self):
         """
         Calculate timing for all stops in the route
@@ -1588,7 +1565,6 @@ class TmsRoute(models.Model):
 
         # Call the timing calculation method on the first stop which will calculate for all
         return self.stop_ids[0].action_calculate_timing()
-
     def action_check_for_oversized_pickings(self):
         """
         Check if any picking in the route is oversized and needs to be split.
@@ -1624,7 +1600,6 @@ class TmsRoute(models.Model):
                     })
 
         return oversized_picking_info
-
     def action_split_oversized_picking(self, picking, max_splits=10):
         """
         Split an oversized picking into multiple smaller pickings that fit within vehicle capacity.
@@ -1764,7 +1739,6 @@ class TmsRoute(models.Model):
             picking.action_cancel()
 
         return created_pickings
-
     def action_handle_oversized_pickings_in_route(self):
         """
         Main method to handle oversized pickings in the route by splitting them.

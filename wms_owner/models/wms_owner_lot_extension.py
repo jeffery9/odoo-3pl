@@ -7,7 +7,6 @@ class WmsOwnerLotExtension(models.Model):
     # Add lot-related fields to owner
     lot_ids = fields.One2many('stock.lot', compute='_compute_lots', string='Owner Lots/Serials')
     lot_count = fields.Integer('Lot Count', compute='_compute_lot_count')
-
     def _compute_lots(self):
         """Compute all lots associated with this owner"""
         for owner in self:
@@ -21,7 +20,6 @@ class WmsOwnerLotExtension(models.Model):
         """Compute count of lots for this owner"""
         for owner in self:
             owner.lot_count = len(owner.lot_ids)
-
     def action_view_lots(self):
         """View all lots associated with this owner"""
         self.ensure_one()

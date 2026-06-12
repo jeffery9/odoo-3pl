@@ -22,13 +22,13 @@ class TestWmsEiqAnalysis(TransactionCase):
         # Create a test warehouse
         self.warehouse = self.Warehouse.create({
             'name': 'Test Warehouse',
-            'code': 'TST'
+            'owner_code': 'TST'
         })
 
         # Create a test owner
         self.owner = self.Owner.create({
             'name': 'Test Owner',
-            'code': 'TO',
+            'owner_code': 'TO',
             'email': 'test@example.com'
         })
 
@@ -40,8 +40,7 @@ class TestWmsEiqAnalysis(TransactionCase):
         # Create test products
         self.product1 = self.Product.create({
             'name': 'Test Product 1',
-            'type': 'product',
-            'default_code': 'TEST001',
+                        'default_code': 'TEST001',
             'weight': 1.0,
             'volume': 0.01,
             'length': 10,
@@ -51,8 +50,7 @@ class TestWmsEiqAnalysis(TransactionCase):
 
         self.product2 = self.Product.create({
             'name': 'Test Product 2',
-            'type': 'product',
-            'default_code': 'TEST002',
+                        'default_code': 'TEST002',
             'weight': 2.0,
             'volume': 0.02,
             'length': 15,
@@ -112,7 +110,6 @@ class TestWmsEiqAnalysis(TransactionCase):
             'location_id': self.location_dst.id,
             'location_dest_id': self.location_src.id,
         })
-
     def test_eiq_analysis_creation(self):
         """Test creation of EIQ analysis records"""
         analysis = self.WmsEiqAnalysis.create({
@@ -130,7 +127,6 @@ class TestWmsEiqAnalysis(TransactionCase):
         self.assertEqual(analysis.warehouse_id.id, self.warehouse.id)
         self.assertEqual(analysis.analysis_type, 'combined')
         self.assertEqual(analysis.state, 'draft')
-
     def test_eiq_analysis_period_constraint(self):
         """Test EIQ analysis period validation"""
         # Test that start date cannot be after end date
@@ -142,7 +138,6 @@ class TestWmsEiqAnalysis(TransactionCase):
                 'owner_id': self.owner.id,
                 'analysis_type': 'outbound',
             })
-
     def test_eiq_analysis_methods_execution(self):
         """Test EIQ analysis methods execution"""
         analysis = self.WmsEiqAnalysis.create({
@@ -177,7 +172,6 @@ class TestWmsEiqAnalysis(TransactionCase):
         }
         abc_result = analysis._calculate_abc_analysis(sample_items)
         self.assertIsInstance(abc_result, list)
-
     def test_eiq_analysis_generation(self):
         """Test EIQ analysis generation"""
         analysis = self.WmsEiqAnalysis.create({
@@ -205,7 +199,6 @@ class TestWmsEiqAnalysis(TransactionCase):
         # Let's make sure we check operations in the right date range
         self.assertIsNotNone(analysis.analysis_results)
         self.assertIsNotNone(analysis.recommendations)
-
     def test_eiq_analysis_report_wizard(self):
         """Test EIQ analysis report wizard"""
         wizard = self.WmsEiqAnalysisReport.create({
@@ -221,7 +214,6 @@ class TestWmsEiqAnalysis(TransactionCase):
         self.assertEqual(wizard.period_end, datetime.now().date())
         self.assertEqual(wizard.owner_id.id, self.owner.id)
         self.assertEqual(wizard.analysis_type, 'outbound')
-
     def test_get_operations_for_analysis(self):
         """Test the method that gets operations for analysis"""
         analysis = self.WmsEiqAnalysis.create({
@@ -241,7 +233,6 @@ class TestWmsEiqAnalysis(TransactionCase):
         # At least one operation should be found (the one we created for testing)
         # This may be empty if the dates don't match, so we'll make a test that's more flexible
         self.assertIsInstance(operations, self.env['stock.picking'].browse(1).__class__)
-
     def test_analysis_results_formatting(self):
         """Test analysis results formatting"""
         analysis = self.WmsEiqAnalysis.create({
@@ -279,7 +270,6 @@ class TestWmsEiqAnalysis(TransactionCase):
         recommendations = analysis._generate_recommendations(stats)
         self.assertIn('<div>', recommendations)
         self.assertIn('recommendations', recommendations)
-
     def test_abc_analysis(self):
         """Test ABC analysis calculation"""
         analysis = self.WmsEiqAnalysis.create({

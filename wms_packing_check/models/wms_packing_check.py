@@ -60,7 +60,6 @@ class WmsPackingCheck(models.Model):
             'status': 'in_progress',
             'check_date': fields.Datetime.now()
         })
-
     def action_complete_check(self):
         """Complete the packing check process"""
         # Determine final status based on pass rate
@@ -69,15 +68,12 @@ class WmsPackingCheck(models.Model):
             'status': final_status,
             'completion_date': fields.Datetime.now()
         })
-
     def action_reject_check(self):
         """Manually reject the packing check"""
         self.write({'status': 'failed'})
-
     def action_approve_check(self):
         """Manually approve the packing check"""
         self.write({'status': 'passed'})
-
     def action_generate_report(self):
         """Generate packing check report"""
         self.ensure_one()
@@ -137,7 +133,6 @@ class WmsPackingCheckWizard(models.TransientModel):
     ], 'Result', required=True, default='pass')
     notes = fields.Text('Notes')
     container_id = fields.Many2one('wms.container', 'Container')
-
     def action_add_performed_check(self):
         """Add performed check to the packing check session"""
         self.ensure_one()
@@ -161,7 +156,6 @@ class WmsStartPackingCheckWizard(models.TransientModel):
     picking_id = fields.Many2one('stock.picking', 'Picking', required=True)
     owner_id = fields.Many2one('wms.owner', 'Owner', required=True)
     container_ids = fields.Many2many('wms.container', string='Containers to Check')
-
     def action_create_packing_check(self):
         """Create a new packing check session from picking"""
         self.ensure_one()

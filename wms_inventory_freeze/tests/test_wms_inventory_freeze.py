@@ -10,7 +10,7 @@ class TestWmsInventoryFreeze(TransactionCase):
         # Create test data
         self.test_owner = self.env['wms.owner'].create({
             'name': 'Test Inventory Freeze Owner',
-            'code': 'TIFO',
+            'owner_code': 'TIFO',
             'is_warehouse_owner': True,
         })
 
@@ -21,8 +21,7 @@ class TestWmsInventoryFreeze(TransactionCase):
 
         self.test_product = self.env['product.product'].create({
             'name': 'Test Product for Inventory Freeze',
-            'type': 'product',
-            'categ_id': self.env.ref('product.product_category_all').id,
+                        'categ_id': self.env.ref('product.product_category_all').id,
         })
 
         self.test_uom = self.env.ref('uom.product_uom_unit')
@@ -33,7 +32,6 @@ class TestWmsInventoryFreeze(TransactionCase):
             'product_id': self.test_product.id,
             'company_id': self.env.company.id,
         })
-
     def test_create_inventory_freeze(self):
         """Test creating an inventory freeze record"""
         inventory_freeze = self.env['wms.inventory.freeze'].create({
@@ -57,7 +55,6 @@ class TestWmsInventoryFreeze(TransactionCase):
         self.assertEqual(inventory_freeze.quantity, 50.0)
         self.assertEqual(inventory_freeze.freeze_type, 'partial')
         self.assertEqual(inventory_freeze.status, 'frozen')
-
     def test_inventory_freeze_status_flow(self):
         """Test the status flow of inventory freeze records"""
         inventory_freeze = self.env['wms.inventory.freeze'].create({
@@ -82,7 +79,6 @@ class TestWmsInventoryFreeze(TransactionCase):
         # Release the inventory
         inventory_freeze.action_release()
         self.assertEqual(inventory_freeze.status, 'released')
-
     def test_inventory_freeze_reasons(self):
         """Test different freeze reasons"""
         reasons = ['quality_issue', 'investigation', 'discrepancy', 'audit', 'customer_request', 'hold']
@@ -99,7 +95,6 @@ class TestWmsInventoryFreeze(TransactionCase):
                 'freeze_type': 'product',
             })
             self.assertEqual(freeze.reason, reason)
-
     def test_inventory_freeze_types(self):
         """Test different freeze types"""
         freeze_types = ['location', 'product', 'lot', 'partial']
@@ -116,7 +111,6 @@ class TestWmsInventoryFreeze(TransactionCase):
                 'freeze_type': freeze_type,
             })
             self.assertEqual(freeze.freeze_type, freeze_type)
-
     def test_inventory_freeze_wizard(self):
         """Test creating inventory freeze using wizard"""
         wizard = self.env['wms.inventory.freeze.wizard'].create({
@@ -139,7 +133,6 @@ class TestWmsInventoryFreeze(TransactionCase):
         freeze = self.env['wms.inventory.freeze'].browse(result['res_id'])
         self.assertEqual(freeze.reason, 'discrepancy')
         self.assertEqual(freeze.quantity, 30.0)
-
     def test_unfreeze_wizard(self):
         """Test unfreezing inventory using wizard"""
         inventory_freeze = self.env['wms.inventory.freeze'].create({
@@ -168,12 +161,11 @@ class TestWmsInventoryFreeze(TransactionCase):
         # Check that the freeze record is now unfrozen
         inventory_freeze.refresh()
         self.assertEqual(inventory_freeze.status, 'unfrozen')
-
     def test_inventory_freeze_ownership_isolation(self):
         """Test that inventory freeze records are properly isolated by owner"""
         owner2 = self.env['wms.owner'].create({
             'name': 'Second Inventory Freeze Owner',
-            'code': 'SIFO',
+            'owner_code': 'SIFO',
             'is_warehouse_owner': True,
         })
 
@@ -202,7 +194,6 @@ class TestWmsInventoryFreeze(TransactionCase):
         self.assertNotEqual(freeze1.owner_id.id, freeze2.owner_id.id)
         self.assertNotEqual(freeze1.reason, freeze2.reason)
         self.assertNotEqual(freeze1.quantity, freeze2.quantity)
-
     def test_stock_quant_freeze_integration(self):
         """Test integration with stock.quant for freeze status"""
         # Create a stock quant

@@ -51,18 +51,15 @@ class WmsBlindReceive(models.Model):
             'status': 'in_progress',
             'start_date': fields.Datetime.now()
         })
-
     def action_complete_blind_receive(self):
         """Complete the blind receive process"""
         self.write({
             'status': 'completed',
             'completion_date': fields.Datetime.now()
         })
-
     def action_cancel_blind_receive(self):
         """Cancel the blind receive process"""
         self.write({'status': 'cancelled'})
-
     def action_generate_report(self):
         """Generate discrepancy report"""
         self.ensure_one()
@@ -139,7 +136,6 @@ class WmsBlindReceiveWizard(models.TransientModel):
     lot_id = fields.Many2one('stock.lot', 'Lot/Serial')
     received_quantity = fields.Float('Received Quantity', required=True, default=1.0)
     blind_receive_id = fields.Many2one('wms.blind.receive', 'Blind Receive Session', required=True)
-
     def action_add_received_product(self):
         """Add received product to the blind receive session"""
         self.ensure_one()
@@ -159,7 +155,6 @@ class WmsBlindReceiveCreateWizard(models.TransientModel):
 
     picking_id = fields.Many2one('stock.picking', 'Picking', required=True)
     owner_id = fields.Many2one('wms.owner', 'Owner', required=True)
-
     def action_create_blind_receive(self):
         """Create a new blind receive session from picking"""
         self.ensure_one()

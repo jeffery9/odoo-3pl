@@ -98,7 +98,6 @@ class WmsRfidTag(models.Model):
                 'status': 'in_use',
                 'date_activated': fields.Datetime.now(),
             })
-
     def action_deactivate_tag(self):
         """Deactivate the RFID tag"""
         for tag in self:
@@ -107,14 +106,12 @@ class WmsRfidTag(models.Model):
                 'status': 'retired',
                 'date_deactivated': fields.Datetime.now(),
             })
-
     def action_report_lost(self):
         """Report the RFID tag as lost"""
         for tag in self:
             tag.write({
                 'status': 'lost',
             })
-
     def action_report_damaged(self):
         """Report the RFID tag as damaged"""
         for tag in self:
@@ -188,7 +185,6 @@ class WmsRfidReader(models.Model):
     next_maintenance = fields.Date('Next Maintenance Date')
 
     notes = fields.Text('Notes')
-
     def action_connect_reader(self):
         """Connect to the RFID reader"""
         for reader in self:
@@ -199,7 +195,6 @@ class WmsRfidReader(models.Model):
                 'is_connected': True,
                 'last_connection': fields.Datetime.now(),
             })
-
     def action_disconnect_reader(self):
         """Disconnect from the RFID reader"""
         for reader in self:
@@ -207,7 +202,6 @@ class WmsRfidReader(models.Model):
                 'status': 'offline',
                 'is_connected': False,
             })
-
     def action_scan_tags(self):
         """Initiate a scan for RFID tags"""
         for reader in self:
@@ -289,7 +283,6 @@ class WmsRfidTransaction(models.Model):
         if vals.get('name', _('New')) == _('New'):
             vals['name'] = self.env['ir.sequence'].next_by_code('wms.rfid.transaction') or _('New')
         return super().create(vals)
-
     def action_verify_transaction(self):
         """Verify the RFID transaction"""
         for transaction in self:
@@ -297,7 +290,6 @@ class WmsRfidTransaction(models.Model):
                 'is_verified': True,
                 'status': 'verified',
             })
-
     def action_mark_error(self, error_msg):
         """Mark the transaction as having an error"""
         for transaction in self:
@@ -357,7 +349,6 @@ class WmsRfidInventory(models.Model):
         if vals.get('name', _('New')) == _('New'):
             vals['name'] = self.env['ir.sequence'].next_by_code('wms.rfid.inventory') or _('New')
         return super().create(vals)
-
     def action_start_inventory(self):
         """Start the RFID inventory"""
         for inventory in self:
@@ -365,7 +356,6 @@ class WmsRfidInventory(models.Model):
                 'state': 'in_progress',
                 'date_start': fields.Datetime.now(),
             })
-
     def action_complete_inventory(self):
         """Complete the RFID inventory"""
         for inventory in self:
@@ -375,12 +365,10 @@ class WmsRfidInventory(models.Model):
             })
             # Calculate inventory results
             inventory._calculate_results()
-
     def action_cancel_inventory(self):
         """Cancel the RFID inventory"""
         for inventory in self:
             inventory.write({'state': 'cancelled'})
-
     def _calculate_results(self):
         """Calculate inventory results"""
         for inventory in self:

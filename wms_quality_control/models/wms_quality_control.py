@@ -46,8 +46,6 @@ class WmsQualityControl(models.Model):
     # Traceability enhanced fields
     traced_moves_count = fields.Integer('Traced Moves', compute='_compute_traced_moves')
     traced_quantities = fields.Float('Traced Quantities', compute='_compute_traced_quantities')
-
-    @api.model
     def create(self, vals):
         # Auto-populate traceability fields if picking is provided
         if vals.get('picking_id'):
@@ -68,7 +66,6 @@ class WmsQualityControl(models.Model):
         if not vals.get('name'):
             vals['name'] = self.env['ir.sequence'].next_by_code('wms.quality.control') or '/'
         return super().create(vals)
-
     def write(self, vals):
         # Auto-populate traceability fields if picking is updated
         if vals.get('picking_id') and not vals.get('lot_ids') and not vals.get('product_ids'):
@@ -139,7 +136,6 @@ class WmsQualityControl(models.Model):
             'domain': [('id', 'in', self.lot_ids.ids)],
             'context': {'default_company_id': self.company_id.id if hasattr(self, 'company_id') else False}
         }
-
     def action_view_products(self):
         """View products associated with this QC"""
         self.ensure_one()
@@ -150,7 +146,6 @@ class WmsQualityControl(models.Model):
             'view_mode': 'list,form',
             'domain': [('id', 'in', self.product_ids.ids)],
         }
-
     def action_view_related_moves(self):
         """View related stock moves"""
         self.ensure_one()
@@ -177,36 +172,30 @@ class WmsQualityControl(models.Model):
                 'view_mode': 'list,form',
                 'domain': domain,
             }
-
     def action_start_qc(self):
         """Start the quality control process"""
         self.write({
             'status': 'in_progress',
             'qc_date': fields.Datetime.now()
         })
-
     def action_pass_qc(self):
         """Pass the quality control check"""
         self.write({
             'status': 'passed',
             'completion_date': fields.Datetime.now()
         })
-
     def action_fail_qc(self):
         """Fail the quality control check"""
         self.write({
             'status': 'failed',
             'completion_date': fields.Datetime.now()
         })
-
     def action_rework_qc(self):
         """Mark quality control as reworked"""
         self.write({'status': 'reworked'})
-
     def action_cancel_qc(self):
         """Cancel quality control"""
         self.write({'status': 'cancelled'})
-
     def action_generate_report(self):
         """Generate quality control report"""
         self.ensure_one()
@@ -297,14 +286,12 @@ class WmsQualityCorrectiveAction(models.Model):
     ], 'Status', default='open')
     verification_notes = fields.Text('Verification Notes')
     owner_id = fields.Many2one('wms.owner', 'Owner', related='qc_id.owner_id', store=True)
-
     def action_complete_action(self):
         """Mark corrective action as completed"""
         self.write({
             'status': 'completed',
             'completion_date': fields.Date.today()
         })
-
     def action_verify_action(self):
         """Verify corrective action completion"""
         self.write({'status': 'verified'})
@@ -337,7 +324,6 @@ class WmsQualityControlWizard(models.TransientModel):
     ], 'QC Type', required=True, default='incoming')
     owner_id = fields.Many2one('wms.owner', 'Owner', required=True)
     notes = fields.Text('Notes')
-
     def action_create_qc(self):
         """Create quality control record"""
         self.ensure_one()
@@ -364,7 +350,6 @@ class WmsQualityControlWizard(models.TransientModel):
             'view_mode': 'form',
             'target': 'current',
         }
-
     def _add_default_checklist_items(self, qc):
         """Add default checklist items based on QC type"""
         default_items = {
@@ -431,7 +416,6 @@ class WmsQualityIssueWizard(models.TransientModel):
     ], 'Category', required=True, default='product')
     quantity_affected = fields.Float('Quantity Affected')
     notes = fields.Text('Notes')
-
     def action_create_issue(self):
         """Create quality issue record"""
         self.ensure_one()

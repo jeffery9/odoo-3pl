@@ -10,7 +10,7 @@ class TestWmsSafetyManagement(TransactionCase):
         # Create test data
         self.test_owner = self.env['wms.owner'].create({
             'name': 'Test Safety Management Owner',
-            'code': 'TSMO',
+            'owner_code': 'TSMO',
             'is_warehouse_owner': True,
         })
 
@@ -44,10 +44,9 @@ class TestWmsSafetyManagement(TransactionCase):
 
         self.test_activity = self.env['wms.labor.activity'].create({
             'name': 'Test Forklift Activity',
-            'code': 'TFA',
+            'owner_code': 'TFA',
             'activity_type': 'machinery',
         })
-
     def test_create_safety_incident(self):
         """Test creating safety incidents"""
         incident = self.env['wms.safety.incident'].create({
@@ -64,7 +63,6 @@ class TestWmsSafetyManagement(TransactionCase):
         self.assertEqual(incident.severity, 'medium')
         self.assertEqual(incident.reported_by.id, self.test_employee.id)
         self.assertEqual(incident.status, 'reported')
-
     def test_create_safety_training(self):
         """Test creating safety training"""
         training = self.env['wms.safety.training'].create({
@@ -82,7 +80,6 @@ class TestWmsSafetyManagement(TransactionCase):
         self.assertEqual(training.duration_hours, 4.0)
         self.assertEqual(training.trainer_id.id, self.test_employee.id)
         self.assertTrue(training.active)
-
     def test_safety_training_participants(self):
         """Test safety training participant tracking"""
         training = self.env['wms.safety.training'].create({
@@ -99,7 +96,6 @@ class TestWmsSafetyManagement(TransactionCase):
         self.assertEqual(len(training.participant_ids), 2)
         self.assertTrue(self.test_employee in training.participant_ids)
         self.assertTrue(self.test_employee2 in training.participant_ids)
-
     def test_create_safety_ppe(self):
         """Test creating safety PPE"""
         ppe = self.env['wms.safety.ppe'].create({
@@ -118,7 +114,6 @@ class TestWmsSafetyManagement(TransactionCase):
         self.assertEqual(ppe.stock_quantity, 100)
         self.assertEqual(ppe.brand, 'Safety Inc.')
         self.assertTrue(ppe.is_active)
-
     def test_create_safety_inspection(self):
         """Test creating safety inspections"""
         inspection = self.env['wms.safety.inspection'].create({
@@ -136,7 +131,6 @@ class TestWmsSafetyManagement(TransactionCase):
         self.assertEqual(inspection.inspector_id.id, self.test_employee.id)
         self.assertEqual(inspection.status, 'draft')
         self.assertEqual(inspection.owner_id.id, self.test_owner.id)
-
     def test_safety_inspection_status_flow(self):
         """Test safety inspection status flow"""
         inspection = self.env['wms.safety.inspection'].create({
@@ -156,7 +150,6 @@ class TestWmsSafetyManagement(TransactionCase):
         # Complete inspection
         inspection.action_complete_inspection()
         self.assertEqual(inspection.status, 'completed')
-
     def test_safety_inspection_findings(self):
         """Test safety inspection findings"""
         inspection = self.env['wms.safety.inspection'].create({
@@ -178,7 +171,6 @@ class TestWmsSafetyManagement(TransactionCase):
         self.assertEqual(finding.inspection_id.id, inspection.id)
         self.assertEqual(finding.severity, 'high')
         self.assertEqual(finding.status, 'open')
-
     def test_create_safety_compliance(self):
         """Test creating safety compliance records"""
         compliance = self.env['wms.safety.compliance'].create({
@@ -194,7 +186,6 @@ class TestWmsSafetyManagement(TransactionCase):
         self.assertEqual(compliance.compliance_type, 'regulatory')
         self.assertFalse(compliance.compliant)
         self.assertEqual(compliance.frequency, 'annual')
-
     def test_safety_risk_assessment(self):
         """Test creating safety risk assessments"""
         risk = self.env['wms.safety.risk'].create({
@@ -231,7 +222,6 @@ class TestWmsSafetyManagement(TransactionCase):
 
         # very_high (5) * very_high (5) = 25
         self.assertEqual(risk.risk_score, 25)
-
     def test_safety_incident_with_witnesses(self):
         """Test safety incident with witnesses"""
         incident = self.env['wms.safety.incident'].create({
@@ -248,7 +238,6 @@ class TestWmsSafetyManagement(TransactionCase):
 
         self.assertEqual(len(incident.witness_ids), 1)
         self.assertTrue(self.test_employee2 in incident.witness_ids)
-
     def test_safety_ppe_required_for_jobs(self):
         """Test PPE required for specific jobs"""
         ppe = self.test_ppe
@@ -256,7 +245,6 @@ class TestWmsSafetyManagement(TransactionCase):
 
         self.assertEqual(len(ppe.required_for_jobs), 1)
         self.assertTrue(self.test_activity in ppe.required_for_jobs)
-
     def test_safety_inspection_findings_count(self):
         """Test computed findings count for inspections"""
         inspection = self.env['wms.safety.inspection'].create({
@@ -305,7 +293,6 @@ class TestWmsSafetyManagement(TransactionCase):
         })
 
         self.assertIsNotNone(training.expiry_date)
-
     def test_safety_compliance_date_calculation(self):
         """Test safety compliance date calculation"""
         from datetime import date, timedelta

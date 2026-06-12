@@ -22,13 +22,13 @@ class TestWmsPackingRule(TransactionCase):
         # Create a test warehouse
         self.warehouse = self.Warehouse.create({
             'name': 'Test Warehouse',
-            'code': 'TST'
+            'owner_code': 'TST'
         })
 
         # Create a test owner
         self.owner = self.Owner.create({
             'name': 'Test Owner',
-            'code': 'TO',
+            'owner_code': 'TO',
             'email': 'test@example.com'
         })
 
@@ -40,8 +40,7 @@ class TestWmsPackingRule(TransactionCase):
         # Create test products
         self.product1 = self.Product.create({
             'name': 'Test Product 1',
-            'type': 'product',
-            'default_code': 'TEST001',
+                        'default_code': 'TEST001',
             'weight': 1.0,
             'volume': 0.01,
             'length': 10,
@@ -51,8 +50,7 @@ class TestWmsPackingRule(TransactionCase):
 
         self.product2 = self.Product.create({
             'name': 'Test Product 2',
-            'type': 'product',
-            'default_code': 'TEST002',
+                        'default_code': 'TEST002',
             'weight': 2.0,
             'volume': 0.02,
             'length': 15,
@@ -76,7 +74,7 @@ class TestWmsPackingRule(TransactionCase):
         # Create a test box type
         self.box_type = self.WmsPackingBoxType.create({
             'name': 'Test Box Type',
-            'code': 'TBT001',
+            'owner_code': 'TBT001',
             'length': 30,
             'width': 30,
             'height': 30,
@@ -84,12 +82,11 @@ class TestWmsPackingRule(TransactionCase):
             'max_volume': 0.1,
             'max_items': 20
         })
-
     def test_packing_rule_creation(self):
         """Test creation of packing rules"""
         packing_rule = self.WmsPackingRule.create({
             'name': 'Test Packing Rule',
-            'code': 'TPR001',
+            'owner_code': 'TPR001',
             'warehouse_ids': [(6, 0, [self.warehouse.id])],
             'product_category_ids': [(6, 0, [self.category.id])],
             'owner_ids': [(6, 0, [self.owner.id])],
@@ -101,7 +98,7 @@ class TestWmsPackingRule(TransactionCase):
         })
 
         self.assertEqual(packing_rule.name, 'Test Packing Rule')
-        self.assertEqual(packing_rule.code, 'TPR001')
+        self.assertEqual(packing_rule.owner_code, 'TPR001')
         self.assertIn(self.warehouse, packing_rule.warehouse_ids)
         self.assertIn(self.category, packing_rule.product_category_ids)
         self.assertIn(self.owner, packing_rule.owner_ids)
@@ -110,14 +107,13 @@ class TestWmsPackingRule(TransactionCase):
         self.assertEqual(packing_rule.max_box_weight, 20.0)
         self.assertEqual(packing_rule.max_box_volume, 0.5)
         self.assertEqual(packing_rule.max_items_per_box, 10)
-
     def test_packing_rule_constraints(self):
         """Test packing rule constraints validation"""
         # Test negative weight constraint
         with self.assertRaises(ValidationError):
             self.WmsPackingRule.create({
                 'name': 'Invalid Packing Rule - Negative Weight',
-                'code': 'IPR001',
+                'owner_code': 'IPR001',
                 'max_box_weight': -5.0,
                 'active': True,
             })
@@ -126,7 +122,7 @@ class TestWmsPackingRule(TransactionCase):
         with self.assertRaises(ValidationError):
             self.WmsPackingRule.create({
                 'name': 'Invalid Packing Rule - Negative Volume',
-                'code': 'IPR002',
+                'owner_code': 'IPR002',
                 'max_box_volume': -0.1,
                 'active': True,
             })
@@ -135,16 +131,15 @@ class TestWmsPackingRule(TransactionCase):
         with self.assertRaises(ValidationError):
             self.WmsPackingRule.create({
                 'name': 'Invalid Packing Rule - Negative Items',
-                'code': 'IPR003',
+                'owner_code': 'IPR003',
                 'max_items_per_box': -5,
                 'active': True,
             })
-
     def test_packing_rule_methods(self):
         """Test packing rule methods"""
         packing_rule = self.WmsPackingRule.create({
             'name': 'Test Packing Rule for Methods',
-            'code': 'TPR002',
+            'owner_code': 'TPR002',
             'rule_type': 'fixed',
             'max_items_per_box': 5,
             'active': True,
@@ -185,7 +180,7 @@ class TestWmsPackingRule(TransactionCase):
         """Test creation of box types"""
         box_type = self.WmsPackingBoxType.create({
             'name': 'Test Box Type 2',
-            'code': 'TBT002',
+            'owner_code': 'TBT002',
             'length': 50,
             'width': 40,
             'height': 30,
@@ -197,7 +192,7 @@ class TestWmsPackingRule(TransactionCase):
         })
 
         self.assertEqual(box_type.name, 'Test Box Type 2')
-        self.assertEqual(box_type.code, 'TBT002')
+        self.assertEqual(box_type.owner_code, 'TBT002')
         self.assertEqual(box_type.length, 50)
         self.assertEqual(box_type.width, 40)
         self.assertEqual(box_type.height, 30)
@@ -206,14 +201,13 @@ class TestWmsPackingRule(TransactionCase):
         self.assertEqual(box_type.max_items, 15)
         self.assertEqual(box_type.material, 'cardboard')
         self.assertEqual(box_type.cost, 2.50)
-
     def test_box_type_constraints(self):
         """Test box type constraints validation"""
         # Test negative dimension constraint
         with self.assertRaises(ValidationError):
             self.WmsPackingBoxType.create({
                 'name': 'Invalid Box Type - Negative Dimension',
-                'code': 'IBT001',
+                'owner_code': 'IBT001',
                 'length': -10,
                 'width': 20,
                 'height': 20,
@@ -225,7 +219,7 @@ class TestWmsPackingRule(TransactionCase):
         with self.assertRaises(ValidationError):
             self.WmsPackingBoxType.create({
                 'name': 'Invalid Box Type - Zero Dimension',
-                'code': 'IBT002',
+                'owner_code': 'IBT002',
                 'length': 0,
                 'width': 20,
                 'height': 20,
@@ -237,7 +231,7 @@ class TestWmsPackingRule(TransactionCase):
         with self.assertRaises(ValidationError):
             self.WmsPackingBoxType.create({
                 'name': 'Invalid Box Type - Negative Weight',
-                'code': 'IBT003',
+                'owner_code': 'IBT003',
                 'length': 30,
                 'width': 30,
                 'height': 30,
@@ -249,19 +243,18 @@ class TestWmsPackingRule(TransactionCase):
         with self.assertRaises(ValidationError):
             self.WmsPackingBoxType.create({
                 'name': 'Invalid Box Type - Negative Volume',
-                'code': 'IBT004',
+                'owner_code': 'IBT004',
                 'length': 30,
                 'width': 30,
                 'height': 30,
                 'max_weight': 10.0,
                 'max_volume': -0.1,
             })
-
     def test_box_type_onchange(self):
         """Test box type onchange functionality"""
         box_type = self.WmsPackingBoxType.create({
             'name': 'Test Box Type for onchange',
-            'code': 'TBT003',
+            'owner_code': 'TBT003',
             'length': 100,
             'width': 50,
             'height': 40,
@@ -275,12 +268,11 @@ class TestWmsPackingRule(TransactionCase):
         # so we're verifying the calculation logic
         calculated_volume = (box_type.length * box_type.width * box_type.height) / 1000000
         self.assertEqual(calculated_volume, expected_volume)
-
     def test_rule_box_type_relationship(self):
         """Test the relationship between packing rules and box types"""
         packing_rule = self.WmsPackingRule.create({
             'name': 'Test Packing Rule with Box Types',
-            'code': 'TPR003',
+            'owner_code': 'TPR003',
             'rule_type': 'mixed',
             'active': True,
         })

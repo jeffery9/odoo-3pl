@@ -62,7 +62,6 @@ class WmsWcsSystem(models.Model):
     device_ids = fields.One2many('wms.wcs.device', 'wcs_system_id', 'Devices')
 
     notes = fields.Text('Notes')
-
     def action_test_connection(self):
         """Test connection to the WCS system"""
         for system in self:
@@ -79,7 +78,6 @@ class WmsWcsSystem(models.Model):
                     'connection_status': 'error',
                     'is_connected': False,
                 })
-
     def action_sync_devices(self):
         """Synchronize devices with the WCS system"""
         for system in self:
@@ -152,7 +150,6 @@ class WmsWcsDevice(models.Model):
             # This would send the actual command to the device
             # For now, we'll just log the action
             _logger.info(f"Sending command to device {device.name}: {command_data}")
-
     def action_refresh_status(self):
         """Refresh the device status from WCS system"""
         for device in self:
@@ -270,7 +267,6 @@ class WmsWcsTask(models.Model):
                     'state': 'confirmed',
                     'date_confirmed': fields.Datetime.now(),
                 })
-
     def action_send_to_wcs(self):
         """Send the task to the WCS system"""
         for task in self:
@@ -281,7 +277,6 @@ class WmsWcsTask(models.Model):
                     'state': 'sent',
                     'date_sent': fields.Datetime.now(),
                 })
-
     def action_start_task(self):
         """Mark the task as started by the WCS system"""
         for task in self:
@@ -291,7 +286,6 @@ class WmsWcsTask(models.Model):
                     'date_started': fields.Datetime.now(),
                     'start_time': fields.Datetime.now(),
                 })
-
     def action_complete_task(self):
         """Mark the task as completed by the WCS system"""
         for task in self:
@@ -301,13 +295,11 @@ class WmsWcsTask(models.Model):
                     'date_completed': fields.Datetime.now(),
                     'end_time': fields.Datetime.now(),
                 })
-
     def action_cancel_task(self):
         """Cancel the WCS task"""
         for task in self:
             if task.state in ['draft', 'confirmed', 'sent']:
                 task.write({'state': 'cancelled'})
-
     def action_retry_task(self):
         """Retry the failed task"""
         for task in self:

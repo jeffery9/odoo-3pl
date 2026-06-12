@@ -52,7 +52,6 @@ class WmsBatchReceive(models.Model):
             'status': 'in_progress',
             'receive_date': fields.Datetime.now()
         })
-
     def action_complete_batch_receive(self):
         """Complete the batch receive process"""
         all_completed = all(bp.status == 'completed' for bp in self.batch_picking_ids)
@@ -63,11 +62,9 @@ class WmsBatchReceive(models.Model):
             })
         else:
             self.write({'status': 'partial'})
-
     def action_cancel_batch_receive(self):
         """Cancel the batch receive process"""
         self.write({'status': 'cancelled'})
-
     def action_add_picking(self):
         """Add picking to batch receive"""
         self.ensure_one()
@@ -79,7 +76,6 @@ class WmsBatchReceive(models.Model):
             'target': 'new',
             'context': {'default_batch_receive_id': self.id}
         }
-
     def action_generate_report(self):
         """Generate batch receive report"""
         self.ensure_one()
@@ -138,14 +134,12 @@ class WmsBatchReceivePicking(models.Model):
             'receive_date': fields.Datetime.now(),
             'received_by': self.env.user.id
         })
-
     def action_complete_receiving(self):
         """Complete receiving this picking"""
         self.write({
             'status': 'completed',
             'completion_date': fields.Datetime.now()
         })
-
     def action_cancel_receiving(self):
         """Cancel receiving this picking"""
         self.write({'status': 'cancelled'})
@@ -163,7 +157,6 @@ class WmsBatchReceiveAddPickingWizard(models.TransientModel):
         ('high', 'High'),
         ('urgent', 'Urgent'),
     ], 'Priority', default='normal')
-
     def action_add_pickings(self):
         """Add selected pickings to batch receive"""
         self.ensure_one()
@@ -190,7 +183,6 @@ class WmsBatchReceiveWizard(models.TransientModel):
         ('urgent', 'Urgent'),
     ], 'Priority', default='normal')
     notes = fields.Text('Notes')
-
     def action_create_batch_receive(self):
         """Create batch receive session with selected pickings"""
         self.ensure_one()

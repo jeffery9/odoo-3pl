@@ -181,7 +181,6 @@ class WmsFinancialTransaction(models.Model):
                 transaction.status = 'posted'
                 transaction.is_posted = True
                 transaction.posting_date = fields.Date.context_today(self)
-
     def action_cancel(self):
         """Cancel the transaction"""
         for transaction in self:
@@ -256,7 +255,6 @@ class WmsCostAllocation(models.Model):
         if vals.get('allocation_code', _('New')) == _('New'):
             vals['allocation_code'] = self.env['ir.sequence'].next_by_code('wms.cost.allocation') or _('New')
         return super().create(vals)
-
     def action_confirm(self):
         """Confirm the cost allocation"""
         for allocation in self:
@@ -396,7 +394,6 @@ class WmsInvoiceIntegration(models.Model):
             invoice.subtotal = sum(t.amount for t in transactions)
             invoice.tax_amount = sum(t.tax_amount for t in transactions)
             invoice.total_amount = sum(t.total_amount for t in transactions)
-
     def action_send_invoice(self):
         """Send the invoice to customer"""
         for invoice in self:

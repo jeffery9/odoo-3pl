@@ -29,8 +29,6 @@ class WmsBillingRecord(models.Model):
         ('invoiced', 'Invoiced'),
         ('paid', 'Paid'),
     ], 'State', default='draft')
-
-    @api.model
     def create(self, vals):
         if not vals.get('name'):
             vals['name'] = self.env['ir.sequence'].next_by_code('wms.billing.record') or '/'
@@ -43,7 +41,6 @@ class WmsBillingRecord(models.Model):
 
     def action_confirm(self):
         self.write({'state': 'confirmed'})
-
     def action_create_invoice(self):
         """Create an invoice for the billing records"""
         # This would create an invoice in the accounting module

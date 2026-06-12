@@ -61,7 +61,6 @@ class WmsWaveRule(models.Model):
         rules = self.search([('active', '=', True)])
         for rule in rules:
             rule._generate_wave()
-
     def _generate_wave(self):
         """Generate wave based on rule configuration"""
         # Get pickings that match the rule criteria
@@ -110,17 +109,14 @@ class WmsWaveRule(models.Model):
 
             return batch
         return False
-
     def generate_wave_manually(self):
         """Generate wave manually from action button"""
         self.ensure_one()
         return self._generate_wave()
-
     def action_execute_rule(self):
         """Manually execute rule to create wave - stub method for base model"""
         # This method is implemented in the auto wave extension
         return True
-
     def toggle_active(self):
         """Toggle the active state of the rule"""
         self.active = not self.active

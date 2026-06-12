@@ -22,7 +22,6 @@ class StockPickingBatch(models.Model):
     actual_completion_time = fields.Float('Actual Completion Time (Hours)')
     user_ids = fields.Many2many('res.users', 'batch_user_rel', 'batch_id', 'user_id', 'Assigned Users')
     progress = fields.Float('Progress (%)', compute='_compute_progress')
-
     def _compute_progress(self):
         for batch in self:
             if batch.picking_ids:

@@ -28,7 +28,6 @@ class StockLocation(models.Model):
 
     # Lot tracking enhancements for locations
     lot_ids = fields.Many2many('stock.lot', compute='_compute_lot_ids', string='Lots in Location')
-
     def _compute_lot_ids(self):
         """Compute all lots currently in this location"""
         for location in self:

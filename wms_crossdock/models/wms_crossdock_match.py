@@ -44,7 +44,6 @@ class WmsCrossdockMatch(models.Model):
                 pick.move_line_ids.mapped('quantity')
                 for pick in match.outbound_picking_ids
             )
-
     def action_confirm_match(self):
         self.write({'status': 'confirmed'})
         # Create operations for the confirmed match
@@ -59,13 +58,10 @@ class WmsCrossdockMatch(models.Model):
                         'crossdock_match_id': match.id,
                         'warehouse_id': inbound.picking_type_id.warehouse_id.id,
                     })
-
     def action_start_transit(self):
         self.write({'status': 'in_transit'})
-
     def action_complete_match(self):
         self.write({'status': 'completed'})
-
     def action_fail_match(self):
         self.write({'status': 'failed'})
 

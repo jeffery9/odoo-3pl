@@ -25,19 +25,19 @@ class TestTmsRouteOptimization(TransactionCase):
         # Create test areas
         self.area_north = self.route_area_model.create({
             'name': 'North Area',
-            'code': 'NORTH',
+            'owner_code': 'NORTH',
             'description': 'Northern delivery area'
         })
 
         self.area_south = self.route_area_model.create({
             'name': 'South Area',
-            'code': 'SOUTH',
+            'owner_code': 'SOUTH',
             'description': 'Southern delivery area'
         })
 
         self.area_east = self.route_area_model.create({
             'name': 'East Area',
-            'code': 'EAST',
+            'owner_code': 'EAST',
             'description': 'Eastern delivery area'
         })
 
@@ -91,7 +91,6 @@ class TestTmsRouteOptimization(TransactionCase):
             'weight': 2.0,
             'volume': 0.05,
         })
-
     def test_haversine_distance_calculation(self):
         """Test the Haversine distance calculation method"""
         route = self.tms_route_model.new({})
@@ -105,7 +104,6 @@ class TestTmsRouteOptimization(TransactionCase):
         self.assertGreater(distance, 0.0, "Distance between different points should be greater than 0")
         # Approximate distance should be around 1-2 km for these coordinates
         self.assertLess(distance, 5.0, "Distance should be reasonable for nearby points")
-
     def test_area_adjacency_check(self):
         """Test the area adjacency functionality"""
         route = self.tms_route_model.new({})
@@ -119,7 +117,6 @@ class TestTmsRouteOptimization(TransactionCase):
         is_adjacent = route._check_areas_adjacent(self.area_north, self.area_south)
         # This might be True or False depending on the distance between partners in each area
         self.assertIsInstance(is_adjacent, bool, "Adjacency check should return boolean")
-
     def test_create_route_with_area(self):
         """Test creating a route with area assignment"""
         # Create a batch with pickings
@@ -158,7 +155,6 @@ class TestTmsRouteOptimization(TransactionCase):
 
         self.assertEqual(route.area_id.id, self.area_north.id, "Route should have correct area assigned")
         self.assertEqual(route.picking_batch_id.id, batch.id, "Route should be linked to correct batch")
-
     def test_route_distance_optimization(self):
         """Test route optimization for distance"""
         # Create a route with stops in different areas
@@ -211,7 +207,6 @@ class TestTmsRouteOptimization(TransactionCase):
         # After optimization, the sequence should be different if there were meaningful differences
         optimized_distance = route._calculate_route_distance(optimized_stops)
         self.assertGreater(optimized_distance, 0, "Optimized route should have distance > 0")
-
     def test_area_combination_within_capacity(self):
         """Test combining areas when within capacity"""
         batch = self.stock_picking_batch_model.create({
@@ -256,7 +251,6 @@ class TestTmsRouteOptimization(TransactionCase):
 
         self.assertLess(total_weight, self.vehicle.max_weight, "Total weight should be within capacity")
         self.assertLess(total_volume, self.vehicle.max_volume, "Total volume should be within capacity")
-
     def test_area_splitting_when_exceeding_capacity(self):
         """Test splitting areas when exceeding capacity"""
         batch = self.stock_picking_batch_model.create({
@@ -296,7 +290,6 @@ class TestTmsRouteOptimization(TransactionCase):
         # The logic is tested in the route splitting methods
         self.assertGreaterEqual(total_weight, self.vehicle.max_weight,
                               "Test setup should exceed vehicle capacity")
-
     def test_optimize_route_by_distance_method(self):
         """Test the main optimize route method"""
         batch = self.stock_picking_batch_model.create({
@@ -349,7 +342,6 @@ class TestTmsRouteOptimization(TransactionCase):
         # Distance might be improved
         self.assertGreaterEqual(original_distance + 0.1, optimized_distance,
                               "Optimized distance should be same or better")
-
     def test_split_combine_for_adjacent_areas_method(self):
         """Test the split and combine method for adjacent areas"""
         batch = self.stock_picking_batch_model.create({
@@ -397,7 +389,6 @@ class TestTmsRouteOptimization(TransactionCase):
 
         # The route might be split, so we check that the method completed properly
         self.assertTrue(True, "Method should complete without errors")
-
     def test_check_geographic_proximity_method(self):
         """Test the geographic proximity checking method"""
         route = self.tms_route_model.new({})
@@ -410,7 +401,6 @@ class TestTmsRouteOptimization(TransactionCase):
         is_close = route._check_geographic_proximity(self.area_north, self.area_south)
         # Result depends on actual distances between partners in areas
         self.assertIsInstance(is_close, bool, "Geographic proximity check should return boolean")
-
     def test_smart_split_combine_route_method(self):
         """Test the smart split and combine route method"""
         batch = self.stock_picking_batch_model.create({
@@ -456,7 +446,6 @@ class TestTmsRouteOptimization(TransactionCase):
         self.assertIn('params', result)
         self.assertIn('title', result['params'])
         self.assertIn('message', result['params'])
-
     def test_optimize_all_routes_for_distance_method(self):
         """Test the optimize all routes for distance method"""
         batch = self.stock_picking_batch_model.create({
@@ -499,7 +488,6 @@ class TestTmsRouteOptimization(TransactionCase):
         self.assertIn('params', result)
         self.assertIn('title', result['params'])
         self.assertIn('message', result['params'])
-
     def test_route_with_no_vehicle_assignment(self):
         """Test route methods with no vehicle assigned"""
         batch = self.stock_picking_batch_model.create({
@@ -532,7 +520,6 @@ class TestTmsRouteOptimization(TransactionCase):
         result = route.action_optimize_all_routes_for_distance()
         self.assertEqual(result['tag'], 'display_notification')
         self.assertIn('No Vehicle Assigned', result['params']['message'])
-
     def test_route_with_single_stop(self):
         """Test route with single stop edge case"""
         batch = self.stock_picking_batch_model.create({
@@ -560,7 +547,6 @@ class TestTmsRouteOptimization(TransactionCase):
         result = route.action_optimize_route_by_distance()
         self.assertEqual(result['tag'], 'display_notification')
         self.assertIn('No Optimization Needed', result['params']['message'])
-
     def test_optimize_stops_by_distance_algorithm(self):
         """Test the core algorithm that optimizes stops by distance"""
         batch = self.stock_picking_batch_model.create({
@@ -618,7 +604,6 @@ class TestTmsRouteOptimization(TransactionCase):
 
         # The optimized distance should be valid
         self.assertGreaterEqual(optimized_distance, 0, "Optimized distance should be non-negative")
-
     def test_create_sub_route_functionality(self):
         """Test the sub-route creation functionality"""
         batch = self.stock_picking_batch_model.create({
@@ -665,7 +650,6 @@ class TestTmsRouteOptimization(TransactionCase):
         # Check that stops were moved to the new route
         for stop in [stop_1, stop_2]:
             self.assertEqual(stop.route_id.id, sub_route.id, f"Stop {stop.id} should be in new route")
-
     def test_calculate_route_distance_functionality(self):
         """Test the route distance calculation functionality"""
         batch = self.stock_picking_batch_model.create({
@@ -714,7 +698,6 @@ class TestTmsRouteOptimization(TransactionCase):
         # Calculate distance with only one stop (should be 0)
         single_stop_distance = route._calculate_route_distance(route.stop_ids[:1])
         self.assertEqual(single_stop_distance, 0, "Distance with single stop should be 0")
-
     def test_split_route_by_area_capacity_method(self):
         """Test the area-based route splitting when capacity is exceeded"""
         batch = self.stock_picking_batch_model.create({
@@ -806,7 +789,6 @@ class TestTmsRouteOptimization(TransactionCase):
         self.assertEqual(result['tag'], 'display_notification')
         self.assertIn('params', result)
         self.assertIn('message', result['params'])
-
     def test_split_combine_for_adjacent_areas_with_oversized_area(self):
         """Test split and combine method when one area is oversized"""
         batch = self.stock_picking_batch_model.create({
@@ -849,7 +831,6 @@ class TestTmsRouteOptimization(TransactionCase):
         self.assertEqual(result['tag'], 'display_notification')
         self.assertIn('params', result)
         self.assertIn('message', result['params'])
-
     def test_adjacent_area_detection(self):
         """Test that adjacent area detection works properly"""
         route = self.tms_route_model.new({
@@ -869,7 +850,6 @@ class TestTmsRouteOptimization(TransactionCase):
 
         is_both_none = route._check_areas_adjacent(None, None)
         self.assertTrue(is_both_none, "Two None areas should be considered compatible")
-
     def test_capacity_constraints_handling(self):
         """Test that capacity constraints are properly handled in all operations"""
         batch = self.stock_picking_batch_model.create({
@@ -933,7 +913,6 @@ class TestTmsRouteOptimization(TransactionCase):
                        "Total weight should be within vehicle weight capacity")
         self.assertGreater(total_volume2, self.vehicle.max_volume or 0,
                           "Total volume should exceed vehicle volume capacity")
-
     def test_geographic_clustering_and_distance_optimization(self):
         """Test geographic clustering with distance optimization"""
         batch = self.stock_picking_batch_model.create({
@@ -988,7 +967,6 @@ class TestTmsRouteOptimization(TransactionCase):
 
         # The optimized distance should be a valid number
         self.assertGreaterEqual(optimized_distance, 0, "Optimized distance should be non-negative")
-
     def test_batch_area_split_functionality(self):
         """Test the batch level area split functionality"""
         # Create pickings for different areas

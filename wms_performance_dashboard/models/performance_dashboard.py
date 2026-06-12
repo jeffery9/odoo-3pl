@@ -220,7 +220,6 @@ class WmsPerformanceKpi(models.Model):
             domain.append(('write_date', '<=', end_date))
 
         return model.search(domain)
-
     def _calculate_kpi_value(self, kpi, records):
         """Calculate KPI value based on method and records"""
         if not records:
@@ -307,7 +306,6 @@ class WmsPerformanceReport(models.Model):
         if vals.get('report_code', _('New')) == _('New'):
             vals['report_code'] = self.env['ir.sequence'].next_by_code('wms.performance.report') or _('New')
         return super().create(vals)
-
     def action_generate_report(self):
         """Generate the performance report"""
         for report in self:
@@ -327,7 +325,6 @@ class WmsPerformanceReport(models.Model):
         for report in self:
             report.status = 'published'
             report.generation_date = fields.Datetime.now()
-
     def _generate_kpi_data(self):
         """Generate KPI data for the report"""
         # This would typically call methods to calculate KPIs for the report period
@@ -414,7 +411,6 @@ class WmsAlert(models.Model):
     # Resolution
     resolution_date = fields.Date('Resolution Date')
     resolution_notes = fields.Text('Resolution Notes')
-
     def action_acknowledge(self):
         """Acknowledge the alert"""
         for alert in self:
@@ -432,7 +428,6 @@ class WmsAlert(models.Model):
             if alert.status == 'in_progress':
                 alert.status = 'resolved'
                 alert.resolution_date = fields.Date.context_today(self)
-
     def action_close(self):
         """Close the alert"""
         for alert in self:

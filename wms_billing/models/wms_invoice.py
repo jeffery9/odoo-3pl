@@ -46,7 +46,6 @@ class WmsInvoice(models.Model):
         if self.account_move_id:
             return self.account_move_id._post()
         return True
-
     def mark_as_paid_invoice(self):
         """Mark the related account move as paid when this WMS invoice is paid"""
         # Update related billing records

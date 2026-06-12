@@ -11,13 +11,13 @@ class TestWmsDocumentManagement(TransactionCase):
         # Create test data
         self.test_owner = self.env['wms.owner'].create({
             'name': 'Test Document Management Owner',
-            'code': 'TDMO',
+            'owner_code': 'TDMO',
             'is_warehouse_owner': True,
         })
 
         self.test_category = self.env['wms.document.category'].create({
             'name': 'Test Category',
-            'code': 'TC',
+            'owner_code': 'TC',
             'is_active': True,
         })
 
@@ -38,20 +38,18 @@ class TestWmsDocumentManagement(TransactionCase):
             'location_id': self.env.ref('stock.stock_location_stock').id,
             'location_dest_id': self.env.ref('stock.stock_location_customers').id,
         })
-
     def test_create_document_category(self):
         """Test creating document categories"""
         category = self.env['wms.document.category'].create({
             'name': 'Test Document Category',
-            'code': 'TDC',
+            'owner_code': 'TDC',
             'description': 'Test document category description',
         })
 
         self.assertEqual(category.name, 'Test Document Category')
-        self.assertEqual(category.code, 'TDC')
+        self.assertEqual(category.owner_code, 'TDC')
         self.assertTrue(category.is_active)
         self.assertEqual(category.document_count, 0)
-
     def test_create_document_tag(self):
         """Test creating document tags"""
         tag = self.env['wms.document.tag'].create({
@@ -62,7 +60,6 @@ class TestWmsDocumentManagement(TransactionCase):
         self.assertEqual(tag.name, 'Test Document Tag')
         self.assertEqual(tag.description, 'Test document tag description')
         self.assertTrue(tag.active)
-
     def test_create_document(self):
         """Test creating documents"""
         document = self.env['wms.document'].create({
@@ -80,7 +77,6 @@ class TestWmsDocumentManagement(TransactionCase):
         self.assertEqual(document.version, '1.0')
         self.assertEqual(document.status, 'draft')
         self.assertTrue(document.is_latest)
-
     def test_document_file_upload(self):
         """Test document file upload and metadata"""
         # Create sample file content
@@ -99,7 +95,6 @@ class TestWmsDocumentManagement(TransactionCase):
         self.assertEqual(document.filename, 'test_document.txt')
         self.assertEqual(document.file_size, len(sample_content))
         self.assertEqual(document.file_type, 'TXT')
-
     def test_document_status_flow(self):
         """Test document status flow"""
         document = self.env['wms.document'].create({
@@ -121,7 +116,6 @@ class TestWmsDocumentManagement(TransactionCase):
         # Archive the document
         document.action_archive()
         self.assertEqual(document.status, 'archived')
-
     def test_document_with_tags(self):
         """Test document with tags"""
         document = self.env['wms.document'].create({
@@ -136,7 +130,6 @@ class TestWmsDocumentManagement(TransactionCase):
 
         self.assertEqual(len(document.tags), 1)
         self.assertTrue(self.test_tag in document.tags)
-
     def test_document_with_related_record(self):
         """Test document with related record"""
         document = self.env['wms.document'].create({
@@ -148,12 +141,11 @@ class TestWmsDocumentManagement(TransactionCase):
         })
 
         self.assertIsNotNone(document.related_model)
-
     def test_document_template_creation(self):
         """Test creating document templates"""
         template = self.env['wms.document.template'].create({
             'name': 'Test Document Template',
-            'code': 'TDT',
+            'owner_code': 'TDT',
             'category_id': self.test_category.id,
             'template_type': 'form',
             'content_template': 'This is a template for {{document.name}}',
@@ -161,15 +153,14 @@ class TestWmsDocumentManagement(TransactionCase):
         })
 
         self.assertEqual(template.name, 'Test Document Template')
-        self.assertEqual(template.code, 'TDT')
+        self.assertEqual(template.owner_code, 'TDT')
         self.assertEqual(template.template_type, 'form')
         self.assertTrue(template.is_active)
-
     def test_document_workflow_creation(self):
         """Test creating document workflows"""
         workflow = self.env['wms.document.workflow'].create({
             'name': 'Test Document Workflow',
-            'code': 'TDW',
+            'owner_code': 'TDW',
             'initial_status': 'draft',
             'require_approval': True,
             'approval_steps': 2,
@@ -177,12 +168,11 @@ class TestWmsDocumentManagement(TransactionCase):
         })
 
         self.assertEqual(workflow.name, 'Test Document Workflow')
-        self.assertEqual(workflow.code, 'TDW')
+        self.assertEqual(workflow.owner_code, 'TDW')
         self.assertEqual(workflow.initial_status, 'draft')
         self.assertTrue(workflow.require_approval)
         self.assertEqual(workflow.approval_steps, 2)
         self.assertEqual(workflow.default_retention, 365)
-
     def test_document_versioning(self):
         """Test document versioning"""
         # Create first version
@@ -212,20 +202,18 @@ class TestWmsDocumentManagement(TransactionCase):
         # The second version should be marked as latest
         self.assertFalse(doc_v1.is_latest)
         self.assertTrue(doc_v2.is_latest)
-
     def test_document_category_hierarchy(self):
         """Test document category hierarchy"""
         parent_category = self.test_category
 
         child_category = self.env['wms.document.category'].create({
             'name': 'Child Category',
-            'code': 'CC',
+            'owner_code': 'CC',
             'parent_id': parent_category.id,
         })
 
         self.assertEqual(child_category.parent_id.id, parent_category.id)
         self.assertIn(child_category, parent_category.child_ids)
-
     def test_document_expiry_date_calculation(self):
         """Test document expiry date calculation"""
         from datetime import date, timedelta
@@ -244,7 +232,6 @@ class TestWmsDocumentManagement(TransactionCase):
         # For this test, we'll just verify that the field exists and can be computed
         self.assertIsNotNone(document.created_date)
         self.assertEqual(document.retention_period, 30)
-
     def test_document_rejection(self):
         """Test document rejection process"""
         document = self.env['wms.document'].create({
@@ -260,7 +247,6 @@ class TestWmsDocumentManagement(TransactionCase):
         # Reject the document
         document.action_reject()
         self.assertEqual(document.status, 'rejected')
-
     def test_document_archive_and_restore(self):
         """Test document archiving and restoration"""
         document = self.env['wms.document'].create({
@@ -289,7 +275,6 @@ class TestWmsDocumentManagement(TransactionCase):
         document.refresh()
         # The document should be restored to approved status
         self.assertEqual(document.status, 'approved')
-
     def test_document_download_count(self):
         """Test document download count"""
         document = self.env['wms.document'].create({

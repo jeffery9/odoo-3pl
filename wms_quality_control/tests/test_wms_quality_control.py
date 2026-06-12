@@ -10,7 +10,7 @@ class TestWmsQualityControl(TransactionCase):
         # Create test data
         self.test_owner = self.env['wms.owner'].create({
             'name': 'Test Quality Control Owner',
-            'code': 'TQCO',
+            'owner_code': 'TQCO',
             'is_warehouse_owner': True,
         })
 
@@ -29,8 +29,7 @@ class TestWmsQualityControl(TransactionCase):
 
         self.test_product = self.env['product.product'].create({
             'name': 'Test Product for Quality Control',
-            'type': 'product',
-            'categ_id': self.env.ref('product.product_category_all').id,
+                        'categ_id': self.env.ref('product.product_category_all').id,
         })
 
         self.test_uom = self.env.ref('uom.product_uom_unit')
@@ -43,7 +42,6 @@ class TestWmsQualityControl(TransactionCase):
             'location_dest_id': self.test_location.id,
             'owner_id': self.test_owner.id,
         })
-
     def test_create_quality_control_session(self):
         """Test creating a quality control session"""
         qc_session = self.env['wms.quality.control'].create({
@@ -60,7 +58,6 @@ class TestWmsQualityControl(TransactionCase):
         self.assertEqual(qc_session.owner_id.id, self.test_owner.id)
         self.assertEqual(qc_session.picking_id.id, self.test_picking.id)
         self.assertEqual(qc_session.status, 'draft')
-
     def test_quality_control_status_flow(self):
         """Test the status flow of quality control sessions"""
         qc_session = self.env['wms.quality.control'].create({
@@ -85,7 +82,6 @@ class TestWmsQualityControl(TransactionCase):
         # Reset to draft
         qc_session.action_reset_to_draft()
         self.assertEqual(qc_session.status, 'draft')
-
     def test_quality_checklist_creation(self):
         """Test creating quality checklist items"""
         qc_session = self.env['wms.quality.control'].create({
@@ -108,7 +104,6 @@ class TestWmsQualityControl(TransactionCase):
         self.assertEqual(qc_session.checklist_ids[0].item_id, 'Visual Inspection')
         self.assertEqual(qc_session.checklist_ids[0].result, 'pass')
         self.assertEqual(qc_session.checklist_ids[0].criticality, 'major')
-
     def test_quality_issue_creation(self):
         """Test creating quality issues"""
         qc_session = self.env['wms.quality.control'].create({
@@ -133,7 +128,6 @@ class TestWmsQualityControl(TransactionCase):
         self.assertEqual(quality_issue.category, 'defect')
         self.assertEqual(quality_issue.severity, 'major')
         self.assertEqual(quality_issue.qc_session_id.id, qc_session.id)
-
     def test_corrective_action_creation(self):
         """Test creating corrective actions"""
         quality_issue = self.env['wms.quality.issue'].create({
@@ -154,7 +148,6 @@ class TestWmsQualityControl(TransactionCase):
         self.assertEqual(corrective_action.name, 'Test Corrective Action')
         self.assertEqual(corrective_action.issue_id.id, quality_issue.id)
         self.assertEqual(corrective_action.owner_id.id, self.test_owner.id)
-
     def test_quality_photo_creation(self):
         """Test creating quality photos"""
         qc_session = self.env['wms.quality.control'].create({
@@ -176,7 +169,6 @@ class TestWmsQualityControl(TransactionCase):
         self.assertEqual(quality_photo.name, 'Test Quality Photo')
         self.assertEqual(quality_photo.qc_session_id.id, qc_session.id)
         self.assertEqual(quality_photo.owner_id.id, self.test_owner.id)
-
     def test_quality_control_computed_fields(self):
         """Test computed fields in quality control"""
         qc_session = self.env['wms.quality.control'].create({
@@ -230,7 +222,6 @@ class TestWmsQualityControl(TransactionCase):
         self.assertEqual(qc_session.issue_count, 2)
         # With 1 pass and 1 fail, pass rate should be 50%
         self.assertEqual(qc_session.pass_rate, 0.5)
-
     def test_quality_control_wizard(self):
         """Test creating quality control using wizard"""
         wizard = self.env['wms.quality.control.wizard'].create({
@@ -250,7 +241,6 @@ class TestWmsQualityControl(TransactionCase):
         self.assertEqual(qc_session.control_type, 'incoming')
         self.assertEqual(qc_session.picking_id.id, self.test_picking.id)
         self.assertEqual(qc_session.status, 'in_progress')
-
     def test_quality_issue_wizard(self):
         """Test creating quality issue using wizard"""
         qc_session = self.env['wms.quality.control'].create({
@@ -280,12 +270,11 @@ class TestWmsQualityControl(TransactionCase):
         self.assertEqual(quality_issue.category, 'defect')
         self.assertEqual(quality_issue.severity, 'major')
         self.assertEqual(quality_issue.qc_session_id.id, qc_session.id)
-
     def test_quality_control_ownership_isolation(self):
         """Test that quality control records are properly isolated by owner"""
         owner2 = self.env['wms.owner'].create({
             'name': 'Second Quality Control Owner',
-            'code': 'SQCO',
+            'owner_code': 'SQCO',
             'is_warehouse_owner': True,
         })
 

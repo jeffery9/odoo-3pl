@@ -10,7 +10,7 @@ class TestWmsPerformanceDashboard(TransactionCase):
         # Create test data
         self.test_owner = self.env['wms.owner'].create({
             'name': 'Test Performance Dashboard Owner',
-            'code': 'TPDO',
+            'owner_code': 'TPDO',
             'is_warehouse_owner': True,
         })
 
@@ -31,28 +31,26 @@ class TestWmsPerformanceDashboard(TransactionCase):
             'location_id': self.env.ref('stock.stock_location_stock').id,
             'location_dest_id': self.env.ref('stock.stock_location_customers').id,
         })
-
     def test_create_dashboard_template(self):
         """Test creating dashboard templates"""
         template = self.env['wms.dashboard.template'].create({
             'name': 'Test Executive Dashboard',
-            'code': 'TED',
+            'owner_code': 'TED',
             'dashboard_type': 'executive',
             'is_active': True,
             'default_period': 'month',
         })
 
         self.assertEqual(template.name, 'Test Executive Dashboard')
-        self.assertEqual(template.code, 'TED')
+        self.assertEqual(template.owner_code, 'TED')
         self.assertEqual(template.dashboard_type, 'executive')
         self.assertTrue(template.is_active)
         self.assertEqual(template.default_period, 'month')
-
     def test_create_dashboard_widget(self):
         """Test creating dashboard widgets"""
         widget = self.env['wms.dashboard.widget'].create({
             'name': 'Test KPI Widget',
-            'code': 'TKW',
+            'owner_code': 'TKW',
             'widget_type': 'kpi',
             'data_source': 'stock_picking',
             'size_x': 4,
@@ -61,18 +59,17 @@ class TestWmsPerformanceDashboard(TransactionCase):
         })
 
         self.assertEqual(widget.name, 'Test KPI Widget')
-        self.assertEqual(widget.code, 'TKW')
+        self.assertEqual(widget.owner_code, 'TKW')
         self.assertEqual(widget.widget_type, 'kpi')
         self.assertEqual(widget.data_source, 'stock_picking')
         self.assertEqual(widget.size_x, 4)
         self.assertEqual(widget.size_y, 2)
         self.assertTrue(widget.is_active)
-
     def test_create_performance_kpi(self):
         """Test creating performance KPIs"""
         kpi = self.env['wms.performance.kpi'].create({
             'name': 'Test Throughput KPI',
-            'code': 'TTK',
+            'owner_code': 'TTK',
             'category': 'throughput',
             'calculation_method': 'count',
             'source_model': 'stock.picking',
@@ -81,7 +78,7 @@ class TestWmsPerformanceDashboard(TransactionCase):
         })
 
         self.assertEqual(kpi.name, 'Test Throughput KPI')
-        self.assertEqual(kpi.code, 'TTK')
+        self.assertEqual(kpi.owner_code, 'TTK')
         self.assertEqual(kpi.category, 'throughput')
         self.assertEqual(kpi.calculation_method, 'count')
         self.assertEqual(kpi.source_model, 'stock.picking')
@@ -92,7 +89,7 @@ class TestWmsPerformanceDashboard(TransactionCase):
         """Test computed values for performance KPIs"""
         kpi = self.env['wms.performance.kpi'].create({
             'name': 'Computed Value Test',
-            'code': 'CVT',
+            'owner_code': 'CVT',
             'category': 'efficiency',
             'calculation_method': 'count',
             'source_model': 'stock.picking',
@@ -104,7 +101,6 @@ class TestWmsPerformanceDashboard(TransactionCase):
         self.assertEqual(kpi.current_value, 0.0)
         self.assertEqual(kpi.previous_value, 0.0)
         self.assertEqual(kpi.trend, 0.0)
-
     def test_create_performance_report(self):
         """Test creating performance reports"""
         report = self.env['wms.performance.report'].create({
@@ -120,7 +116,6 @@ class TestWmsPerformanceDashboard(TransactionCase):
         self.assertEqual(report.owner_id.id, self.test_owner.id)
         self.assertEqual(report.report_type, 'monthly')
         self.assertEqual(report.status, 'draft')
-
     def test_performance_report_status_flow(self):
         """Test performance report status flow"""
         report = self.env['wms.performance.report'].create({
@@ -144,7 +139,6 @@ class TestWmsPerformanceDashboard(TransactionCase):
         # Publish the report
         report.action_publish_report()
         self.assertEqual(report.status, 'published')
-
     def test_create_alert(self):
         """Test creating alerts"""
         alert = self.env['wms.alert'].create({
@@ -162,7 +156,6 @@ class TestWmsPerformanceDashboard(TransactionCase):
         self.assertEqual(alert.status, 'open')
         self.assertEqual(alert.target_value, 95.0)
         self.assertEqual(alert.actual_value, 98.0)
-
     def test_alert_status_flow(self):
         """Test alert status flow"""
         alert = self.env['wms.alert'].create({
@@ -189,12 +182,11 @@ class TestWmsPerformanceDashboard(TransactionCase):
         # Close the alert
         alert.action_close()
         self.assertEqual(alert.status, 'closed')
-
     def test_create_benchmark(self):
         """Test creating benchmarks"""
         benchmark = self.env['wms.benchmark'].create({
             'name': 'Test Throughput Benchmark',
-            'code': 'TTB',
+            'owner_code': 'TTB',
             'category': 'throughput',
             'benchmark_type': 'industry',
             'value': 95.0,
@@ -203,19 +195,18 @@ class TestWmsPerformanceDashboard(TransactionCase):
         })
 
         self.assertEqual(benchmark.name, 'Test Throughput Benchmark')
-        self.assertEqual(benchmark.code, 'TTB')
+        self.assertEqual(benchmark.owner_code, 'TTB')
         self.assertEqual(benchmark.category, 'throughput')
         self.assertEqual(benchmark.benchmark_type, 'industry')
         self.assertEqual(benchmark.value, 95.0)
         self.assertEqual(benchmark.unit_of_measure, '%')
         self.assertEqual(benchmark.year, 2024)
         self.assertTrue(benchmark.is_current)
-
     def test_benchmark_with_owner(self):
         """Test benchmark with owner"""
         benchmark = self.env['wms.benchmark'].create({
             'name': 'Owner Benchmark Test',
-            'code': 'OBT',
+            'owner_code': 'OBT',
             'category': 'efficiency',
             'benchmark_type': 'historical',
             'value': 85.0,
@@ -223,7 +214,6 @@ class TestWmsPerformanceDashboard(TransactionCase):
         })
 
         self.assertEqual(benchmark.owner_id.id, self.test_owner.id)
-
     def test_performance_report_generation(self):
         """Test performance report generation"""
         report = self.env['wms.performance.report'].create({
@@ -242,12 +232,11 @@ class TestWmsPerformanceDashboard(TransactionCase):
 
         # Check that generated fields are populated
         self.assertIsNotNone(report.generation_date)
-
     def test_kpi_trend_calculation(self):
         """Test KPI trend calculation"""
         kpi = self.env['wms.performance.kpi'].create({
             'name': 'Trend Calculation Test',
-            'code': 'TCT',
+            'owner_code': 'TCT',
             'category': 'quality',
             'calculation_method': 'average',
             'source_model': 'stock.picking',
@@ -273,12 +262,11 @@ class TestWmsPerformanceDashboard(TransactionCase):
         })
 
         self.assertEqual(alert.assigned_to.id, self.test_user.id)
-
     def test_dashboard_widget_layout(self):
         """Test dashboard widget layout properties"""
         widget = self.env['wms.dashboard.widget'].create({
             'name': 'Layout Test Widget',
-            'code': 'LTW',
+            'owner_code': 'LTW',
             'widget_type': 'chart',
             'data_source': 'wms_labor_task',
             'size_x': 6,

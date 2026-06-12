@@ -10,7 +10,7 @@ class TestWmsCrossdock(TransactionCase):
         # Create test data
         self.test_owner = self.env['wms.owner'].create({
             'name': 'Test Crossdock Owner',
-            'code': 'TCO',
+            'owner_code': 'TCO',
             'is_warehouse_owner': True,
         })
 
@@ -29,10 +29,8 @@ class TestWmsCrossdock(TransactionCase):
 
         self.test_product = self.env['product.product'].create({
             'name': 'Test Product',
-            'type': 'product',
-            'categ_id': self.env.ref('product.product_category_all').id,
+                        'categ_id': self.env.ref('product.product_category_all').id,
         })
-
     def test_create_crossdock_operation(self):
         """Test creating a WMS crossdock operation"""
         # First create inbound and outbound pickings
@@ -66,7 +64,6 @@ class TestWmsCrossdock(TransactionCase):
         self.assertEqual(crossdock_operation.status, 'draft')
         self.assertEqual(crossdock_operation.inbound_picking_id.id, inbound_picking.id)
         self.assertEqual(crossdock_operation.outbound_picking_id.id, outbound_picking.id)
-
     def test_create_crossdock_match(self):
         """Test creating a WMS crossdock match"""
         # Create sample pickings to match
@@ -103,7 +100,6 @@ class TestWmsCrossdock(TransactionCase):
         self.assertEqual(crossdock_match.matching_algorithm, 'Basic Product Match')
         self.assertIn(inbound_picking.id, crossdock_match.inbound_picking_ids.ids)
         self.assertIn(outbound_picking.id, crossdock_match.outbound_picking_ids.ids)
-
     def test_crossdock_operation_status_flow(self):
         """Test the status flow of crossdock operations"""
         # Create pickings first
@@ -142,7 +138,6 @@ class TestWmsCrossdock(TransactionCase):
         # Simulate completing the operation
         crossdock_operation.action_complete_operation()
         self.assertEqual(crossdock_operation.status, 'completed')
-
     def test_crossdock_match_status_flow(self):
         """Test the status flow of crossdock matches"""
         crossdock_match = self.env['wms.crossdock.match'].create({
@@ -165,7 +160,6 @@ class TestWmsCrossdock(TransactionCase):
         # Simulate completing the match
         crossdock_match.action_complete_match()
         self.assertEqual(crossdock_match.status, 'completed')
-
     def test_crossdock_match_failure(self):
         """Test the failure status of crossdock matches"""
         crossdock_match = self.env['wms.crossdock.match'].create({
@@ -177,7 +171,6 @@ class TestWmsCrossdock(TransactionCase):
         # Simulate failing the match
         crossdock_match.action_fail_match()
         self.assertEqual(crossdock_match.status, 'failed')
-
     def test_stock_picking_crossdock_extension(self):
         """Test the extension to stock.picking model for crossdock"""
         picking = self.env['stock.picking'].create({
@@ -192,7 +185,6 @@ class TestWmsCrossdock(TransactionCase):
 
         self.assertTrue(picking.is_crossdock)
         self.assertEqual(picking.crossdock_status, 'pending')
-
     def test_crossdock_operation_compute_totals(self):
         """Test computed fields in crossdock operations"""
         # Create pickings with move lines to test computed totals
@@ -244,7 +236,6 @@ class TestWmsCrossdock(TransactionCase):
 
         # The total quantity should be computed based on the pickings
         # (This would normally be handled by computed fields in the actual model)
-
     def test_crossdock_match_compute_totals(self):
         """Test computed fields in crossdock matches"""
         # Create sample pickings with move lines
@@ -295,12 +286,11 @@ class TestWmsCrossdock(TransactionCase):
 
         # The total quantities should be computed based on the pickings
         # (This would normally be handled by computed fields in the actual model)
-
     def test_crossdock_ownership_isolation(self):
         """Test that crossdock operations are properly isolated by owner"""
         owner2 = self.env['wms.owner'].create({
             'name': 'Second Crossdock Owner',
-            'code': 'SCO',
+            'owner_code': 'SCO',
             'is_warehouse_owner': True,
         })
 

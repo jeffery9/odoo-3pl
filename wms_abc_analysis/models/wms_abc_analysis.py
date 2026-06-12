@@ -44,14 +44,12 @@ class WmsAbcAnalysis(models.Model):
             record.a_class_count = len(record.analysis_lines.filtered(lambda l: l.abc_class == 'A'))
             record.b_class_count = len(record.analysis_lines.filtered(lambda l: l.abc_class == 'B'))
             record.c_class_count = len(record.analysis_lines.filtered(lambda l: l.abc_class == 'C'))
-
     def action_start_analysis(self):
         """Start the ABC analysis process"""
         self.write({
             'status': 'in_progress',
             'analysis_date': fields.Datetime.now()
         })
-
     def action_run_analysis(self):
         """Run the ABC analysis"""
         for analysis in self:
@@ -86,7 +84,6 @@ class WmsAbcAnalysis(models.Model):
                 })
 
         self.write({'status': 'completed'})
-
     def _calculate_product_value(self, product, start_date, end_date):
         """Calculate the value of product movement during the period"""
         # This is a simplified calculation - in a real implementation,
@@ -102,7 +99,6 @@ class WmsAbcAnalysis(models.Model):
         for move in moves:
             total_value += move.value  # This is the accounting value of the move
         return total_value
-
     def _calculate_product_volume(self, product, start_date, end_date):
         """Calculate the volume of product movement during the period"""
         moves = self.env['stock.move'].search([
@@ -114,7 +110,6 @@ class WmsAbcAnalysis(models.Model):
         ])
         total_volume = sum(moves.mapped('product_uom_qty'))
         return total_volume
-
     def _calculate_product_frequency(self, product, start_date, end_date):
         """Calculate the frequency of product movement during the period"""
         moves = self.env['stock.move'].search([
@@ -125,7 +120,6 @@ class WmsAbcAnalysis(models.Model):
             ('picking_id.owner_id', '=', self.owner_id.id),
         ])
         return len(moves)
-
     def _determine_abc_class(self, product, analysis, value, volume, frequency):
         """Determine the ABC class based on rules"""
         # Default rules if no custom rules defined
@@ -160,7 +154,6 @@ class WmsAbcAnalysis(models.Model):
         else:  # combined
             # Use combined approach
             return self._classify_combined(product, analysis, value, volume, frequency)
-
     def _classify_by_value(self, product, analysis, value):
         """Classify product by value"""
         # This would need to compare against other products' values
@@ -188,7 +181,6 @@ class WmsAbcAnalysis(models.Model):
     def action_archive_analysis(self):
         """Archive the analysis record"""
         self.write({'status': 'archived'})
-
     def action_generate_report(self):
         """Generate ABC analysis report"""
         self.ensure_one()
@@ -257,7 +249,6 @@ class WmsAbcAnalysisWizard(models.TransientModel):
         ('combined', 'Combined'),
     ], 'Analysis Method', default='combined', required=True)
     notes = fields.Text('Notes')
-
     def action_run_abc_analysis(self):
         """Run ABC analysis with specified parameters"""
         self.ensure_one()

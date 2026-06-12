@@ -57,7 +57,6 @@ class WmsCrossdockOperation(models.Model):
 
     def action_start_operation(self):
         self.write({'status': 'in_progress'})
-
     def action_complete_operation(self):
         # Update related pickings
         if self.inbound_picking_id:
@@ -65,7 +64,6 @@ class WmsCrossdockOperation(models.Model):
         if self.outbound_picking_id:
             self.outbound_picking_id.write({'state': 'done'})
         self.write({'status': 'completed'})
-
     def action_cancel_operation(self):
         # Reset related pickings if needed
         self.write({'status': 'cancelled'})

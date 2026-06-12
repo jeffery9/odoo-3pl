@@ -65,7 +65,6 @@ class StockPickingBatch(models.Model):
     def _compute_tms_route_count(self):
         for batch in self:
             batch.tms_route_count = len(batch.tms_route_ids)
-
     def _compute_current_route(self):
         """Get the current route (non-delivered) for this batch"""
         for batch in self:
@@ -88,7 +87,6 @@ class StockPickingBatch(models.Model):
         """Compute the count of route stops"""
         for batch in self:
             batch.route_stop_count = len(batch.tms_route_ids.mapped('stop_ids'))
-
     def action_view_route_stops(self):
         """Action to view all route stops for this batch"""
         self.ensure_one()
@@ -100,7 +98,6 @@ class StockPickingBatch(models.Model):
             'domain': [('route_id', 'in', self.tms_route_ids.ids)],
             'context': {'default_route_id': self.current_route_id.id if self.current_route_id else False},
         }
-
     def action_create_tms_route_single(self):
         """Create a single TMS route from this batch, enforcing one batch per route"""
         self.ensure_one()
@@ -264,11 +261,9 @@ class StockPickingBatch(models.Model):
             'view_mode': 'form',
             'target': 'current',
         }
-
     def action_create_tms_route(self):
         """Create a TMS route from this batch - one batch per route"""
         return self.action_create_tms_route_single()
-
     def action_check_split_picking_requirements(self):
         """Check if the batch pickings should be split based on capacity requirements"""
         self.ensure_one()
@@ -341,7 +336,6 @@ class StockPickingBatch(models.Model):
                     'sticky': False,
                 }
             }
-
     def action_view_tms_routes(self):
         """View TMS routes for this batch"""
         self.ensure_one()
@@ -353,7 +347,6 @@ class StockPickingBatch(models.Model):
             'domain': [('picking_batch_id', '=', self.id)],
             'context': {'default_picking_batch_id': self.id},
         }
-
     def action_create_batch_by_area(self):
         """Create batches based on route coverage areas"""
         # This method would group pickings by their customer's area
@@ -419,7 +412,6 @@ class StockPickingBatch(models.Model):
                     'sticky': False,
                 }
             }
-
     def action_create_area_split_batch_if_needed(self):
         """
         Create an area-based split of the batch if the cargo in the main area

@@ -128,7 +128,6 @@ class StockLotTraceability(models.Model):
                     queue.extend(new_moves.ids)
 
         return all_upstream
-
     def _find_downstream_moves(self, lot):
         """Find all downstream moves for a lot using Odoo's native methods"""
         # Find moves where this lot was output (production output, supply to other operations, etc.)
@@ -158,7 +157,6 @@ class StockLotTraceability(models.Model):
                     queue.extend(new_moves.ids)
 
         return all_downstream
-
     def action_view_upstream_moves(self):
         """View upstream moves for this traceability record"""
         self.ensure_one()
@@ -170,7 +168,6 @@ class StockLotTraceability(models.Model):
             'domain': [('id', 'in', self.upstream_move_ids.ids)],
             'context': {'default_company_id': self.company_id.id}
         }
-
     def action_view_downstream_moves(self):
         """View downstream moves for this traceability record"""
         self.ensure_one()
@@ -182,7 +179,6 @@ class StockLotTraceability(models.Model):
             'domain': [('id', 'in', self.downstream_move_ids.ids)],
             'context': {'default_company_id': self.company_id.id}
         }
-
     def action_view_location_history(self):
         """View location history for this lot"""
         self.ensure_one()
@@ -193,8 +189,6 @@ class StockLotTraceability(models.Model):
             'view_mode': 'list,form',
             'domain': [('id', 'in', self.location_ids.ids)],
         }
-
-    @api.model
     def create_for_lot(self, lot_id):
         """Create a traceability record for a specific lot"""
         lot = self.env['stock.lot'].browse(lot_id)
@@ -211,7 +205,6 @@ class StockLotTraceability(models.Model):
             vals['owner_id'] = related_move.owner_id.id
 
         return self.create(vals)
-
     def action_refresh_traceability(self):
         """Refresh traceability information"""
         for record in self:

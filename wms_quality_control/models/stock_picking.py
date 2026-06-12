@@ -84,7 +84,6 @@ class StockPicking(models.Model):
             'target': 'new',
             'context': {'default_picking_id': self.id, 'default_owner_id': self.owner_id.id if hasattr(self, 'owner_id') and self.owner_id else False}
         }
-
     def action_view_quality_controls(self):
         """View quality controls for this picking"""
         self.ensure_one()
@@ -96,7 +95,6 @@ class StockPicking(models.Model):
             'domain': [('picking_id', '=', self.id)],
             'context': {'default_picking_id': self.id}
         }
-
     def action_view_lots(self):
         """View lots/serials for this picking"""
         self.ensure_one()
@@ -108,7 +106,6 @@ class StockPicking(models.Model):
             'domain': [('id', 'in', self.lot_ids.ids)],
             'context': {'default_company_id': self.company_id.id}
         }
-
     def action_view_traceability_report(self):
         """View full traceability report for this picking"""
         self.ensure_one()
@@ -130,7 +127,6 @@ class StockPicking(models.Model):
             'view_mode': 'form',
             'target': 'current',
         }
-
     def action_view_lot_traceability(self):
         """View detailed traceability report for all lots in this picking"""
         self.ensure_one()

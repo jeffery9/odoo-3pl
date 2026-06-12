@@ -11,7 +11,6 @@ class StockPicking(models.Model):
     def _compute_blind_receive_count(self):
         for picking in self:
             picking.blind_receive_count = len(picking.blind_receive_ids)
-
     def action_start_blind_receive(self):
         """Start a blind receive session for this picking"""
         self.ensure_one()
@@ -23,7 +22,6 @@ class StockPicking(models.Model):
             'target': 'new',
             'context': {'default_picking_id': self.id, 'default_owner_id': self.owner_id.id if hasattr(self, 'owner_id') and self.owner_id else False}
         }
-
     def action_view_blind_receive(self):
         """View blind receive sessions for this picking"""
         self.ensure_one()

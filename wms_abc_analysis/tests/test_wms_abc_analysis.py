@@ -10,7 +10,7 @@ class TestWmsAbcAnalysis(TransactionCase):
         # Create test data
         self.test_owner = self.env['wms.owner'].create({
             'name': 'Test ABC Analysis Owner',
-            'code': 'TAAO',
+            'owner_code': 'TAAO',
             'is_warehouse_owner': True,
         })
 
@@ -29,13 +29,11 @@ class TestWmsAbcAnalysis(TransactionCase):
 
         self.test_product = self.env['product.product'].create({
             'name': 'Test Product for ABC Analysis',
-            'type': 'product',
-            'categ_id': self.env.ref('product.product_category_all').id,
+                        'categ_id': self.env.ref('product.product_category_all').id,
             'standard_price': 25.0,
         })
 
         self.test_uom = self.env.ref('uom.product_uom_unit')
-
     def test_create_abc_analysis(self):
         """Test creating an ABC analysis record"""
         abc_analysis = self.env['wms.abc.analysis'].create({
@@ -51,7 +49,6 @@ class TestWmsAbcAnalysis(TransactionCase):
         self.assertEqual(abc_analysis.owner_id.id, self.test_owner.id)
         self.assertEqual(abc_analysis.analysis_method, 'combined')
         self.assertEqual(abc_analysis.status, 'draft')
-
     def test_abc_analysis_rules(self):
         """Test creating ABC analysis rules"""
         abc_analysis = self.env['wms.abc.analysis'].create({
@@ -75,7 +72,6 @@ class TestWmsAbcAnalysis(TransactionCase):
         self.assertEqual(abc_analysis.abc_rules[0].abc_class, 'A')
         self.assertEqual(abc_analysis.abc_rules[0].name, 'A Class Rule')
         self.assertEqual(abc_analysis.abc_rules[0].min_value, 10000.0)
-
     def test_abc_analysis_line(self):
         """Test creating ABC analysis lines"""
         abc_analysis = self.env['wms.abc.analysis'].create({
@@ -122,7 +118,6 @@ class TestWmsAbcAnalysis(TransactionCase):
         # we'll just complete it manually for testing purposes
         abc_analysis.write({'status': 'completed'})
         self.assertEqual(abc_analysis.status, 'completed')
-
     def test_abc_analysis_totals_computation(self):
         """Test that ABC analysis totals are computed correctly"""
         abc_analysis = self.env['wms.abc.analysis'].create({
@@ -172,7 +167,6 @@ class TestWmsAbcAnalysis(TransactionCase):
         self.assertEqual(abc_analysis.a_class_count, 1)
         self.assertEqual(abc_analysis.b_class_count, 1)
         self.assertEqual(abc_analysis.c_class_count, 1)
-
     def test_abc_analysis_methods(self):
         """Test different analysis methods"""
         methods = ['value', 'volume', 'frequency', 'combined']
@@ -186,7 +180,6 @@ class TestWmsAbcAnalysis(TransactionCase):
                 'analysis_method': method,
             })
             self.assertEqual(abc_analysis.analysis_method, method)
-
     def test_abc_analysis_wizard(self):
         """Test creating ABC analysis using wizard"""
         wizard = self.env['wms.abc.analysis.wizard'].create({
@@ -206,13 +199,11 @@ class TestWmsAbcAnalysis(TransactionCase):
         abc_analysis = self.env['wms.abc.analysis'].browse(result['res_id'])
         self.assertEqual(abc_analysis.analysis_method, 'combined')
         self.assertEqual(abc_analysis.status, 'in_progress')
-
     def test_product_abc_classification_extension(self):
         """Test the product extension for ABC classification"""
         product = self.env['product.product'].create({
             'name': 'Test Product ABC Extension',
-            'type': 'product',
-            'categ_id': self.env.ref('product.product_category_all').id,
+                        'categ_id': self.env.ref('product.product_category_all').id,
             'standard_price': 15.0,
         })
 
@@ -230,12 +221,11 @@ class TestWmsAbcAnalysis(TransactionCase):
         self.assertEqual(product.annual_usage_value, 10000.0)
         self.assertEqual(product.annual_usage_volume, 500.0)
         self.assertEqual(product.usage_frequency, 25)
-
     def test_abc_analysis_ownership_isolation(self):
         """Test that ABC analysis records are properly isolated by owner"""
         owner2 = self.env['wms.owner'].create({
             'name': 'Second ABC Analysis Owner',
-            'code': 'SAAO',
+            'owner_code': 'SAAO',
             'is_warehouse_owner': True,
         })
 

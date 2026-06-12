@@ -221,7 +221,6 @@ class WmsValueAddedOperation(models.Model):
                     'state': 'in_progress',
                     'date_started': fields.Datetime.now(),
                 })
-
     def action_complete_operation(self):
         """Complete the value added operation"""
         for operation in self:
@@ -230,7 +229,6 @@ class WmsValueAddedOperation(models.Model):
                     'state': 'quality_check' if operation.service_id.has_quality_check else 'completed',
                     'date_completed': fields.Datetime.now(),
                 })
-
     def action_approve_operation(self):
         """Approve the operation after quality check"""
         for operation in self:
@@ -238,7 +236,6 @@ class WmsValueAddedOperation(models.Model):
                 operation.write({
                     'state': 'approved' if operation.service_id.requires_approval else 'completed',
                 })
-
     def action_cancel_operation(self):
         """Cancel the operation"""
         for operation in self:
@@ -350,7 +347,6 @@ class WmsValueAddedReport(models.TransientModel):
         ('other', 'Other'),
     ], string='Service Type')
     warehouse_id = fields.Many2one('stock.warehouse', 'Warehouse')
-
     def action_generate_report(self):
         """Generate value added service report"""
         domain = [

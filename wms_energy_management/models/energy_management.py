@@ -72,7 +72,6 @@ class WmsEnergyReading(models.Model):
                 raise ValidationError(_('Cost cannot be negative.'))
             if reading.carbon_emissions and reading.carbon_emissions < 0:
                 raise ValidationError(_('Carbon emissions cannot be negative.'))
-
     def action_validate_reading(self):
         """Validate the energy reading"""
         for reading in self:
@@ -262,7 +261,6 @@ class WmsEnergyAlert(models.Model):
     resolved_by = fields.Many2one('res.users', 'Resolved By')
     resolved_date = fields.Datetime('Resolved Date')
     reading_id = fields.Many2one('wms.energy.reading', 'Related Reading')
-
     def action_resolve_alert(self):
         """Resolve the energy alert"""
         for alert in self:
@@ -283,7 +281,6 @@ class WmsEnergyDashboard(models.Model):
     total_cost = fields.Float('Total Cost')
     total_emissions = fields.Float('Total Emissions (kg)')
     avg_efficiency = fields.Float('Average Efficiency %')
-
     def init(self):
         """Create the SQL view for energy dashboard"""
         tools.drop_view_if_exists(self.env.cr, 'wms_energy_dashboard')

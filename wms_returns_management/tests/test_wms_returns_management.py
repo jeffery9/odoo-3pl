@@ -10,7 +10,7 @@ class TestWmsReturnsManagement(TransactionCase):
         # Create test data
         self.test_owner = self.env['wms.owner'].create({
             'name': 'Test Returns Management Owner',
-            'code': 'TRMO',
+            'owner_code': 'TRMO',
             'is_warehouse_owner': True,
         })
 
@@ -21,7 +21,7 @@ class TestWmsReturnsManagement(TransactionCase):
 
         self.test_warehouse = self.env['stock.warehouse'].create({
             'name': 'Test Warehouse',
-            'code': 'TW',
+            'owner_code': 'TW',
         })
 
         self.test_picking_type = self.env['stock.picking.type'].create({
@@ -34,8 +34,7 @@ class TestWmsReturnsManagement(TransactionCase):
 
         self.test_product = self.env['product.product'].create({
             'name': 'Test Product for Returns',
-            'type': 'product',
-            'categ_id': self.env.ref('product.product_category_all').id,
+                        'categ_id': self.env.ref('product.product_category_all').id,
         })
 
         self.test_uom = self.env.ref('uom.product_uom_unit')
@@ -57,7 +56,6 @@ class TestWmsReturnsManagement(TransactionCase):
             'product_uom_qty': 10,
             'product_uom': self.test_uom.id,
         })
-
     def test_create_return_authorization(self):
         """Test creating a return authorization"""
         rma = self.env['wms.return.authorization'].create({
@@ -73,7 +71,6 @@ class TestWmsReturnsManagement(TransactionCase):
         self.assertEqual(rma.customer_id.id, self.test_customer.id)
         self.assertEqual(rma.return_reason, 'defective')
         self.assertEqual(rma.state, 'draft')
-
     def test_return_authorization_status_flow(self):
         """Test the status flow of return authorizations"""
         rma = self.env['wms.return.authorization'].create({
@@ -106,7 +103,6 @@ class TestWmsReturnsManagement(TransactionCase):
         # Complete return
         rma.action_complete()
         self.assertEqual(rma.state, 'completed')
-
     def test_return_line_creation(self):
         """Test creating return line items"""
         rma = self.env['wms.return.authorization'].create({
@@ -128,7 +124,6 @@ class TestWmsReturnsManagement(TransactionCase):
         self.assertEqual(rma.return_line_ids[0].quantity, 5.0)
         self.assertEqual(rma.return_line_ids[0].unit_price, 10.0)
         self.assertEqual(rma.return_line_ids[0].subtotal, 50.0)
-
     def test_return_line_subtotal_computation(self):
         """Test computed subtotal for return lines"""
         rma = self.env['wms.return.authorization'].create({
@@ -189,7 +184,6 @@ class TestWmsReturnsManagement(TransactionCase):
         self.assertEqual(return_reason.name, 'Test Return Reason')
         self.assertEqual(return_reason.description, 'Test return reason description')
         self.assertEqual(return_reason.category, 'quality')
-
     def test_return_disposition_creation(self):
         """Test creating return dispositions"""
         return_disposition = self.env['wms.return.disposition'].create({
@@ -201,7 +195,6 @@ class TestWmsReturnsManagement(TransactionCase):
         self.assertEqual(return_disposition.name, 'Test Return Disposition')
         self.assertEqual(return_disposition.description, 'Test return disposition description')
         self.assertEqual(return_disposition.action_type, 'refund')
-
     def test_return_authorization_with_sale_order(self):
         """Test creating RMA with associated sale order"""
         rma = self.env['wms.return.authorization'].create({
@@ -214,12 +207,11 @@ class TestWmsReturnsManagement(TransactionCase):
 
         self.assertEqual(rma.sale_order_id.id, self.test_sale_order.id)
         self.assertEqual(rma.customer_id.id, self.test_customer.id)
-
     def test_return_authorization_ownership_isolation(self):
         """Test that return authorization records are properly isolated by owner"""
         owner2 = self.env['wms.owner'].create({
             'name': 'Second Returns Management Owner',
-            'code': 'SRMO',
+            'owner_code': 'SRMO',
             'is_warehouse_owner': True,
         })
 
@@ -246,7 +238,6 @@ class TestWmsReturnsManagement(TransactionCase):
 
         self.assertNotEqual(rma1.owner_id.id, rma2.owner_id.id)
         self.assertNotEqual(rma1.customer_id.id, rma2.customer_id.id)
-
     def test_return_authorization_financial_fields(self):
         """Test financial fields in return authorization"""
         rma = self.env['wms.return.authorization'].create({

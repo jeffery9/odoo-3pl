@@ -115,14 +115,12 @@ class WmsLaborTask(models.Model):
             if task.status in ['draft', 'assigned']:
                 task.status = 'in_progress'
                 task.actual_start_date = fields.Datetime.now()
-
     def action_complete_task(self):
         """Complete the task"""
         for task in self:
             if task.status == 'in_progress':
                 task.status = 'completed'
                 task.actual_end_date = fields.Datetime.now()
-
     def action_cancel_task(self):
         """Cancel the task"""
         for task in self:

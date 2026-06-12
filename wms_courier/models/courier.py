@@ -197,7 +197,6 @@ class WmsShipmentOrder(models.Model):
     def _onchange_courier_company(self):
         if self.courier_company_id:
             return {'domain': {'courier_service_id': [('courier_company_id', '=', self.courier_company_id.id)]}}
-
     def action_confirm_shipment(self):
         """Confirm the shipment with the courier company"""
         for shipment in self:
@@ -206,7 +205,6 @@ class WmsShipmentOrder(models.Model):
                     'state': 'confirmed',
                     'date_confirmed': fields.Datetime.now(),
                 })
-
     def action_ship_shipment(self):
         """Mark shipment as shipped and send to courier"""
         for shipment in self:
@@ -217,7 +215,6 @@ class WmsShipmentOrder(models.Model):
                     'state': 'in_transit',
                     'date_shipped': fields.Datetime.now(),
                 })
-
     def action_deliver_shipment(self):
         """Mark shipment as delivered"""
         for shipment in self:
@@ -226,7 +223,6 @@ class WmsShipmentOrder(models.Model):
                     'state': 'delivered',
                     'date_delivered': fields.Datetime.now(),
                 })
-
     def action_track_shipment(self):
         """Track the shipment using the courier's API"""
         for shipment in self:

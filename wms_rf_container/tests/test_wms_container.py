@@ -10,7 +10,7 @@ class TestWmsContainer(TransactionCase):
         # Create test data
         self.test_owner = self.env['wms.owner'].create({
             'name': 'Test Container Owner',
-            'code': 'TCO',
+            'owner_code': 'TCO',
             'is_warehouse_owner': True,
         })
 
@@ -21,12 +21,10 @@ class TestWmsContainer(TransactionCase):
 
         self.test_product = self.env['product.product'].create({
             'name': 'Test Product for Container',
-            'type': 'product',
-            'categ_id': self.env.ref('product.product_category_all').id,
+                        'categ_id': self.env.ref('product.product_category_all').id,
         })
 
         self.test_uom = self.env.ref('uom.product_uom_unit')
-
     def test_create_container(self):
         """Test creating a WMS container"""
         container = self.env['wms.container'].create({
@@ -44,7 +42,6 @@ class TestWmsContainer(TransactionCase):
         self.assertEqual(container.owner_id.id, self.test_owner.id)
         self.assertEqual(container.status, 'empty')
         self.assertEqual(container.capacity, 1.5)
-
     def test_container_content(self):
         """Test adding content to a container"""
         container = self.env['wms.container'].create({
@@ -65,14 +62,12 @@ class TestWmsContainer(TransactionCase):
         self.assertEqual(len(container.contents), 1)
         self.assertEqual(container.contents[0].product_id.id, self.test_product.id)
         self.assertEqual(container.contents[0].quantity, 10.0)
-
     def test_container_load_computation(self):
         """Test that container load is computed correctly"""
         # Create a product with volume
         volumed_product = self.env['product.product'].create({
             'name': 'Volumed Product',
-            'type': 'product',
-            'categ_id': self.env.ref('product.product_category_all').id,
+                        'categ_id': self.env.ref('product.product_category_all').id,
             'volume': 0.1,  # 0.1 CBM per unit
         })
 
@@ -100,7 +95,6 @@ class TestWmsContainer(TransactionCase):
         self.assertEqual(container.current_load, 0.5)
         # Load percentage should be (0.5 / 2.0) * 100 = 25%
         self.assertEqual(container.load_percentage, 25.0)
-
     def test_container_status_changes(self):
         """Test container status transitions"""
         container = self.env['wms.container'].create({
@@ -124,7 +118,6 @@ class TestWmsContainer(TransactionCase):
         # Status should remain empty until explicitly changed - computed field would handle this in real scenario
         container.write({'status': 'partial'})
         self.assertEqual(container.status, 'partial')
-
     def test_container_location_assignment(self):
         """Test assigning container to a location"""
         container = self.env['wms.container'].create({
@@ -138,7 +131,6 @@ class TestWmsContainer(TransactionCase):
         # Assign location
         container.location_id = self.test_location.id
         self.assertEqual(container.location_id.id, self.test_location.id)
-
     def test_container_hierarchy(self):
         """Test container hierarchy (parent-child relationships)"""
         parent_container = self.env['wms.container'].create({
@@ -160,7 +152,6 @@ class TestWmsContainer(TransactionCase):
 
         self.assertEqual(child_container.parent_container_id.id, parent_container.id)
         self.assertIn(child_container.id, parent_container.child_containers.ids)
-
     def test_container_wizard_actions(self):
         """Test container wizard actions"""
         container = self.env['wms.container'].create({
@@ -179,12 +170,11 @@ class TestWmsContainer(TransactionCase):
 
         self.assertEqual(wizard.container_id.id, container.id)
         self.assertEqual(wizard.location_id.id, self.test_location.id)
-
     def test_container_ownership_isolation(self):
         """Test that containers are properly isolated by owner"""
         owner2 = self.env['wms.owner'].create({
             'name': 'Second Container Owner',
-            'code': 'SCO',
+            'owner_code': 'SCO',
             'is_warehouse_owner': True,
         })
 

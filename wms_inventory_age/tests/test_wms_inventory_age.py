@@ -11,7 +11,7 @@ class TestWmsInventoryAge(TransactionCase):
         # Create test data
         self.test_owner = self.env['wms.owner'].create({
             'name': 'Test Inventory Age Owner',
-            'code': 'TIAO',
+            'owner_code': 'TIAO',
             'is_warehouse_owner': True,
         })
 
@@ -22,8 +22,7 @@ class TestWmsInventoryAge(TransactionCase):
 
         self.test_product = self.env['product.product'].create({
             'name': 'Test Product for Inventory Age',
-            'type': 'product',
-            'categ_id': self.env.ref('product.product_category_all').id,
+                        'categ_id': self.env.ref('product.product_category_all').id,
             'standard_price': 20.0,
         })
 
@@ -35,7 +34,6 @@ class TestWmsInventoryAge(TransactionCase):
             'product_id': self.test_product.id,
             'company_id': self.env.company.id,
         })
-
     def test_inventory_age_report_generation(self):
         """Test generating an inventory age report"""
         # Create a stock quant
@@ -59,7 +57,6 @@ class TestWmsInventoryAge(TransactionCase):
         self.assertEqual(action['type'], 'ir.actions.act_window')
         self.assertEqual(action['res_model'], 'wms.inventory.age.report')
         self.assertEqual(action['res_id'], report.id)
-
     def test_inventory_age_computation(self):
         """Test that inventory age is computed correctly"""
         # Create a stock quant with a date in the past to test age calculation
@@ -89,7 +86,6 @@ class TestWmsInventoryAge(TransactionCase):
         # For a newly created quant, it should be 'current' (0-30 days)
         quant.refresh()
         self.assertEqual(quant.aging_period, 'current')
-
     def test_inventory_age_config(self):
         """Test creating inventory age configuration"""
         config = self.env['wms.inventory.age.config'].create({
@@ -107,7 +103,6 @@ class TestWmsInventoryAge(TransactionCase):
         self.assertEqual(config.critical_age_days, 365)
         self.assertTrue(config.auto_create_alerts)
         self.assertEqual(config.alert_frequency, 'weekly')
-
     def test_inventory_age_alert(self):
         """Test creating inventory age alerts"""
         alert = self.env['wms.inventory.age.alert'].create({
@@ -126,7 +121,6 @@ class TestWmsInventoryAge(TransactionCase):
         self.assertEqual(alert.age_days, 400)
         self.assertEqual(alert.alert_type, 'critical')
         self.assertEqual(alert.status, 'open')
-
     def test_age_alert_status_flow(self):
         """Test the status flow of age alerts"""
         alert = self.env['wms.inventory.age.alert'].create({
@@ -148,7 +142,6 @@ class TestWmsInventoryAge(TransactionCase):
         # Resolve the alert
         alert.action_resolve()
         self.assertEqual(alert.status, 'resolved')
-
     def test_age_report_line_computation(self):
         """Test that age report line values are computed correctly"""
         # Create a report line directly for testing
@@ -181,7 +174,6 @@ class TestWmsInventoryAge(TransactionCase):
             self.assertEqual(line.aging_period, '180_365')
         else:
             self.assertEqual(line.aging_period, 'over_365')
-
     def test_quant_is_aged_inventory_computation(self):
         """Test that is_aged_inventory is computed correctly"""
         # Create a quant
@@ -222,12 +214,11 @@ class TestWmsInventoryAge(TransactionCase):
                 'alert_type': alert_type,
             })
             self.assertEqual(alert.alert_type, alert_type)
-
     def test_inventory_age_ownership_isolation(self):
         """Test that inventory age features are properly isolated by owner"""
         owner2 = self.env['wms.owner'].create({
             'name': 'Second Inventory Age Owner',
-            'code': 'SIAO',
+            'owner_code': 'SIAO',
             'is_warehouse_owner': True,
         })
 

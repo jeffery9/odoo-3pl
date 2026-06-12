@@ -28,7 +28,7 @@ class TestWmsWechat(TransactionCase):
         # Create a test warehouse
         self.warehouse = self.Warehouse.create({
             'name': 'Test Warehouse',
-            'code': 'TST'
+            'owner_code': 'TST'
         })
 
         # Create test locations
@@ -47,7 +47,7 @@ class TestWmsWechat(TransactionCase):
         # Create a test owner
         self.owner = self.Owner.create({
             'name': 'Test Owner',
-            'code': 'TO',
+            'owner_code': 'TO',
             'email': 'test@example.com'
         })
 
@@ -59,8 +59,7 @@ class TestWmsWechat(TransactionCase):
         # Create test products
         self.product1 = self.Product.create({
             'name': 'Test Product 1',
-            'type': 'product',
-            'default_code': 'TEST001',
+                        'default_code': 'TEST001',
             'list_price': 10.0,
             'standard_price': 5.0,
             'weight': 1.0,
@@ -72,8 +71,7 @@ class TestWmsWechat(TransactionCase):
 
         self.product2 = self.Product.create({
             'name': 'Test Product 2',
-            'type': 'product',
-            'default_code': 'TEST002',
+                        'default_code': 'TEST002',
             'list_price': 20.0,
             'standard_price': 10.0,
             'weight': 2.0,
@@ -112,7 +110,6 @@ class TestWmsWechat(TransactionCase):
             'subscribe_time': datetime.now(),
             'allowed_warehouse_ids': [(6, 0, [self.warehouse.id])],
         })
-
     def test_wechat_app_creation(self):
         """Test creation of WeChat app records"""
         app = self.WmsWechatApp.create({
@@ -133,7 +130,6 @@ class TestWmsWechat(TransactionCase):
         self.assertFalse(app.enable_inventory_check)
         self.assertTrue(app.enable_location_search)
         self.assertTrue(app.active)
-
     def test_wechat_user_creation(self):
         """Test creation of WeChat user records"""
         user = self.WmsWechatUser.create({
@@ -160,7 +156,6 @@ class TestWmsWechat(TransactionCase):
         self.assertEqual(user.user_type, 'employee')
         self.assertTrue(user.subscribe)
         self.assertIn(self.warehouse.id, [w.id for w in user.allowed_warehouse_ids])
-
     def test_wechat_user_sync_info(self):
         """Test WeChat user info synchronization"""
         user_data = {
@@ -181,7 +176,6 @@ class TestWmsWechat(TransactionCase):
         self.assertEqual(self.wechat_user.gender, '2')
         self.assertEqual(self.wechat_user.city, 'Updated City')
         self.assertTrue(self.wechat_user.subscribe)
-
     def test_wechat_user_login(self):
         """Test WeChat user login functionality"""
         initial_last_login = self.wechat_user.last_login
@@ -195,7 +189,6 @@ class TestWmsWechat(TransactionCase):
         self.assertIsNotNone(self.wechat_user.last_activity)
         self.assertGreaterEqual(self.wechat_user.last_login, initial_last_login or datetime.min)
         self.assertGreaterEqual(self.wechat_user.last_activity, initial_last_activity or datetime.min)
-
     def test_wechat_message_creation(self):
         """Test creation of WeChat message records"""
         message = self.WmsWechatMessage.create({
@@ -217,7 +210,6 @@ class TestWmsWechat(TransactionCase):
         self.assertEqual(message.direction, 'in')
         self.assertEqual(message.status, 'pending')
         self.assertEqual(message.content, 'Hello from WeChat user!')
-
     def test_wechat_message_status_transitions(self):
         """Test WeChat message status transitions"""
         message = self.WmsWechatMessage.create({
@@ -243,7 +235,6 @@ class TestWmsWechat(TransactionCase):
         # Mark as processed
         message.mark_as_processed()
         self.assertTrue(message.is_processed)
-
     def test_wechat_inventory_check_creation(self):
         """Test creation of WeChat inventory check records"""
         inventory_check = self.WmsWechatInventoryCheck.create({
@@ -262,7 +253,6 @@ class TestWmsWechat(TransactionCase):
         self.assertEqual(inventory_check.state, 'draft')
         self.assertEqual(inventory_check.location_id.id, self.location_src.id)
         self.assertEqual(inventory_check.product_id.id, self.product1.id)
-
     def test_wechat_inventory_check_state_transitions(self):
         """Test WeChat inventory check state transitions"""
         inventory_check = self.WmsWechatInventoryCheck.create({
@@ -301,7 +291,6 @@ class TestWmsWechat(TransactionCase):
 
         inventory_check2.action_cancel_check()
         self.assertEqual(inventory_check2.state, 'cancelled')
-
     def test_wechat_picking_notification_creation(self):
         """Test creation of WeChat picking notification records"""
         # Create a test picking
@@ -331,7 +320,6 @@ class TestWmsWechat(TransactionCase):
         self.assertIn(picking.name, notification.message)
         self.assertEqual(notification.priority, 'normal')
         self.assertEqual(notification.status, 'pending')
-
     def test_wechat_picking_notification_status_transitions(self):
         """Test WeChat picking notification status transitions"""
         # Create a test picking
@@ -378,7 +366,6 @@ class TestWmsWechat(TransactionCase):
         # Verify that the token was updated and connection was successful
         self.assertEqual(self.wechat_app.connection_status, 'connected')
         self.assertIsNotNone(self.wechat_app.last_sync)
-
     def test_wechat_app_get_access_token(self):
         """Test getting access token from WeChat API"""
         # This test would require mocking the API call in a real scenario
@@ -391,7 +378,6 @@ class TestWmsWechat(TransactionCase):
 
             token = self.wechat_app.get_access_token()
             self.assertEqual(token, 'mocked_token')
-
     def test_wechat_message_routing(self):
         """Test routing of WeChat messages based on content"""
         # Create a test message with inventory command
@@ -412,7 +398,6 @@ class TestWmsWechat(TransactionCase):
 
         # Check that message was processed
         self.assertTrue(message.is_processed)
-
     def test_wechat_message_help_request(self):
         """Test handling of help requests in WeChat messages"""
         # Create a message with help command
@@ -435,7 +420,6 @@ class TestWmsWechat(TransactionCase):
             ('name', 'like', f'RESP_{message.id}')
         ])
         self.assertTrue(len(response_messages) > 0)
-
     def test_wechat_message_inventory_request(self):
         """Test handling of inventory requests in WeChat messages"""
         # Create a message with inventory command
@@ -458,7 +442,6 @@ class TestWmsWechat(TransactionCase):
             ('operator_id', '=', self.wechat_user.id)
         ])
         self.assertTrue(len(inventory_checks) > 0)
-
     def test_wechat_user_unique_openid_constraint(self):
         """Test that OpenID must be unique for WeChat users"""
         # Create first user
@@ -475,7 +458,6 @@ class TestWmsWechat(TransactionCase):
                 'name': 'Test User 2',
                 'app_id': self.wechat_app.id,
             })
-
     def test_process_webhook_data(self):
         """Test processing of webhook data from WeChat"""
         # Sample webhook message data

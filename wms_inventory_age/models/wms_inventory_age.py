@@ -22,7 +22,6 @@ class WmsInventoryAgeReport(models.TransientModel):
         ('over_365', 'Over 365 Days'),
     ], 'Aging Period', help='Filter by specific aging period')
     report_lines = fields.One2many('wms.inventory.age.report.line', 'report_id', 'Report Lines', readonly=True)
-
     def action_generate_report(self):
         """Generate the inventory age report"""
         self.ensure_one()
@@ -73,7 +72,6 @@ class WmsInventoryAgeReport(models.TransientModel):
             'target': 'new',
             'context': {'default_id': self.id},
         }
-
     def _calculate_inventory_age(self, quant):
         """Calculate the age of inventory in days"""
         # For this example, we'll use the creation date of the quant
@@ -84,7 +82,6 @@ class WmsInventoryAgeReport(models.TransientModel):
         else:
             # Quant was created after the report date, shouldn't happen normally
             return 0
-
     def _get_aging_period(self, age_days):
         """Determine the aging period based on age in days"""
         if age_days <= 30:
@@ -161,11 +158,9 @@ class WmsInventoryAgeAlert(models.Model):
         if not vals.get('name'):
             vals['name'] = self.env['ir.sequence'].next_by_code('wms.inventory.age.alert') or '/'
         return super().create(vals)
-
     def action_acknowledge(self):
         """Acknowledge the alert"""
         self.write({'status': 'acknowledged'})
-
     def action_resolve(self):
         """Resolve the alert"""
         self.write({'status': 'resolved'})

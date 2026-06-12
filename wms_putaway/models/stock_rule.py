@@ -30,7 +30,6 @@ class StockRule(models.Model):
         ('B', 'B'),
         ('C', 'C')
     ], 'ABC Category', help='ABC classification for the rule')
-
     def _get_stock_move_values(self, product_id, product_qty, product_uom, location_dest_id, name, origin, company_id, values):
         """Extend the stock move values to include 3PL-specific fields"""
         move_values = super()._get_stock_move_values(

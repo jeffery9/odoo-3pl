@@ -14,7 +14,6 @@ class StockPicking(models.Model):
     def _compute_rma_count(self):
         for picking in self:
             picking.rma_count = len(picking.rma_ids)
-
     def action_create_rma(self):
         """Create a new RMA for this picking"""
         self.ensure_one()
@@ -32,7 +31,6 @@ class StockPicking(models.Model):
                 'default_owner_id': self.owner_id.id if hasattr(self, 'owner_id') and self.owner_id else False,
             }
         }
-
     def action_view_rmas(self):
         """View RMAs for this picking"""
         self.ensure_one()

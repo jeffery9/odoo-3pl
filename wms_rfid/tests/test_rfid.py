@@ -29,7 +29,7 @@ class TestWmsRfid(TransactionCase):
         # Create a test warehouse
         self.warehouse = self.Warehouse.create({
             'name': 'Test Warehouse',
-            'code': 'TST'
+            'owner_code': 'TST'
         })
 
         # Create test locations
@@ -48,7 +48,7 @@ class TestWmsRfid(TransactionCase):
         # Create a test owner
         self.owner = self.Owner.create({
             'name': 'Test Owner',
-            'code': 'TO',
+            'owner_code': 'TO',
             'email': 'test@example.com'
         })
 
@@ -60,8 +60,7 @@ class TestWmsRfid(TransactionCase):
         # Create test products
         self.product1 = self.Product.create({
             'name': 'Test Product 1',
-            'type': 'product',
-            'default_code': 'TEST001',
+                        'default_code': 'TEST001',
             'list_price': 10.0,
             'standard_price': 5.0,
             'weight': 1.0,
@@ -73,8 +72,7 @@ class TestWmsRfid(TransactionCase):
 
         self.product2 = self.Product.create({
             'name': 'Test Product 2',
-            'type': 'product',
-            'default_code': 'TEST002',
+                        'default_code': 'TEST002',
             'list_price': 20.0,
             'standard_price': 10.0,
             'weight': 2.0,
@@ -124,7 +122,7 @@ class TestWmsRfid(TransactionCase):
         # Create test RFID reader
         self.rfid_reader = self.WmsRfidReader.create({
             'name': 'Test RFID Reader',
-            'code': 'TRR001',
+            'owner_code': 'TRR001',
             'reader_type': 'fixed',
             'location_id': self.location_src.id,
             'warehouse_id': self.warehouse.id,
@@ -134,7 +132,6 @@ class TestWmsRfid(TransactionCase):
             'read_range': 2.0,
             'frequency': 915.0,
         })
-
     def test_rfid_tag_creation(self):
         """Test creation of RFID tag records"""
         tag = self.WmsRfidTag.create({
@@ -155,7 +152,6 @@ class TestWmsRfid(TransactionCase):
         self.assertEqual(tag.current_load, 75.0)
         self.assertEqual(tag.utilization_rate, 37.5)  # (75/200)*100
         self.assertTrue(tag.active)
-
     def test_rfid_tag_utilization_rate_computation(self):
         """Test utilization rate computation for RFID tags"""
         # Test with capacity and current load
@@ -188,7 +184,6 @@ class TestWmsRfid(TransactionCase):
 
         # Utilization rate should be capped at 100%
         self.assertEqual(tag3.utilization_rate, 100.0)
-
     def test_rfid_tag_status_transitions(self):
         """Test RFID tag status transitions"""
         tag = self.WmsRfidTag.create({
@@ -220,12 +215,11 @@ class TestWmsRfid(TransactionCase):
         self.assertFalse(tag.active)
         self.assertEqual(tag.status, 'retired')
         self.assertIsNotNone(tag.date_deactivated)
-
     def test_rfid_reader_creation(self):
         """Test creation of RFID reader records"""
         reader = self.WmsRfidReader.create({
             'name': 'Second RFID Reader',
-            'code': 'SRR002',
+            'owner_code': 'SRR002',
             'reader_type': 'handheld',
             'location_id': self.location_dst.id,
             'warehouse_id': self.warehouse.id,
@@ -242,7 +236,7 @@ class TestWmsRfid(TransactionCase):
         })
 
         self.assertEqual(reader.name, 'Second RFID Reader')
-        self.assertEqual(reader.code, 'SRR002')
+        self.assertEqual(reader.owner_code, 'SRR002')
         self.assertEqual(reader.reader_type, 'handheld')
         self.assertEqual(reader.location_id.id, self.location_dst.id)
         self.assertEqual(reader.warehouse_id.id, self.warehouse.id)
@@ -253,7 +247,6 @@ class TestWmsRfid(TransactionCase):
         self.assertEqual(reader.read_range, 1.5)
         self.assertTrue(reader.auto_scan_enabled)
         self.assertEqual(reader.scan_interval, 60)
-
     def test_rfid_reader_connection(self):
         """Test RFID reader connection functionality"""
         # Test initial state
@@ -270,14 +263,12 @@ class TestWmsRfid(TransactionCase):
         self.rfid_reader.action_disconnect_reader()
         self.assertEqual(self.rfid_reader.status, 'offline')
         self.assertFalse(self.rfid_reader.is_connected)
-
     def test_rfid_reader_scan(self):
         """Test RFID reader scan functionality"""
         # This method just logs the scan, so we'll verify it doesn't raise an error
         result = self.rfid_reader.action_scan_tags()
         # The method returns None, which is falsy, so we just make sure it doesn't throw an exception
         self.assertIsNone(result)
-
     def test_rfid_transaction_creation(self):
         """Test creation of RFID transaction records"""
         transaction = self.WmsRfidTransaction.create({
@@ -307,7 +298,6 @@ class TestWmsRfid(TransactionCase):
         self.assertEqual(transaction.operator_id.id, self.employee.id)
         self.assertEqual(transaction.equipment_id.id, self.equipment.id)
         self.assertEqual(transaction.status, 'completed')
-
     def test_rfid_transaction_verification(self):
         """Test RFID transaction verification"""
         transaction = self.WmsRfidTransaction.create({
@@ -329,7 +319,6 @@ class TestWmsRfid(TransactionCase):
         transaction.action_verify_transaction()
         self.assertTrue(transaction.is_verified)
         self.assertEqual(transaction.status, 'verified')
-
     def test_rfid_transaction_error_marking(self):
         """Test marking RFID transactions with errors"""
         transaction = self.WmsRfidTransaction.create({
@@ -349,7 +338,6 @@ class TestWmsRfid(TransactionCase):
         transaction.action_mark_error('Connection timeout')
         self.assertEqual(transaction.status, 'error')
         self.assertEqual(transaction.error_message, 'Connection timeout')
-
     def test_rfid_inventory_creation(self):
         """Test creation of RFID inventory records"""
         inventory = self.WmsRfidInventory.create({
@@ -370,7 +358,6 @@ class TestWmsRfid(TransactionCase):
         self.assertTrue(inventory.include_sublocations)
         self.assertFalse(inventory.count_zero)
         self.assertEqual(inventory.owner_id.id, self.owner.id)
-
     def test_rfid_inventory_state_transitions(self):
         """Test RFID inventory state transitions"""
         inventory = self.WmsRfidInventory.create({
@@ -400,7 +387,6 @@ class TestWmsRfid(TransactionCase):
 
         inventory2.action_cancel_inventory()
         self.assertEqual(inventory2.state, 'cancelled')
-
     def test_rfid_inventory_report_generation(self):
         """Test RFID inventory report generation"""
         inventory = self.WmsRfidInventory.create({
@@ -415,7 +401,6 @@ class TestWmsRfid(TransactionCase):
         self.assertEqual(action['res_model'], 'wms.rfid.transaction')
         self.assertEqual(action['view_mode'], 'list,form')
         self.assertIn('TEST_TAG_001', str(action.get('domain', [])))
-
     def test_rfid_tag_onchange_functionality(self):
         """Test onchange functionality for RFID tags"""
         # Create a tag with product type and associated product
@@ -465,7 +450,6 @@ class TestWmsRfid(TransactionCase):
 
         self.assertEqual(transaction.source_document, f'stock.picking,{picking.id}')
         self.assertEqual(transaction.quantity, 8.0)
-
     def test_rfid_inventory_results_calculation(self):
         """Test RFID inventory results calculation"""
         inventory = self.WmsRfidInventory.create({

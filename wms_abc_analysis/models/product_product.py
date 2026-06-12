@@ -13,7 +13,6 @@ class ProductProduct(models.Model):
     annual_usage_value = fields.Float('Annual Usage Value', help='Total value of product usage in the last year')
     annual_usage_volume = fields.Float('Annual Usage Volume', help='Total quantity of product usage in the last year')
     usage_frequency = fields.Integer('Usage Frequency', help='Number of times product was used in the last year')
-
     def action_run_abc_analysis(self):
         """Run ABC analysis for this product"""
         self.ensure_one()

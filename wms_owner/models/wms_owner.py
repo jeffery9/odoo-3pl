@@ -28,8 +28,6 @@ class WmsOwner(models.Model):
     _sql_constraints = [
         ('owner_code_unique', 'UNIQUE(owner_code)', 'Owner code must be unique!')
     ]
-
-    @api.model
     def create(self, vals):
         if not vals.get('owner_code'):
             vals['owner_code'] = self.env['ir.sequence'].next_by_code('wms.owner.code') or '/'
@@ -45,7 +43,6 @@ class WmsOwner(models.Model):
         vals['partner_id'] = partner.id
 
         return super().create(vals)
-
     def write(self, vals):
         # Update the related partner
         if 'name' in vals or 'owner_code' in vals:
@@ -59,7 +56,6 @@ class WmsOwner(models.Model):
                 self.partner_id.write(partner_vals)
 
         return super().write(vals)
-
     def unlink(self):
         # Delete the related partner
         partners = self.mapped('partner_id')

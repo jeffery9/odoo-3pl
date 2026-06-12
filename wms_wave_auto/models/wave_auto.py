@@ -71,7 +71,6 @@ class WmsWaveRule(models.Model):
         for rule in self:
             if rule.min_orders > rule.max_orders > 0:
                 raise ValidationError(_('Minimum orders cannot be greater than maximum orders.'))
-
     def action_execute_rule(self):
         """Manually execute rule to create wave"""
         for rule in self:
@@ -79,7 +78,6 @@ class WmsWaveRule(models.Model):
             if wave_picking_ids:
                 if len(wave_picking_ids) >= rule.min_orders:
                     self._create_wave_from_pickings(rule, wave_picking_ids)
-
     def _get_pickings_for_wave(self, rule):
         """Get suitable pickings based on the rule"""
         domain = [
@@ -121,7 +119,6 @@ class WmsWaveRule(models.Model):
             sorted_pickings = sorted_pickings[:rule.max_orders]
 
         return sorted_pickings
-
     def _filter_by_volume_weight(self, pickings, rule):
         """Filter pickings by volume and weight limits"""
         filtered = []
@@ -155,7 +152,6 @@ class WmsWaveRule(models.Model):
                 break
 
         return filtered
-
     def _sort_pickings_by_strategy(self, pickings, rule):
         """Sort pickings by wave strategy"""
         if rule.wave_strategy == 'fifo':
@@ -175,7 +171,6 @@ class WmsWaveRule(models.Model):
             return sorted(pickings, key=lambda p: p.move_ids[:1].location_id.name or '')
         else:
             return pickings
-
     def _create_wave_from_pickings(self, rule, pickings):
         """Create wave from pickings"""
         wave_name = f"Auto-Wave-{fields.Date.today()}-{rule.code}"

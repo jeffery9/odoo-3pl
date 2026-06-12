@@ -51,7 +51,6 @@ class StockPicking(models.Model):
             'target': 'new',
             'context': {'default_picking_ids': [(6, 0, self.ids)]}
         }
-
     def action_start_batch_receive(self):
         """Start a batch receive session with this picking"""
         self.ensure_one()
@@ -78,7 +77,6 @@ class StockPicking(models.Model):
             'target': 'new',
             'context': {'default_picking_ids': [(6, 0, self.ids)], 'default_owner_id': self.owner_id.id if hasattr(self, 'owner_id') and self.owner_id else False}
         }
-
     def action_view_batch_receives(self):
         """View batch receives for this picking"""
         self.ensure_one()
@@ -90,7 +88,6 @@ class StockPicking(models.Model):
             'domain': [('picking_id', '=', self.id)],
             'context': {'default_picking_id': self.id}
         }
-
     def action_view_lots(self):
         """View lots/serials for this picking"""
         self.ensure_one()
